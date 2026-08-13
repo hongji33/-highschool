@@ -96,15 +96,16 @@
             text-align: center;
             color: #0f172a;
             font-weight: 900;
-            cursor: pointer;
+            cursor: default;
             box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5);
             border-radius: 12px;
             transition: all 0.2s ease;
             padding: 8px;
         }
-        .building:hover {
-            transform: scale(1.04);
-            filter: brightness(1.1);
+        .building.zone-active {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+            box-shadow: 0 0 0 4px rgba(56,189,248,0.8), 0 10px 20px rgba(0,0,0,0.6);
             z-index: 10;
         }
 
@@ -169,7 +170,7 @@
                 background-color: #ffffff !important;
                 color: #0f172a !important;
             }
-            header, main, #quiz-modal, #room-modal, #career-modal, #tutorial-modal {
+            header, main, #quiz-modal, #room-modal, #career-modal, #tutorial-modal, #intro-modal, #character-modal {
                 display: none !important;
             }
             #result-modal {
@@ -325,18 +326,18 @@
             <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex flex-col lg:flex-row items-center justify-between gap-4">
                 <!-- Grade Filter Tabs -->
                 <div class="flex items-center gap-2 w-full lg:w-auto overflow-x-auto pb-1 lg:pb-0">
-                    <span class="text-xs font-bold text-slate-400 mr-1 whitespace-nowrap">📅 학년 선택:</span>
-                    <button onclick="setActiveGrade(1)" id="grade-tab-1" class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-sky-500 text-slate-950">
-                        <span>1학년 (공통/기초)</span>
-                        <span id="grade-1-badge" class="px-1.5 py-0.5 rounded bg-slate-950/30 text-[10px]">64학점</span>
+                    <span class="text-xs font-bold text-slate-400 mr-1 whitespace-nowrap flex-shrink-0">📅 학년 선택:</span>
+                    <button onclick="setActiveGrade(1)" id="grade-tab-1" class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap flex-shrink-0 bg-sky-500 text-slate-950">
+                        <span class="whitespace-nowrap">1학년 (공통/기초)</span>
+                        <span id="grade-1-badge" class="px-1.5 py-0.5 rounded bg-slate-950/30 text-[10px] whitespace-nowrap">64학점</span>
                     </button>
-                    <button onclick="setActiveGrade(2)" id="grade-tab-2" class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-slate-800 text-slate-300">
-                        <span>2학년 (일반/진로)</span>
-                        <span id="grade-2-badge" class="px-1.5 py-0.5 rounded bg-slate-950/30 text-[10px]">0학점</span>
+                    <button onclick="setActiveGrade(2)" id="grade-tab-2" class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap flex-shrink-0 bg-slate-800 text-slate-300">
+                        <span class="whitespace-nowrap">2학년 (일반/진로)</span>
+                        <span id="grade-2-badge" class="px-1.5 py-0.5 rounded bg-slate-950/30 text-[10px] whitespace-nowrap">0학점</span>
                     </button>
-                    <button onclick="setActiveGrade(3)" id="grade-tab-3" class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-slate-800 text-slate-300">
-                        <span>3학년 (진로/융합)</span>
-                        <span id="grade-3-badge" class="px-1.5 py-0.5 rounded bg-slate-950/30 text-[10px]">0학점</span>
+                    <button onclick="setActiveGrade(3)" id="grade-tab-3" class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap flex-shrink-0 bg-slate-800 text-slate-300">
+                        <span class="whitespace-nowrap">3학년 (진로/융합)</span>
+                        <span id="grade-3-badge" class="px-1.5 py-0.5 rounded bg-slate-950/30 text-[10px] whitespace-nowrap">0학점</span>
                     </button>
                 </div>
 
@@ -358,6 +359,11 @@
                 </div>
             </div>
 
+            <div id="grade1-autofill-note" class="bg-sky-950/50 border border-sky-500/40 rounded-xl px-3.5 py-2 text-[11px] sm:text-xs text-sky-200 flex items-start gap-2">
+                <span class="text-sm">💡</span>
+                <span><b class="text-sky-300">1학년 공통과목(64학점)은 자동으로 미리 채워져 있어요.</b> 그래서 실제로는 <b class="text-amber-300">2학년부터 직접 과목을 골라 나가는 게임</b>이에요. 물론 1학년 과목도 1학년 탭이나 오른쪽 "학년별 수강 신청 목록"에서 언제든 취소·변경할 수 있습니다.</span>
+            </div>
+
             <!-- Main Interactive Game Grid Layout -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
                 
@@ -370,7 +376,7 @@
                                 <span id="map-grade-title" class="text-amber-400 font-black">[1학년]</span> 수강 신청 캠퍼스
                             </h2>
                         </div>
-                        <span class="text-[11px] text-slate-400">⌨️ 방향키 이동 또는 건물 터치</span>
+                        <span class="text-[11px] text-slate-400">⌨️ 방향키로 건물 안까지 이동하세요</span>
                     </div>
 
                     <!-- Campus Map Ground -->
@@ -379,37 +385,37 @@
                         <div class="road v"></div>
 
                         <!-- Buildings -->
-                        <div class="building b-art" onclick="openRoomModal('미술·디자인관')">
+                        <div id="building-미술·디자인관" class="building b-art">
                             <span class="text-lg">🎨</span>
                             <span class="text-xs sm:text-sm font-black">미술·디자인관</span>
                             <span class="text-[10px] text-slate-800 font-bold">미술 창작 · 디자인</span>
                         </div>
 
-                        <div class="building b-science" onclick="openRoomModal('과학관')">
+                        <div id="building-과학관" class="building b-science">
                             <span class="text-lg">🔬</span>
                             <span class="text-xs sm:text-sm font-black">과학관</span>
                             <span class="text-[10px] text-slate-800 font-bold">생명과학 · 화학 · 물리</span>
                         </div>
 
-                        <div class="building b-social" onclick="openRoomModal('사회·인문관')">
+                        <div id="building-사회·인문관" class="building b-social">
                             <span class="text-lg">🏛️</span>
                             <span class="text-xs sm:text-sm font-black">사회·인문관</span>
                             <span class="text-[10px] text-slate-800 font-bold">경제 · 사회문제</span>
                         </div>
 
-                        <div class="building b-math" onclick="openRoomModal('수학관')">
+                        <div id="building-수학관" class="building b-math">
                             <span class="text-lg">📐</span>
                             <span class="text-xs sm:text-sm font-black">수학관</span>
                             <span class="text-[10px] text-slate-800 font-bold">수학 · 심화수학</span>
                         </div>
 
-                        <div class="building b-language" onclick="openRoomModal('언어·문화관')">
+                        <div id="building-언어·문화관" class="building b-language">
                             <span class="text-lg">💻</span>
                             <span class="text-xs sm:text-sm font-black">언어·문화관</span>
                             <span class="text-[10px] text-slate-800 font-bold">영어 · AI · 프로그래밍</span>
                         </div>
 
-                        <div class="building b-career" onclick="openCareerModal()">
+                        <div id="building-진로상담센터" class="building b-career">
                             <span class="text-lg">🧭</span>
                             <span class="text-xs sm:text-sm font-black">진로상담센터</span>
                             <span class="text-[10px] text-amber-100 font-bold">희망 진로 설정</span>
@@ -418,7 +424,7 @@
                         <!-- Center Info Board -->
                         <div class="centerSign">
                             <div id="center-grade-indicator" class="text-xs font-black text-amber-300">현재 선택: 1학년 과목</div>
-                            <div class="text-[10px] text-slate-300 font-medium mt-1">건물을 클릭하여 해당 학년 수강 과목을 선택하세요</div>
+                            <div class="text-[10px] text-slate-300 font-medium mt-1">건물 안으로 걸어 들어가면 자동으로 열립니다</div>
                         </div>
 
                         <!-- Movable Player Character -->
@@ -426,7 +432,7 @@
                     </div>
 
                     <div class="mt-3 flex items-center justify-between text-xs text-slate-400">
-                        <span>📍 키보드 방향키/WASD로 교내를 이동하여 과목을 수강할 수 있습니다.</span>
+                        <span>📍 키보드 방향키/WASD로 건물 내부까지 이동하면 자동으로 수강 신청 창이 열립니다.</span>
                         <button onclick="resetPlayerPos()" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded">
                             🔄 위치 초기화
                         </button>
@@ -486,7 +492,7 @@
                             <span class="text-[10px] text-slate-400">클릭 시 신청 취소</span>
                         </div>
 
-                        <div id="schedule-grid" class="grid grid-cols-1 gap-2 text-xs max-h-[180px] overflow-y-auto p-1">
+                        <div id="schedule-grid" class="grid grid-cols-1 gap-2 text-xs p-1">
                             <!-- Injected by JS -->
                         </div>
                     </div>
@@ -554,7 +560,13 @@
                         <p class="text-xs text-slate-400">해당 학년의 과목을 선택하여 3개년 수강 계획에 반영해보세요.</p>
                     </div>
                 </div>
-                <button onclick="closeModal('room-modal')" class="text-slate-400 hover:text-white text-2xl font-bold">✕</button>
+                <div class="flex items-center gap-3">
+                    <div class="bg-slate-950 border border-sky-500/50 px-3 py-1.5 rounded-xl text-center">
+                        <div class="text-[9px] text-sky-400 font-bold leading-none">누적 학점</div>
+                        <div id="room-credit-badge" class="text-xs font-black text-amber-300 font-pixel mt-1">0 / 192</div>
+                    </div>
+                    <button onclick="closeModal('room-modal')" class="text-slate-400 hover:text-white text-2xl font-bold">✕</button>
+                </div>
             </div>
 
             <div id="room-subjects-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
@@ -620,21 +632,101 @@
 
     <!-- TUTORIAL MODAL -->
     <div id="tutorial-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md hidden flex items-center justify-center p-3 z-50">
-        <!-- ... existing tutorial content ... -->
+        <div class="modal-card max-w-2xl w-full p-5 sm:p-6 text-slate-100 relative max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl">❓</span>
+                    <div>
+                        <h2 id="tutorial-modal-heading" class="text-lg font-bold text-sky-300">고교학점제 3개년 192학점 안내</h2>
+                        <p id="tutorial-modal-sub" class="text-xs text-slate-400">MISSION 192를 시작하기 전, 핵심 규칙을 확인해보세요.</p>
+                    </div>
+                </div>
+                <button onclick="closeModal('tutorial-modal')" class="text-slate-400 hover:text-white text-2xl font-bold">✕</button>
+            </div>
+
+            <div class="space-y-3 text-xs sm:text-sm">
+                <div class="p-3.5 bg-slate-950 rounded-xl border border-sky-500/40">
+                    <div class="font-bold text-sky-300 mb-1 flex items-center gap-1.5"><span>🎓</span> 총 이수 학점 : 192학점</div>
+                    <p class="text-slate-300 leading-relaxed">3년간 졸업하려면 <b class="text-amber-300">교과 174학점 + 창의적 체험활동 18학점 = 총 192학점</b>을 이수해야 합니다. 1학점은 50분 수업 16회 기준입니다.</p>
+                </div>
+
+                <div class="p-3.5 bg-slate-950 rounded-xl border border-amber-500/40">
+                    <div class="font-bold text-amber-300 mb-1 flex items-center gap-1.5"><span>📅</span> 학년별 배분 (권장)</div>
+                    <div class="grid grid-cols-3 gap-2 text-center">
+                        <div class="p-2 bg-slate-900 rounded-lg border border-slate-800">
+                            <div class="text-sky-300 font-bold">1학년</div>
+                            <div class="font-pixel text-amber-300 mt-1">약 64학점</div>
+                            <div class="text-slate-400 mt-1">공통 과목 중심</div>
+                        </div>
+                        <div class="p-2 bg-slate-900 rounded-lg border border-slate-800">
+                            <div class="text-sky-300 font-bold">2학년</div>
+                            <div class="font-pixel text-amber-300 mt-1">약 64학점</div>
+                            <div class="text-slate-400 mt-1">일반/진로 선택</div>
+                        </div>
+                        <div class="p-2 bg-slate-900 rounded-lg border border-slate-800">
+                            <div class="text-sky-300 font-bold">3학년</div>
+                            <div class="font-pixel text-amber-300 mt-1">약 64학점</div>
+                            <div class="text-slate-400 mt-1">진로/융합 선택</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-3.5 bg-slate-950 rounded-xl border border-emerald-500/40">
+                    <div class="font-bold text-emerald-300 mb-1 flex items-center gap-1.5"><span>✅</span> 과목 이수 기준</div>
+                    <ul class="list-disc list-inside space-y-1 text-slate-300 leading-relaxed">
+                        <li>출석률 <b class="text-emerald-300">수업일수의 2/3 이상</b></li>
+                        <li>학업성취율 <b class="text-emerald-300">40% 이상</b></li>
+                        <li>기준 미달 시 <b class="text-emerald-300">최소 성취수준 보장지도</b>를 통해 보충 이수</li>
+                    </ul>
+                </div>
+
+                <div class="p-3.5 bg-slate-950 rounded-xl border border-purple-500/40">
+                    <div class="font-bold text-purple-300 mb-1 flex items-center gap-1.5"><span>🏫</span> MISSION 192 플레이 방법</div>
+                    <ul class="list-disc list-inside space-y-1 text-slate-300 leading-relaxed">
+                        <li><b class="text-purple-200">1학년 공통과목 64학점은 게임 시작과 동시에 자동으로 채워집니다.</b> 실질적인 선택은 2학년부터 시작되며, 1학년 과목도 언제든 취소·변경 가능합니다.</li>
+                        <li>방향키/WASD로 캠퍼스를 이동해 건물 안까지 걸어 들어가면 수강 신청 창이 자동으로 열립니다.</li>
+                        <li>학년 탭을 바꿔가며 각 학년에 맞는 과목을 신청하세요. (학년당 최대 72학점)</li>
+                        <li>진로상담센터에 들어가 희망 진로를 지정하면 진로 분석이 더 정교해집니다.</li>
+                        <li>3개년 누적 192학점을 채우면 최종 수강 계획서 & 진로 리포트가 완성됩니다.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flex justify-end border-t border-slate-800 pt-3 mt-4">
+                <button id="tutorial-confirm-btn" onclick="closeModal('tutorial-modal')" class="px-5 py-2.5 bg-slate-800 text-slate-300 font-bold rounded-xl text-xs">확인 / 닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- INTRO / TITLE SPLASH MODAL -->
+    <div id="intro-modal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md hidden flex items-center justify-center p-3 z-50">
+        <div class="modal-card max-w-lg w-full p-6 sm:p-8 text-center text-slate-100 relative border-2 border-sky-500/80">
+            <div class="w-16 h-16 mx-auto bg-sky-500 rounded-2xl flex items-center justify-center text-slate-950 text-4xl font-black shadow-lg mb-4">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <h1 class="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-cyan-300 to-blue-200 mb-2">
+                고교학점제 방탈출 & MISSION 192
+            </h1>
+            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed mb-6">
+                15개 방탈출 단서를 해독하고, 고교 3개년 192학점 맞춤 수강계획을 설계하는 게임입니다.
+            </p>
+            <button onclick="startIntroFlow()" class="w-full px-5 py-3 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-bold rounded-xl text-sm shadow-lg transition">
+                🎮 시작하기 (캐릭터 설정하러 가기)
+            </button>
+        </div>
     </div>
 
     <!-- CHARACTER CUSTOMIZATION MODAL -->
     <div id="character-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md hidden flex items-center justify-center p-3 z-50">
-        <div class="modal-card max-w-xl w-full p-5 sm:p-6 text-slate-100 relative max-h-[92vh] overflow-y-auto border-2 border-sky-500/80">
+        <div class="modal-card max-w-2xl w-full p-5 sm:p-6 text-slate-100 relative max-h-[92vh] overflow-y-auto border-2 border-sky-500/80">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
                 <div class="flex items-center gap-3">
                     <span class="text-3xl">🪞</span>
                     <div>
-                        <h2 class="text-lg font-bold text-sky-300 font-pixel">내 캐릭터 꾸미기</h2>
-                        <p class="text-xs text-slate-400">나만의 학생 캐릭터를 꾸미고 이름을 정해 캠퍼스를 누벼보세요!</p>
+                        <h2 id="character-modal-heading" class="text-lg font-bold text-sky-300 font-pixel">내 캐릭터 꾸미기</h2>
+                        <p id="character-modal-sub" class="text-xs text-slate-400">나만의 학생 캐릭터를 꾸미고 이름을 정해 캠퍼스를 누벼보세요!</p>
                     </div>
                 </div>
-                <button onclick="closeModal('character-modal')" class="text-slate-400 hover:text-white text-2xl font-bold">✕</button>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
@@ -657,13 +749,21 @@
                             <button onclick="setCustomTrait('hairStyle', 'long')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">긴머리</button>
                             <button onclick="setCustomTrait('hairStyle', 'ponytail')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">포니테일</button>
                             <button onclick="setCustomTrait('hairStyle', 'cap')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">볼캡모자</button>
+                            <button onclick="setCustomTrait('hairStyle', 'curly')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">곱슬머리</button>
+                            <button onclick="setCustomTrait('hairStyle', 'buzz')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">스포츠컷</button>
+                            <button onclick="setCustomTrait('hairStyle', 'twintail')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">양갈래</button>
+                            <button onclick="setCustomTrait('hairStyle', 'beanie')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">비니모자</button>
                         </div>
-                        <div class="flex items-center gap-1.5">
+                        <div class="flex items-center gap-1.5 flex-wrap">
                             <button onclick="setCustomTrait('hairColor', '#3b82f6')" class="w-6 h-6 rounded-full bg-blue-500 border border-white/40"></button>
                             <button onclick="setCustomTrait('hairColor', '#f59e0b')" class="w-6 h-6 rounded-full bg-amber-500 border border-white/40"></button>
                             <button onclick="setCustomTrait('hairColor', '#ec4899')" class="w-6 h-6 rounded-full bg-pink-500 border border-white/40"></button>
                             <button onclick="setCustomTrait('hairColor', '#10b981')" class="w-6 h-6 rounded-full bg-emerald-500 border border-white/40"></button>
                             <button onclick="setCustomTrait('hairColor', '#1e293b')" class="w-6 h-6 rounded-full bg-slate-800 border border-white/40"></button>
+                            <button onclick="setCustomTrait('hairColor', '#ef4444')" class="w-6 h-6 rounded-full bg-red-500 border border-white/40"></button>
+                            <button onclick="setCustomTrait('hairColor', '#a855f7')" class="w-6 h-6 rounded-full bg-purple-500 border border-white/40"></button>
+                            <button onclick="setCustomTrait('hairColor', '#e2e8f0')" class="w-6 h-6 rounded-full bg-slate-200 border border-white/40"></button>
+                            <button onclick="setCustomTrait('hairColor', '#14b8a6')" class="w-6 h-6 rounded-full bg-teal-500 border border-white/40"></button>
                         </div>
                     </div>
 
@@ -674,6 +774,9 @@
                             <button onclick="setCustomTrait('eyeStyle', 'sparkle')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">✨ 반짝반짝</button>
                             <button onclick="setCustomTrait('eyeStyle', 'glasses')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">👓 스마트안경</button>
                             <button onclick="setCustomTrait('eyeStyle', 'happy')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">😊 웃는눈</button>
+                            <button onclick="setCustomTrait('eyeStyle', 'sleepy')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">😌 잠든눈</button>
+                            <button onclick="setCustomTrait('eyeStyle', 'starry')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">🌟 별눈</button>
+                            <button onclick="setCustomTrait('eyeStyle', 'wink')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">😉 윙크</button>
                         </div>
                     </div>
 
@@ -684,30 +787,39 @@
                             <button onclick="setCustomTrait('outfitStyle', 'uniform')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">단정한 교복</button>
                             <button onclick="setCustomTrait('outfitStyle', 'hoodie')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">편한 후드티</button>
                             <button onclick="setCustomTrait('outfitStyle', 'cardigan')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">니트 가디건</button>
+                            <button onclick="setCustomTrait('outfitStyle', 'sports')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">체육복</button>
+                            <button onclick="setCustomTrait('outfitStyle', 'shirt')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">셔츠 & 조끼</button>
+                            <button onclick="setCustomTrait('outfitStyle', 'dress')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">원피스</button>
                         </div>
-                        <div class="flex items-center gap-1.5">
+                        <div class="flex items-center gap-1.5 flex-wrap">
                             <button onclick="setCustomTrait('outfitColor', '#1d4ed8')" class="w-6 h-6 rounded-full bg-blue-700 border border-white/40"></button>
                             <button onclick="setCustomTrait('outfitColor', '#b91c1c')" class="w-6 h-6 rounded-full bg-red-700 border border-white/40"></button>
                             <button onclick="setCustomTrait('outfitColor', '#047857')" class="w-6 h-6 rounded-full bg-emerald-700 border border-white/40"></button>
                             <button onclick="setCustomTrait('outfitColor', '#6b21a8')" class="w-6 h-6 rounded-full bg-purple-700 border border-white/40"></button>
                             <button onclick="setCustomTrait('outfitColor', '#334155')" class="w-6 h-6 rounded-full bg-slate-700 border border-white/40"></button>
+                            <button onclick="setCustomTrait('outfitColor', '#c2410c')" class="w-6 h-6 rounded-full bg-orange-700 border border-white/40"></button>
+                            <button onclick="setCustomTrait('outfitColor', '#0e7490')" class="w-6 h-6 rounded-full bg-cyan-700 border border-white/40"></button>
+                            <button onclick="setCustomTrait('outfitColor', '#a16207')" class="w-6 h-6 rounded-full bg-yellow-700 border border-white/40"></button>
                         </div>
                     </div>
 
                     <!-- Skin Tone -->
                     <div>
                         <span class="font-bold text-sky-300 block mb-1">🎨 피부 톤</span>
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-2 flex-wrap">
                             <button onclick="setCustomTrait('skinTone', '#fde047')" class="px-3 py-1 bg-amber-200 text-slate-950 font-bold rounded-lg text-xs">밝은 톤</button>
                             <button onclick="setCustomTrait('skinTone', '#fbcfe8')" class="px-3 py-1 bg-pink-200 text-slate-950 font-bold rounded-lg text-xs">핑크 톤</button>
                             <button onclick="setCustomTrait('skinTone', '#fed7aa')" class="px-3 py-1 bg-orange-200 text-slate-950 font-bold rounded-lg text-xs">웜 톤</button>
+                            <button onclick="setCustomTrait('skinTone', '#e7c9a9')" class="px-3 py-1 bg-[#e7c9a9] text-slate-950 font-bold rounded-lg text-xs">허니 톤</button>
+                            <button onclick="setCustomTrait('skinTone', '#c68863')" class="px-3 py-1 bg-[#c68863] text-slate-950 font-bold rounded-lg text-xs">브론즈 톤</button>
+                            <button onclick="setCustomTrait('skinTone', '#8d5a3c')" class="px-3 py-1 bg-[#8d5a3c] text-white font-bold rounded-lg text-xs">딥 톤</button>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="flex justify-end border-t border-slate-800 pt-3 mt-4 gap-2">
-                <button onclick="saveCharacter()" class="px-6 py-2.5 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-bold rounded-xl text-xs shadow-lg transition">
+                <button onclick="saveCharacter()" id="character-save-btn" class="px-6 py-2.5 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-bold rounded-xl text-xs shadow-lg transition">
                     ✨ 커스텀 완성 및 저장
                 </button>
             </div>
@@ -763,14 +875,16 @@
         // Player Character Customization State
         let playerConfig = {
             name: "김고교",
-            hairStyle: "short", // short, long, ponytail, cap
+            hairStyle: "short",
             hairColor: "#3b82f6",
-            eyeStyle: "sparkle", // sparkle, glasses, happy
-            outfitStyle: "uniform", // uniform, hoodie, cardigan
+            eyeStyle: "sparkle",
+            outfitStyle: "uniform",
             outfitColor: "#1d4ed8",
             skinTone: "#fde047"
         };
 
+        let isFirstTimeSetup = true;
+        let isOnboardingTutorial = false;
         let currentTotalScore = 0;
 
         // Dynamic SVG Avatar Rendering Engine
@@ -789,6 +903,14 @@
                 hairSVG = `<path d="M 8 18 C 8 8, 32 8, 32 18 L 34 22 L 6 22 Z" fill="${hair}" /><path d="M 28 14 Q 38 12 36 28 Q 32 26 30 20" fill="${hair}" />`;
             } else if (config.hairStyle === 'cap') {
                 hairSVG = `<path d="M 7 17 A 13 13 0 0 1 33 17 Z" fill="${hair}" /><rect x="4" y="16" width="32" height="4" rx="2" fill="${hair}" /><path d="M 2 18 L 14 18" stroke="#ffffff" stroke-width="2" />`;
+            } else if (config.hairStyle === 'curly') {
+                hairSVG = `<circle cx="10" cy="15" r="5" fill="${hair}"/><circle cx="16" cy="10" r="5.5" fill="${hair}"/><circle cx="24" cy="10" r="5.5" fill="${hair}"/><circle cx="30" cy="15" r="5" fill="${hair}"/><circle cx="20" cy="8" r="5" fill="${hair}"/>`;
+            } else if (config.hairStyle === 'buzz') {
+                hairSVG = `<path d="M 8 17 C 8 9, 32 9, 32 17 L 33 19 L 7 19 Z" fill="${hair}" opacity="0.85" />`;
+            } else if (config.hairStyle === 'twintail') {
+                hairSVG = `<path d="M 8 18 C 8 8, 32 8, 32 18 L 34 22 L 6 22 Z" fill="${hair}" /><path d="M 6 16 Q -2 20 2 32 Q 6 30 7 22" fill="${hair}" /><path d="M 34 16 Q 42 20 38 32 Q 34 30 33 22" fill="${hair}" />`;
+            } else if (config.hairStyle === 'beanie') {
+                hairSVG = `<path d="M 7 19 A 13 12 0 0 1 33 19 L 33 21 L 7 21 Z" fill="${hair}" /><rect x="5" y="18" width="30" height="5" rx="2.5" fill="${hair}" /><circle cx="20" cy="9" r="2.5" fill="${hair}" opacity="0.7"/>`;
             }
 
             // Eye paths
@@ -799,6 +921,12 @@
                 eyesSVG = `<circle cx="14" cy="20" r="2" fill="#0f172a"/><circle cx="26" cy="20" r="2" fill="#0f172a"/><rect x="9" y="15" width="10" height="9" rx="2" fill="none" stroke="#38bdf8" stroke-width="1.5"/><rect x="21" y="15" width="10" height="9" rx="2" fill="none" stroke="#38bdf8" stroke-width="1.5"/><line x1="19" y1="19" x2="21" y2="19" stroke="#38bdf8" stroke-width="1.5"/>`;
             } else if (config.eyeStyle === 'happy') {
                 eyesSVG = `<path d="M 12 21 Q 14 17 16 21" stroke="#0f172a" stroke-width="2" fill="none"/><path d="M 24 21 Q 26 17 28 21" stroke="#0f172a" stroke-width="2" fill="none"/>`;
+            } else if (config.eyeStyle === 'sleepy') {
+                eyesSVG = `<line x1="11" y1="20" x2="17" y2="20" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/><line x1="23" y1="20" x2="29" y2="20" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>`;
+            } else if (config.eyeStyle === 'starry') {
+                eyesSVG = `<path d="M14 17 L15 20 L18 20 L15.5 22 L16.5 25 L14 23 L11.5 25 L12.5 22 L10 20 L13 20 Z" fill="#fbbf24"/><path d="M26 17 L27 20 L30 20 L27.5 22 L28.5 25 L26 23 L23.5 25 L24.5 22 L22 20 L25 20 Z" fill="#fbbf24"/>`;
+            } else if (config.eyeStyle === 'wink') {
+                eyesSVG = `<circle cx="14" cy="20" r="2.5" fill="#0f172a"/><circle cx="15" cy="19" r="1" fill="#ffffff"/><path d="M 24 20 Q 26 17.5 28 20" stroke="#0f172a" stroke-width="2" fill="none" stroke-linecap="round"/>`;
             }
 
             // Outfit paths
@@ -809,6 +937,12 @@
                 outfitSVG = `<rect x="7" y="30" width="26" height="18" rx="6" fill="${outfit}" /><path d="M 17 30 L 20 38 L 23 30" stroke="#ffffff" stroke-width="1.5" fill="none" /><rect x="13" y="38" width="14" height="7" rx="2" fill="#000000" opacity="0.2" />`;
             } else if (config.outfitStyle === 'cardigan') {
                 outfitSVG = `<rect x="8" y="30" width="24" height="18" rx="4" fill="${outfit}" /><polygon points="20,30 14,48 26,48" fill="#f8fafc" /><circle cx="20" cy="38" r="1" fill="#0f172a" /><circle cx="20" cy="43" r="1" fill="#0f172a" />`;
+            } else if (config.outfitStyle === 'sports') {
+                outfitSVG = `<rect x="8" y="30" width="24" height="18" rx="4" fill="${outfit}" /><path d="M 8 33 L 32 33" stroke="#ffffff" stroke-width="2" /><path d="M 8 42 L 32 42" stroke="#ffffff" stroke-width="2" />`;
+            } else if (config.outfitStyle === 'shirt') {
+                outfitSVG = `<rect x="8" y="30" width="24" height="18" rx="4" fill="#f8fafc" /><polygon points="20,30 16,38 24,38" fill="#f8fafc" stroke="#cbd5e1" stroke-width="0.5"/><polygon points="12,34 20,48 12,48" fill="${outfit}"/><polygon points="28,34 20,48 28,48" fill="${outfit}"/>`;
+            } else if (config.outfitStyle === 'dress') {
+                outfitSVG = `<path d="M 14 30 L 26 30 L 32 48 L 8 48 Z" fill="${outfit}" /><polygon points="20,30 17,36 23,36" fill="#f8fafc" />`;
             }
 
             return `
@@ -852,6 +986,20 @@
         function openCharacterModal() {
             document.getElementById('custom-player-name').value = playerConfig.name;
             updateAvatarPreviews();
+
+            const heading = document.getElementById('character-modal-heading');
+            const sub = document.getElementById('character-modal-sub');
+            const saveBtn = document.getElementById('character-save-btn');
+            if (isFirstTimeSetup) {
+                heading.innerText = '🎮 캐릭터를 만들고 방탈출을 시작하세요!';
+                sub.innerText = '나만의 학생 캐릭터를 꾸미고 이름을 정한 뒤, 저장하면 바로 방탈출 퀴즈가 시작됩니다.';
+                saveBtn.innerText = '🚪 캐릭터 완성! 방탈출 시작하기';
+            } else {
+                heading.innerText = '내 캐릭터 꾸미기';
+                sub.innerText = '나만의 학생 캐릭터를 꾸미고 이름을 정해 캠퍼스를 누벼보세요!';
+                saveBtn.innerText = '✨ 커스텀 완성 및 저장';
+            }
+
             document.getElementById('character-modal').classList.remove('hidden');
         }
 
@@ -866,6 +1014,20 @@
             if (inputName) playerConfig.name = inputName;
             updateAvatarPreviews();
             closeModal('character-modal');
+
+            if (isFirstTimeSetup) {
+                isFirstTimeSetup = false;
+                logItems.unshift(`🎮 [캐릭터 생성] '${playerConfig.name}' 캐릭터로 방탈출을 시작합니다!`);
+                updateGameUI();
+                playSound('correct');
+                // Show the 고교학점제 안내 guide right after character setup, before the quiz begins
+                setTimeout(() => {
+                    isOnboardingTutorial = true;
+                    showTutorialModal();
+                }, 200);
+                return;
+            }
+
             logItems.unshift(`🪞 [캐릭터 설정] '${playerConfig.name}' 캐릭터 스타일을 변경했습니다.`);
             updateGameUI();
             playSound('correct');
@@ -1184,6 +1346,19 @@
         let targetCareerGoal = "자율 융합 계열";
         let logItems = ["고등학교 입학! 3년(192학점) 학년별 맞춤 수강 계획을 시작합니다."];
         let playerPos = { x: 45, y: 43 };
+        let currentBuildingZone = null;
+
+        // Building collision zones (percent-based). These are intentionally SMALLER than the
+        // visible building footprint (CSS b-art/b-science/etc.) so the player sprite has to walk
+        // fully inside the building — not just brush past its edge — before it triggers.
+        const buildingZones = {
+            '미술·디자인관': { left: 10, right: 25, top: 12, bottom: 25, type: 'room' },
+            '과학관': { left: 42, right: 57, top: 12, bottom: 25, type: 'room' },
+            '사회·인문관': { left: 75, right: 90, top: 12, bottom: 25, type: 'room' },
+            '수학관': { left: 10, right: 25, top: 75, bottom: 88, type: 'room' },
+            '언어·문화관': { left: 42, right: 57, top: 75, bottom: 88, type: 'room' },
+            '진로상담센터': { left: 75, right: 90, top: 75, bottom: 88, type: 'career' }
+        };
 
         // Selected Courses Data by Grade
         let selectedCourses = {
@@ -1307,9 +1482,9 @@
             [1, 2, 3].forEach(g => {
                 const btn = document.getElementById(`grade-tab-${g}`);
                 if (g === activeGrade) {
-                    btn.className = "px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-sky-500 text-slate-950 shadow-lg scale-105";
+                    btn.className = "px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap flex-shrink-0 bg-sky-500 text-slate-950 shadow-lg scale-105";
                 } else {
-                    btn.className = "px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:bg-slate-700";
+                    btn.className = "px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap flex-shrink-0 bg-slate-800 text-slate-300 hover:bg-slate-700";
                 }
             });
 
@@ -1426,7 +1601,7 @@
                 });
 
                 if (!hasAnyCourses) {
-                    scheduleGrid.innerHTML = '<div class="text-center text-xs text-slate-500 py-4">신청된 수강 과목이 없습니다. 건물을 터치하여 수강 신청하세요.</div>';
+                    scheduleGrid.innerHTML = '<div class="text-center text-xs text-slate-500 py-4">신청된 수강 과목이 없습니다. 건물 안으로 이동하여 수강 신청하세요.</div>';
                 }
             }
 
@@ -1456,6 +1631,7 @@
             const modal = document.getElementById('room-modal');
             document.getElementById('room-modal-title').innerText = roomName;
             document.getElementById('room-grade-badge').innerText = `[${activeGrade}학년 과목]`;
+            document.getElementById('room-credit-badge').innerText = `${getTotalCredits()} / ${TARGET_CREDITS}`;
 
             const list = document.getElementById('room-subjects-list');
             list.innerHTML = '';
@@ -1547,11 +1723,28 @@
         }
 
         function showTutorialModal() {
+            const heading = document.getElementById('tutorial-modal-heading');
+            const sub = document.getElementById('tutorial-modal-sub');
+            const confirmBtn = document.getElementById('tutorial-confirm-btn');
+
+            if (isOnboardingTutorial) {
+                heading.innerText = '🎉 캐릭터 완성! 시작 전 잠깐, 고교학점제 안내';
+                sub.innerText = '방탈출 퀴즈를 풀기 전에 핵심 규칙을 먼저 확인해보세요.';
+                confirmBtn.innerText = '✅ 확인했어요, 방탈출 시작하기!';
+            } else {
+                heading.innerText = '고교학점제 3개년 192학점 안내';
+                sub.innerText = 'MISSION 192를 시작하기 전, 핵심 규칙을 확인해보세요.';
+                confirmBtn.innerText = '확인 / 닫기';
+            }
+
             document.getElementById('tutorial-modal').classList.remove('hidden');
         }
 
         function closeModal(modalId) {
             document.getElementById(modalId).classList.add('hidden');
+            if (modalId === 'tutorial-modal') {
+                isOnboardingTutorial = false;
+            }
         }
 
         // Real-Time Career Analysis Engine
@@ -1747,10 +1940,54 @@
             document.getElementById('result-modal').classList.remove('hidden');
         }
 
+        // Building proximity detection: entering a building zone auto-opens its modal
+        function checkBuildingCollision() {
+            let insideZone = null;
+
+            for (const [name, z] of Object.entries(buildingZones)) {
+                if (playerPos.x >= z.left && playerPos.x <= z.right && playerPos.y >= z.top && playerPos.y <= z.bottom) {
+                    insideZone = name;
+                    break;
+                }
+            }
+
+            // Visual highlight for whichever building the player currently overlaps
+            Object.keys(buildingZones).forEach(name => {
+                const el = document.getElementById(`building-${name}`);
+                if (el) el.classList.toggle('zone-active', name === insideZone);
+            });
+
+            if (insideZone && insideZone !== currentBuildingZone) {
+                currentBuildingZone = insideZone;
+                playSound('select');
+                if (buildingZones[insideZone].type === 'career') {
+                    openCareerModal();
+                } else {
+                    openRoomModal(insideZone);
+                }
+            } else if (!insideZone) {
+                currentBuildingZone = null;
+            }
+        }
+
         // Keyboard Movement Controls for Campus Map
         window.addEventListener('keydown', (e) => {
+            // Only handle movement while the campus map screen is actually visible
+            const missionSection = document.getElementById('mission-game-section');
+            if (!missionSection || missionSection.classList.contains('hidden')) return;
+
+            // Don't hijack keys while the user is typing (e.g. character name input)
+            const active = document.activeElement;
+            if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) return;
+
             const key = e.key.toLowerCase();
-            const step = 3;
+            const movementKeys = ['arrowleft', 'arrowright', 'arrowup', 'arrowdown', 'a', 'd', 'w', 's'];
+            if (!movementKeys.includes(key)) return;
+
+            // Stop the browser's default page-scroll behavior for these keys
+            e.preventDefault();
+
+            const step = 2;
             let moved = false;
 
             if (key === 'arrowleft' || key === 'a') {
@@ -1773,22 +2010,36 @@
                     playerEl.style.left = `${playerPos.x}%`;
                     playerEl.style.top = `${playerPos.y}%`;
                 }
+                checkBuildingCollision();
             }
         });
 
         function resetPlayerPos() {
             playerPos = { x: 45, y: 43 };
+            currentBuildingZone = null;
             const playerEl = document.getElementById('game-player');
             if (playerEl) {
                 playerEl.style.left = `${playerPos.x}%`;
                 playerEl.style.top = `${playerPos.y}%`;
             }
+            Object.keys(buildingZones).forEach(name => {
+                const el = document.getElementById(`building-${name}`);
+                if (el) el.classList.remove('zone-active');
+            });
+        }
+
+        function startIntroFlow() {
+            closeModal('intro-modal');
+            openCharacterModal();
+            playSound('select');
         }
 
         window.onload = function() {
             renderObjects();
             updateQuizProgress();
             updateAvatarPreviews();
+            // Onboarding order: title splash -> character setup -> (tutorial) -> escape room quiz
+            document.getElementById('intro-modal').classList.remove('hidden');
         };
     </script>
 </body>

@@ -1,0 +1,1795 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고교학점제 방탈출 & MISSION 192 v2</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        pixel: ['"Press Start 2P"', 'monospace'],
+                        sans: ['"Noto Sans KR"', 'sans-serif'],
+                    },
+                    colors: {
+                        m2: {
+                            bg: '#101722',
+                            card: '#182333',
+                            accent: '#4e91f7',
+                            highlight: '#70c7ff',
+                            border: '#3d526c'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: "Noto Sans KR", Arial, sans-serif;
+            user-select: none;
+            overflow-x: hidden;
+        }
+
+        button {
+            border: 0;
+            border-radius: 10px;
+            padding: 10px 16px;
+            background: #3b82f6;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        button:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        button:active { transform: translateY(1px); }
+
+        .hidden { display: none !important; }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+
+        /* Mission 192 Campus Map & Building Styles */
+        .map-board {
+            position: relative;
+            min-height: 520px;
+            border-radius: 16px;
+            overflow: hidden;
+            background: linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px),
+                        linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+                        #1e293b;
+            background-size: 36px 36px;
+            border: 4px solid #334155;
+        }
+
+        .road { position: absolute; background: #475569; }
+        .road.h { left: 0; right: 0; top: 46%; height: 70px; }
+        .road.v { top: 0; bottom: 0; left: 46%; width: 70px; }
+
+        .building {
+            position: absolute;
+            width: 27%;
+            height: 25%;
+            border: 3px solid #0f172a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #0f172a;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5);
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            padding: 8px;
+        }
+        .building:hover {
+            transform: scale(1.04);
+            filter: brightness(1.1);
+            z-index: 10;
+        }
+
+        .b-art { left: 4%; top: 6%; background: #fca5a5; }
+        .b-science { left: 36%; top: 6%; background: #93c5fd; }
+        .b-social { right: 4%; top: 6%; background: #fde047; }
+        .b-math { left: 4%; bottom: 6%; background: #86efac; }
+        .b-language { left: 36%; bottom: 6%; background: #c084fc; }
+        .b-career { right: 4%; bottom: 6%; background: #f97316; color: white; }
+
+        .centerSign {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 230px;
+            text-align: center;
+            background: rgba(15, 23, 42, 0.95);
+            border: 2px solid #38bdf8;
+            border-radius: 14px;
+            padding: 10px;
+            font-weight: 900;
+            z-index: 8;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        .player {
+            position: absolute;
+            width: 44px;
+            height: 48px;
+            z-index: 15;
+            transition: left 0.12s linear, top 0.12s linear;
+            filter: drop-shadow(0px 6px 8px rgba(0,0,0,0.6));
+            cursor: pointer;
+        }
+
+        /* Floating Score Text Animation */
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-35px) scale(1.15); }
+        }
+        .animate-score-float {
+            animation: floatUp 1.2s ease-out forwards;
+            pointer-events: none;
+        }
+
+        /* Modal Cards */
+        .modal-card {
+            background: #1e293b;
+            border: 2px solid #475569;
+            border-radius: 20px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+
+        @media print {
+            body {
+                background-color: #ffffff !important;
+                color: #0f172a !important;
+            }
+            header, main, #quiz-modal, #room-modal, #career-modal, #tutorial-modal {
+                display: none !important;
+            }
+            #result-modal {
+                position: static !important;
+                background: #ffffff !important;
+                backdrop-filter: none !important;
+                display: block !important;
+                padding: 0 !important;
+            }
+            .modal-card {
+                max-width: 100% !important;
+                max-height: none !important;
+                box-shadow: none !important;
+                border: none !important;
+                background: #ffffff !important;
+                color: #0f172a !important;
+                padding: 0 !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-card {
+                border: 1px solid #cbd5e1 !important;
+                background-color: #f8fafc !important;
+                color: #0f172a !important;
+            }
+            .print-title {
+                color: #0f172a !important;
+                -webkit-text-fill-color: initial !important;
+            }
+            .print-text-dark {
+                color: #1e293b !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-2 sm:p-4 bg-slate-950">
+
+    <!-- Header Section -->
+    <header class="w-full max-w-6xl mx-auto mb-3 bg-slate-900/90 border border-slate-800 rounded-2xl p-3 sm:p-4 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-3 backdrop-blur">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-sky-500 rounded-xl flex items-center justify-center text-slate-950 text-2xl font-black shadow-lg">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <div>
+                <h1 class="text-lg sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-cyan-300 to-blue-200">
+                    고교학점제 방탈출 & MISSION 192 v2
+                </h1>
+                <p class="text-xs text-slate-400">15개 방탈출 단서를 해독하고, 고교 3개년 192학점 맞춤 수강계획을 설계하세요!</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+            <!-- Player Avatar Badge -->
+            <button onclick="openCharacterModal()" class="flex items-center gap-2.5 bg-slate-950/80 border border-sky-500/40 hover:border-sky-400 p-1.5 px-3 rounded-xl transition group">
+                <div id="header-avatar-preview" class="w-9 h-9 rounded-lg bg-slate-900 flex items-center justify-center overflow-hidden border border-slate-700 group-hover:scale-105 transition"></div>
+                <div class="text-left">
+                    <div class="text-[10px] text-sky-400 font-bold leading-none">내 캐릭터</div>
+                    <div id="header-player-name" class="text-xs font-black text-slate-100 mt-1">김고교</div>
+                </div>
+                <span class="text-xs text-sky-400 ml-1">✏️</span>
+            </button>
+
+            <!-- Real-time Total Score Counter -->
+            <div class="bg-slate-950/90 border border-amber-500/50 px-3 py-1.5 rounded-xl text-center min-w-[90px]">
+                <div class="text-[10px] text-amber-400 font-bold">수강 종합점수</div>
+                <div id="header-score-num" class="text-sm sm:text-base font-black text-amber-300 font-pixel">0점</div>
+            </div>
+
+            <!-- Escape Room Progress Tracker -->
+            <div id="quiz-progress-box" class="flex items-center gap-3 bg-slate-950/80 px-3 py-1.5 rounded-xl border border-slate-800">
+                <div class="text-center">
+                    <div class="text-[10px] text-slate-400 font-medium">방탈출 열쇠</div>
+                    <div id="key-counter" class="text-sm font-bold text-amber-400 font-pixel">0 / 15</div>
+                </div>
+                <div class="w-20 bg-slate-800 h-3 rounded-full overflow-hidden p-0.5 border border-slate-700">
+                    <div id="progress-bar" class="bg-gradient-to-r from-amber-500 to-yellow-300 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="w-full max-w-6xl mx-auto flex-1 flex flex-col gap-4">
+
+        <!-- SECTION 1: ESCAPE ROOM QUIZ SECTION -->
+        <div id="escape-room-section" class="bg-slate-900 border-2 border-slate-800 rounded-2xl p-4 sm:p-5 shadow-2xl relative overflow-hidden flex flex-col">
+            
+            <div class="bg-slate-950/90 border border-slate-800 rounded-xl p-3 mb-4 flex flex-col md:flex-row items-center justify-between gap-3 text-center md:text-left">
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl">🏫</span>
+                    <div>
+                        <h2 class="text-base sm:text-lg font-bold text-sky-300">STAGE 1 : 고교학점제 비밀 교실 (15개 단서 해독)</h2>
+                        <p class="text-xs text-slate-300">교실 내 15개 오브젝트를 터치하여 퀴즈를 맞추고 열쇠를 얻으세요! (고교학점제 10문제 + 센스퀴즈 5문제)</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-1.5 text-xs font-medium">
+                    <button onclick="filterObjects('all')" id="btn-filter-all" class="px-3 py-1.5 rounded-lg bg-sky-500 text-slate-950 font-bold transition">전체 15개</button>
+                    <button onclick="filterObjects('credit')" id="btn-filter-credit" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition">고교학점제(10)</button>
+                    <button onclick="filterObjects('fun')" id="btn-filter-fun" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition">센스퀴즈(5)</button>
+                </div>
+            </div>
+
+            <!-- Quiz Grid (15 Cards) -->
+            <div id="object-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 min-h-[360px] content-start">
+            </div>
+
+            <!-- Portal Banner -->
+            <div id="portal-banner" class="mt-4 p-4 bg-slate-950/90 border-2 border-slate-800 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-950 border border-indigo-500 flex items-center justify-center text-2xl text-indigo-400 animate-pulse">
+                        🌀
+                    </div>
+                    <div>
+                        <div id="portal-title" class="font-bold text-sm text-slate-200">STAGE 2 포탈 [잠김]</div>
+                        <div id="portal-desc" class="text-xs text-slate-400">15개 열쇠를 모두 수집하면 MISSION 192 고교 3개년 학년별 수강 설계 게임이 열립니다.</div>
+                    </div>
+                </div>
+                <div class="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
+                    <button onclick="bypassAndOpenGame()" class="w-full sm:w-auto px-4 py-2.5 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-bold rounded-xl text-xs shadow-lg transition flex items-center justify-center gap-2">
+                        ⚡ 바로 테스트하기 (MISSION 192 즉시 입장)
+                    </button>
+                    <button id="enter-game-btn" onclick="openMissionGame()" disabled class="w-full sm:w-auto px-5 py-2.5 bg-slate-800 text-slate-500 rounded-xl font-bold font-pixel text-xs cursor-not-allowed border border-slate-700 transition">
+                        🎓 MISSION 192 입장
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: MISSION 192 V2 GAME SECTION -->
+        <div id="mission-game-section" class="hidden flex flex-col gap-4">
+
+            <!-- Game Navigation Bar -->
+            <div class="bg-slate-900 border-2 border-sky-500/80 rounded-2xl p-3 sm:p-4 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="text-3xl font-black font-pixel text-sky-400">MISSION <span class="text-cyan-300">192</span></div>
+                    <div class="h-6 w-[2px] bg-slate-700 hidden sm:block"></div>
+                    <div class="text-xs text-slate-300">
+                        <span class="text-amber-400 font-bold">STAGE 2:</span> 고교 3개년 학년별 수강계획 & 진로 설계
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
+                    <button onclick="showTutorialModal()" class="text-xs bg-slate-800 hover:bg-slate-700 text-sky-300 border border-sky-500/40 px-3 py-2 rounded-xl font-bold">
+                        ❓ 고교학점제(3년 192학점) 안내
+                    </button>
+                    <button onclick="exitMissionGame()" class="text-xs bg-rose-950 text-rose-300 hover:bg-rose-900 px-3 py-2 rounded-xl font-bold">
+                        🚪 방탈출 복귀
+                    </button>
+                </div>
+            </div>
+
+            <!-- Grade Selection Tabs & Credit Status Banner -->
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex flex-col lg:flex-row items-center justify-between gap-4">
+                <!-- Grade Filter Tabs -->
+                <div class="flex items-center gap-2 w-full lg:w-auto overflow-x-auto pb-1 lg:pb-0">
+                    <span class="text-xs font-bold text-slate-400 mr-1 whitespace-nowrap">📅 학년 선택:</span>
+                    <button onclick="setActiveGrade(1)" id="grade-tab-1" class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-sky-500 text-slate-950">
+                        <span>1학년 (공통/기초)</span>
+                        <span id="grade-1-badge" class="px-1.5 py-0.5 rounded bg-slate-950/30 text-[10px]">64학점</span>
+                    </button>
+                    <button onclick="setActiveGrade(2)" id="grade-tab-2" class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-slate-800 text-slate-300">
+                        <span>2학년 (일반/진로)</span>
+                        <span id="grade-2-badge" class="px-1.5 py-0.5 rounded bg-slate-950/30 text-[10px]">0학점</span>
+                    </button>
+                    <button onclick="setActiveGrade(3)" id="grade-tab-3" class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-slate-800 text-slate-300">
+                        <span>3학년 (진로/융합)</span>
+                        <span id="grade-3-badge" class="px-1.5 py-0.5 rounded bg-slate-950/30 text-[10px]">0학점</span>
+                    </button>
+                </div>
+
+                <!-- Cumulative 192 Credit Bar -->
+                <div class="w-full lg:w-1/2 flex flex-col gap-1.5 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="font-bold text-sky-300">🎓 3년간 누적 수강 학점 (목표 192학점)</span>
+                        <span class="font-pixel text-amber-400 font-bold"><span id="hud-credit-num">64</span> / 192 학점</span>
+                    </div>
+                    <div class="bg-slate-900 h-4 rounded-full overflow-hidden p-0.5 border border-slate-700 relative">
+                        <div id="hud-credit-bar" class="bg-gradient-to-r from-blue-500 via-sky-400 to-cyan-300 h-full rounded-full transition-all duration-300" style="width: 33%"></div>
+                    </div>
+                    <div class="flex justify-between text-[11px] text-slate-400">
+                        <span>1학년: <b id="sub-g1-credit" class="text-sky-300">64</b>/64</span>
+                        <span>2학년: <b id="sub-g2-credit" class="text-amber-300">0</b>/64</span>
+                        <span>3학년: <b id="sub-g3-credit" class="text-emerald-300">0</b>/64</span>
+                        <span id="hud-credit-pct" class="font-bold text-cyan-300">33% 완료</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Interactive Game Grid Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                
+                <!-- Left Panel: Interactive Campus Map (7 Cols) -->
+                <div class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xl flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-lg">🏫</span>
+                            <h2 class="text-sm sm:text-base font-bold text-sky-300">
+                                <span id="map-grade-title" class="text-amber-400 font-black">[1학년]</span> 수강 신청 캠퍼스
+                            </h2>
+                        </div>
+                        <span class="text-[11px] text-slate-400">⌨️ 방향키 이동 또는 건물 터치</span>
+                    </div>
+
+                    <!-- Campus Map Ground -->
+                    <div class="map-board">
+                        <div class="road h"></div>
+                        <div class="road v"></div>
+
+                        <!-- Buildings -->
+                        <div class="building b-art" onclick="openRoomModal('미술·디자인관')">
+                            <span class="text-lg">🎨</span>
+                            <span class="text-xs sm:text-sm font-black">미술·디자인관</span>
+                            <span class="text-[10px] text-slate-800 font-bold">미술 창작 · 디자인</span>
+                        </div>
+
+                        <div class="building b-science" onclick="openRoomModal('과학관')">
+                            <span class="text-lg">🔬</span>
+                            <span class="text-xs sm:text-sm font-black">과학관</span>
+                            <span class="text-[10px] text-slate-800 font-bold">생명과학 · 화학 · 물리</span>
+                        </div>
+
+                        <div class="building b-social" onclick="openRoomModal('사회·인문관')">
+                            <span class="text-lg">🏛️</span>
+                            <span class="text-xs sm:text-sm font-black">사회·인문관</span>
+                            <span class="text-[10px] text-slate-800 font-bold">경제 · 사회문제</span>
+                        </div>
+
+                        <div class="building b-math" onclick="openRoomModal('수학관')">
+                            <span class="text-lg">📐</span>
+                            <span class="text-xs sm:text-sm font-black">수학관</span>
+                            <span class="text-[10px] text-slate-800 font-bold">수학 · 심화수학</span>
+                        </div>
+
+                        <div class="building b-language" onclick="openRoomModal('언어·문화관')">
+                            <span class="text-lg">💻</span>
+                            <span class="text-xs sm:text-sm font-black">언어·문화관</span>
+                            <span class="text-[10px] text-slate-800 font-bold">영어 · AI · 프로그래밍</span>
+                        </div>
+
+                        <div class="building b-career" onclick="openCareerModal()">
+                            <span class="text-lg">🧭</span>
+                            <span class="text-xs sm:text-sm font-black">진로상담센터</span>
+                            <span class="text-[10px] text-amber-100 font-bold">희망 진로 설정</span>
+                        </div>
+
+                        <!-- Center Info Board -->
+                        <div class="centerSign">
+                            <div id="center-grade-indicator" class="text-xs font-black text-amber-300">현재 선택: 1학년 과목</div>
+                            <div class="text-[10px] text-slate-300 font-medium mt-1">건물을 클릭하여 해당 학년 수강 과목을 선택하세요</div>
+                        </div>
+
+                        <!-- Movable Player Character -->
+                        <div id="game-player" class="player" style="left: 45%; top: 43%;"></div>
+                    </div>
+
+                    <div class="mt-3 flex items-center justify-between text-xs text-slate-400">
+                        <span>📍 키보드 방향키/WASD로 교내를 이동하여 과목을 수강할 수 있습니다.</span>
+                        <button onclick="resetPlayerPos()" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded">
+                            🔄 위치 초기화
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Sidebar Panel: Career Direction Analysis & Selected Courses (5 Cols) -->
+                <div class="lg:col-span-5 flex flex-col gap-3">
+                    
+                    <!-- REAL-TIME CAREER DIRECTION ANALYSIS PANEL -->
+                    <div class="bg-slate-900 border-2 border-sky-500/60 p-4 rounded-2xl space-y-3 shadow-xl">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xs font-bold text-sky-300 font-pixel flex items-center gap-2">
+                                <span>🎯</span> 수강 신청 기반 진로 분석
+                            </h3>
+                            <span class="text-[10px] bg-sky-500/20 text-sky-300 px-2 py-0.5 rounded border border-sky-500/30">실시간 반영</span>
+                        </div>
+
+                        <div id="career-analysis-box" class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-2.5">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs text-slate-400">추천 진로 방향:</span>
+                                <span id="career-recommend-title" class="text-sm font-bold text-amber-300">IT · 공학 계열</span>
+                            </div>
+                            <div class="text-xs text-slate-300 leading-relaxed" id="career-recommend-desc">
+                                과목 선택 비율에 기반하여 최적의 진로 적성을 실시간 분석 중입니다.
+                            </div>
+
+                            <!-- Real-time Score Breakdown Metrics -->
+                            <div class="grid grid-cols-3 gap-2 pt-2 border-t border-slate-800 text-center">
+                                <div class="bg-slate-900 p-2 rounded-lg border border-slate-800">
+                                    <span class="text-[10px] text-slate-400 block">학업 이수 점수</span>
+                                    <span id="score-credit-metric" class="text-xs font-bold text-sky-300 font-pixel">0 / 400</span>
+                                </div>
+                                <div class="bg-slate-900 p-2 rounded-lg border border-slate-800">
+                                    <span class="text-[10px] text-slate-400 block">진로 적합 점수</span>
+                                    <span id="score-career-metric" class="text-xs font-bold text-amber-300 font-pixel">0 / 300</span>
+                                </div>
+                                <div class="bg-slate-900 p-2 rounded-lg border border-slate-800">
+                                    <span class="text-[10px] text-slate-400 block">융합 균형 점수</span>
+                                    <span id="score-balance-metric" class="text-xs font-bold text-emerald-300 font-pixel">0 / 300</span>
+                                </div>
+                            </div>
+
+                            <!-- Category breakdown bars -->
+                            <div id="category-bars" class="space-y-1.5 pt-2 border-t border-slate-800">
+                                <!-- JS Injects Category Weight Bars -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Selected Courses Breakdown by Grade -->
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-3 flex-1 flex flex-col">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xs font-bold text-sky-400 font-pixel flex items-center gap-2">
+                                <span>📚</span> 학년별 수강 신청 목록
+                            </h3>
+                            <span class="text-[10px] text-slate-400">클릭 시 신청 취소</span>
+                        </div>
+
+                        <div id="schedule-grid" class="grid grid-cols-1 gap-2 text-xs max-h-[180px] overflow-y-auto p-1">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+
+                    <!-- School Activity Log -->
+                    <div class="bg-slate-900 border border-slate-800 p-3.5 rounded-2xl space-y-2">
+                        <h3 class="text-xs font-bold text-sky-400 font-pixel flex items-center gap-2">
+                            <span>📜</span> 수강 및 진로 기록
+                        </h3>
+                        <div id="log-box" class="bg-slate-950 p-3 rounded-xl border border-slate-800 max-h-[110px] overflow-y-auto text-xs text-slate-300 space-y-1 leading-relaxed">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- QUIZ MODAL -->
+    <div id="quiz-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-3 z-50">
+        <div class="bg-slate-900 border-2 border-sky-500/80 rounded-2xl max-w-md w-full p-5 shadow-2xl relative">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+                <div class="flex items-center gap-3">
+                    <div id="modal-icon" class="w-10 h-10 rounded-xl bg-slate-950 border border-slate-700 flex items-center justify-center text-2xl">📚</div>
+                    <div>
+                        <div id="modal-badge" class="text-[10px] font-pixel text-sky-400">고교학점제 핵심</div>
+                        <h3 id="modal-title" class="text-sm font-bold text-slate-100">단서 #1</h3>
+                    </div>
+                </div>
+                <button onclick="closeQuizModal()" class="text-slate-400 hover:text-white text-xl">✕</button>
+            </div>
+
+            <div id="modal-question" class="text-sm font-bold text-amber-300 mb-4 bg-slate-950 p-3.5 rounded-xl border border-slate-800 leading-relaxed">
+                질문 내용이 여기에 들어갑니다.
+            </div>
+
+            <div id="modal-options" class="space-y-2 mb-4">
+            </div>
+
+            <div id="modal-explanation" class="hidden p-3 bg-slate-950 border border-emerald-500/50 rounded-xl text-xs text-emerald-300">
+                <div class="font-bold mb-1">💡 해설:</div>
+                <div id="explanation-text">설명 내용</div>
+            </div>
+
+            <div class="mt-4 flex justify-end">
+                <button onclick="closeQuizModal()" class="px-4 py-2 bg-slate-800 text-slate-300 font-bold rounded-xl text-xs">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BUILDING SUBJECT SELECTOR MODAL -->
+    <div id="room-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md hidden flex items-center justify-center p-3 z-50">
+        <div class="modal-card max-w-2xl w-full p-5 sm:p-6 text-slate-100 relative max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-4">
+                <div class="flex items-center gap-3">
+                    <span id="room-icon" class="text-3xl">🎨</span>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h2 id="room-modal-title" class="text-lg font-bold text-sky-300">건물 이름</h2>
+                            <span id="room-grade-badge" class="px-2 py-0.5 rounded text-xs font-bold bg-amber-400 text-slate-950">[1학년 과목]</span>
+                        </div>
+                        <p class="text-xs text-slate-400">해당 학년의 과목을 선택하여 3개년 수강 계획에 반영해보세요.</p>
+                    </div>
+                </div>
+                <button onclick="closeModal('room-modal')" class="text-slate-400 hover:text-white text-2xl font-bold">✕</button>
+            </div>
+
+            <div id="room-subjects-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                <!-- Javascript injects subject cards -->
+            </div>
+
+            <div class="flex justify-end border-t border-slate-800 pt-3">
+                <button onclick="closeModal('room-modal')" class="px-5 py-2.5 bg-slate-800 text-slate-300 font-bold rounded-xl text-xs">확인 / 닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CAREER COUNSELING CENTER MODAL -->
+    <div id="career-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md hidden flex items-center justify-center p-3 z-50">
+        <div class="modal-card max-w-lg w-full p-5 sm:p-6 text-slate-100 relative">
+            <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl">🧭</span>
+                    <div>
+                        <h2 class="text-lg font-bold text-amber-300">진로상담센터</h2>
+                        <p class="text-xs text-slate-400">목표하는 희망 진로 계열을 지정해보세요.</p>
+                    </div>
+                </div>
+                <button onclick="closeModal('career-modal')" class="text-slate-400 hover:text-white text-2xl font-bold">✕</button>
+            </div>
+
+            <p class="text-xs text-slate-300 mb-3 leading-relaxed">
+                목표 진로 계열을 지정하면 과목 추천 가이드를 받을 수 있습니다. 수강 신청에 따라 진로 방향이 실시간 진단되기도 합니다.
+            </p>
+
+            <div class="grid grid-cols-2 gap-2.5 mb-5">
+                <button onclick="setCareerGoal('공학·IT 계열')" class="p-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-left font-bold text-xs text-sky-300 flex items-center justify-between">
+                    <span>💻 공학·IT 계열</span>
+                    <span>➡️</span>
+                </button>
+                <button onclick="setCareerGoal('과학·의약 계열')" class="p-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-left font-bold text-xs text-emerald-300 flex items-center justify-between">
+                    <span>🔬 과학·의약 계열</span>
+                    <span>➡️</span>
+                </button>
+                <button onclick="setCareerGoal('예술·디자인 계열')" class="p-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-left font-bold text-xs text-pink-300 flex items-center justify-between">
+                    <span>🎨 예술·미디어 계열</span>
+                    <span>➡️</span>
+                </button>
+                <button onclick="setCareerGoal('경영·사회 계열')" class="p-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-left font-bold text-xs text-amber-300 flex items-center justify-between">
+                    <span>🏛️ 경영·사회 계열</span>
+                    <span>➡️</span>
+                </button>
+                <button onclick="setCareerGoal('인문·언어 계열')" class="p-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-left font-bold text-xs text-purple-300 flex items-center justify-between">
+                    <span>📖 인문·언어 계열</span>
+                    <span>➡️</span>
+                </button>
+                <button onclick="setCareerGoal('자율 융합 탐색')" class="p-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-left font-bold text-xs text-cyan-300 flex items-center justify-between">
+                    <span>🌟 자율 융합 계열</span>
+                    <span>➡️</span>
+                </button>
+            </div>
+
+            <div class="flex justify-end">
+                <button onclick="closeModal('career-modal')" class="px-4 py-2 bg-slate-800 text-slate-300 font-bold rounded-xl text-xs">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TUTORIAL MODAL -->
+    <div id="tutorial-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md hidden flex items-center justify-center p-3 z-50">
+        <!-- ... existing tutorial content ... -->
+    </div>
+
+    <!-- CHARACTER CUSTOMIZATION MODAL -->
+    <div id="character-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md hidden flex items-center justify-center p-3 z-50">
+        <div class="modal-card max-w-xl w-full p-5 sm:p-6 text-slate-100 relative max-h-[92vh] overflow-y-auto border-2 border-sky-500/80">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl">🪞</span>
+                    <div>
+                        <h2 class="text-lg font-bold text-sky-300 font-pixel">내 캐릭터 꾸미기</h2>
+                        <p class="text-xs text-slate-400">나만의 학생 캐릭터를 꾸미고 이름을 정해 캠퍼스를 누벼보세요!</p>
+                    </div>
+                </div>
+                <button onclick="closeModal('character-modal')" class="text-slate-400 hover:text-white text-2xl font-bold">✕</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
+                <!-- Live Avatar Preview Area -->
+                <div class="md:col-span-5 flex flex-col items-center justify-center bg-slate-950 p-4 rounded-2xl border border-sky-500/30">
+                    <div id="customizer-avatar-preview" class="w-28 h-32 flex items-center justify-center p-2 mb-3 bg-slate-900/80 rounded-xl border border-slate-800 shadow-inner"></div>
+                    <div class="w-full">
+                        <label class="block text-xs font-bold text-slate-300 mb-1">학생 이름 설정</label>
+                        <input type="text" id="custom-player-name" value="김고교" maxlength="8" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-amber-300 text-center focus:border-sky-400 outline-none">
+                    </div>
+                </div>
+
+                <!-- Customization Controls Grid -->
+                <div class="md:col-span-7 space-y-3 text-xs">
+                    <!-- Hair Style & Color -->
+                    <div>
+                        <span class="font-bold text-sky-300 block mb-1">💇 헤어 스타일 & 색상</span>
+                        <div class="grid grid-cols-4 gap-1.5 mb-1.5">
+                            <button onclick="setCustomTrait('hairStyle', 'short')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">단발</button>
+                            <button onclick="setCustomTrait('hairStyle', 'long')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">긴머리</button>
+                            <button onclick="setCustomTrait('hairStyle', 'ponytail')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">포니테일</button>
+                            <button onclick="setCustomTrait('hairStyle', 'cap')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">볼캡모자</button>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="setCustomTrait('hairColor', '#3b82f6')" class="w-6 h-6 rounded-full bg-blue-500 border border-white/40"></button>
+                            <button onclick="setCustomTrait('hairColor', '#f59e0b')" class="w-6 h-6 rounded-full bg-amber-500 border border-white/40"></button>
+                            <button onclick="setCustomTrait('hairColor', '#ec4899')" class="w-6 h-6 rounded-full bg-pink-500 border border-white/40"></button>
+                            <button onclick="setCustomTrait('hairColor', '#10b981')" class="w-6 h-6 rounded-full bg-emerald-500 border border-white/40"></button>
+                            <button onclick="setCustomTrait('hairColor', '#1e293b')" class="w-6 h-6 rounded-full bg-slate-800 border border-white/40"></button>
+                        </div>
+                    </div>
+
+                    <!-- Eye Expression -->
+                    <div>
+                        <span class="font-bold text-sky-300 block mb-1">👀 눈 모양 / 표정</span>
+                        <div class="grid grid-cols-3 gap-1.5">
+                            <button onclick="setCustomTrait('eyeStyle', 'sparkle')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">✨ 반짝반짝</button>
+                            <button onclick="setCustomTrait('eyeStyle', 'glasses')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">👓 스마트안경</button>
+                            <button onclick="setCustomTrait('eyeStyle', 'happy')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">😊 웃는눈</button>
+                        </div>
+                    </div>
+
+                    <!-- Outfit Style & Color -->
+                    <div>
+                        <span class="font-bold text-sky-300 block mb-1">👕 의상 스타일 & 색상</span>
+                        <div class="grid grid-cols-3 gap-1.5 mb-1.5">
+                            <button onclick="setCustomTrait('outfitStyle', 'uniform')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">단정한 교복</button>
+                            <button onclick="setCustomTrait('outfitStyle', 'hoodie')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">편한 후드티</button>
+                            <button onclick="setCustomTrait('outfitStyle', 'cardigan')" class="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-center font-medium border border-slate-700">니트 가디건</button>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="setCustomTrait('outfitColor', '#1d4ed8')" class="w-6 h-6 rounded-full bg-blue-700 border border-white/40"></button>
+                            <button onclick="setCustomTrait('outfitColor', '#b91c1c')" class="w-6 h-6 rounded-full bg-red-700 border border-white/40"></button>
+                            <button onclick="setCustomTrait('outfitColor', '#047857')" class="w-6 h-6 rounded-full bg-emerald-700 border border-white/40"></button>
+                            <button onclick="setCustomTrait('outfitColor', '#6b21a8')" class="w-6 h-6 rounded-full bg-purple-700 border border-white/40"></button>
+                            <button onclick="setCustomTrait('outfitColor', '#334155')" class="w-6 h-6 rounded-full bg-slate-700 border border-white/40"></button>
+                        </div>
+                    </div>
+
+                    <!-- Skin Tone -->
+                    <div>
+                        <span class="font-bold text-sky-300 block mb-1">🎨 피부 톤</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="setCustomTrait('skinTone', '#fde047')" class="px-3 py-1 bg-amber-200 text-slate-950 font-bold rounded-lg text-xs">밝은 톤</button>
+                            <button onclick="setCustomTrait('skinTone', '#fbcfe8')" class="px-3 py-1 bg-pink-200 text-slate-950 font-bold rounded-lg text-xs">핑크 톤</button>
+                            <button onclick="setCustomTrait('skinTone', '#fed7aa')" class="px-3 py-1 bg-orange-200 text-slate-950 font-bold rounded-lg text-xs">웜 톤</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end border-t border-slate-800 pt-3 mt-4 gap-2">
+                <button onclick="saveCharacter()" class="px-6 py-2.5 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-bold rounded-xl text-xs shadow-lg transition">
+                    ✨ 커스텀 완성 및 저장
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RESULT MODAL -->
+    <div id="result-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md hidden flex items-center justify-center p-3 z-50">
+        <div class="modal-card max-w-2xl w-full p-5 sm:p-6 text-center text-slate-100 relative max-h-[92vh] overflow-y-auto">
+            <div class="text-4xl animate-bounce mb-1 no-print">🎉</div>
+            <h1 class="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-cyan-300 to-blue-200 font-pixel print-title">
+                🎓 고교학점제 3개년 수강 계획서 & 진로 리포트
+            </h1>
+            <p class="text-xs text-slate-300 mt-1 print-text-dark">MISSION 192 완성! 학생 맞춤형 교육과정 이수 계획 및 학과 진단 결과입니다.</p>
+
+            <div class="my-3 p-3.5 bg-slate-950 rounded-2xl border-2 border-sky-500/60 flex flex-col sm:flex-row items-center justify-around gap-2 print-card">
+                <div class="text-center">
+                    <span class="text-[10px] text-slate-400 font-pixel block">FINAL CREDITS</span>
+                    <div class="text-3xl font-black text-cyan-300 font-pixel">
+                        <span id="r-final-credit">192</span> / 192 학점
+                    </div>
+                </div>
+                <div class="h-8 w-[1px] bg-slate-800 hidden sm:block"></div>
+                <div class="text-center">
+                    <span class="text-[10px] text-slate-400 block font-bold">최종 이수 분야</span>
+                    <b id="r-career" class="text-amber-300 text-sm sm:text-base">IT · 공학 계열</b>
+                </div>
+                <div class="h-8 w-[1px] bg-slate-800 hidden sm:block"></div>
+                <div class="text-center">
+                    <span class="text-[10px] text-slate-400 block font-bold">3개년 신청 과목 수</span>
+                    <b id="r-subjects" class="text-sky-300 text-sm sm:text-base font-pixel">0 개</b>
+                </div>
+            </div>
+
+            <!-- DETAILED BRIEFING REPORT CONTENT -->
+            <div id="r-report-briefing" class="space-y-3 text-left text-xs mb-4">
+                <!-- JS Injects Recommended Majors, Areas to Supplement, Competencies, and 3-Year Course List -->
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="flex flex-col sm:flex-row items-center justify-end gap-2 border-t border-slate-800 pt-3 no-print">
+                <button onclick="window.print()" class="w-full sm:w-auto px-5 py-2.5 bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-bold rounded-xl text-xs shadow-lg transition flex items-center justify-center gap-1.5">
+                    🖨️ 수강 계획서 인쇄 / PDF 저장
+                </button>
+                <button onclick="location.reload()" class="w-full sm:w-auto px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-xs transition">
+                    🔄 다시 처음부터 설계하기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Player Character Customization State
+        let playerConfig = {
+            name: "김고교",
+            hairStyle: "short", // short, long, ponytail, cap
+            hairColor: "#3b82f6",
+            eyeStyle: "sparkle", // sparkle, glasses, happy
+            outfitStyle: "uniform", // uniform, hoodie, cardigan
+            outfitColor: "#1d4ed8",
+            skinTone: "#fde047"
+        };
+
+        let currentTotalScore = 0;
+
+        // Dynamic SVG Avatar Rendering Engine
+        function renderAvatarSVG(config = playerConfig) {
+            const skin = config.skinTone;
+            const hair = config.hairColor;
+            const outfit = config.outfitColor;
+
+            // Hair paths
+            let hairSVG = '';
+            if (config.hairStyle === 'short') {
+                hairSVG = `<path d="M 8 18 C 8 8, 32 8, 32 18 L 34 22 L 6 22 Z" fill="${hair}" /><path d="M 6 18 Q 12 12 20 18 Q 28 12 34 18" stroke="${hair}" stroke-width="3" fill="none" />`;
+            } else if (config.hairStyle === 'long') {
+                hairSVG = `<path d="M 6 18 C 6 6, 34 6, 34 18 L 36 34 L 32 34 L 32 22 L 8 22 L 8 34 L 4 34 Z" fill="${hair}" />`;
+            } else if (config.hairStyle === 'ponytail') {
+                hairSVG = `<path d="M 8 18 C 8 8, 32 8, 32 18 L 34 22 L 6 22 Z" fill="${hair}" /><path d="M 28 14 Q 38 12 36 28 Q 32 26 30 20" fill="${hair}" />`;
+            } else if (config.hairStyle === 'cap') {
+                hairSVG = `<path d="M 7 17 A 13 13 0 0 1 33 17 Z" fill="${hair}" /><rect x="4" y="16" width="32" height="4" rx="2" fill="${hair}" /><path d="M 2 18 L 14 18" stroke="#ffffff" stroke-width="2" />`;
+            }
+
+            // Eye paths
+            let eyesSVG = '';
+            if (config.eyeStyle === 'sparkle') {
+                eyesSVG = `<circle cx="14" cy="20" r="2.5" fill="#0f172a"/><circle cx="15" cy="19" r="1" fill="#ffffff"/><circle cx="26" cy="20" r="2.5" fill="#0f172a"/><circle cx="27" cy="19" r="1" fill="#ffffff"/>`;
+            } else if (config.eyeStyle === 'glasses') {
+                eyesSVG = `<circle cx="14" cy="20" r="2" fill="#0f172a"/><circle cx="26" cy="20" r="2" fill="#0f172a"/><rect x="9" y="15" width="10" height="9" rx="2" fill="none" stroke="#38bdf8" stroke-width="1.5"/><rect x="21" y="15" width="10" height="9" rx="2" fill="none" stroke="#38bdf8" stroke-width="1.5"/><line x1="19" y1="19" x2="21" y2="19" stroke="#38bdf8" stroke-width="1.5"/>`;
+            } else if (config.eyeStyle === 'happy') {
+                eyesSVG = `<path d="M 12 21 Q 14 17 16 21" stroke="#0f172a" stroke-width="2" fill="none"/><path d="M 24 21 Q 26 17 28 21" stroke="#0f172a" stroke-width="2" fill="none"/>`;
+            }
+
+            // Outfit paths
+            let outfitSVG = '';
+            if (config.outfitStyle === 'uniform') {
+                outfitSVG = `<rect x="8" y="30" width="24" height="18" rx="4" fill="${outfit}" /><polygon points="20,30 16,38 24,38" fill="#f8fafc" /><polygon points="20,33 18,40 22,40" fill="#ef4444" />`;
+            } else if (config.outfitStyle === 'hoodie') {
+                outfitSVG = `<rect x="7" y="30" width="26" height="18" rx="6" fill="${outfit}" /><path d="M 17 30 L 20 38 L 23 30" stroke="#ffffff" stroke-width="1.5" fill="none" /><rect x="13" y="38" width="14" height="7" rx="2" fill="#000000" opacity="0.2" />`;
+            } else if (config.outfitStyle === 'cardigan') {
+                outfitSVG = `<rect x="8" y="30" width="24" height="18" rx="4" fill="${outfit}" /><polygon points="20,30 14,48 26,48" fill="#f8fafc" /><circle cx="20" cy="38" r="1" fill="#0f172a" /><circle cx="20" cy="43" r="1" fill="#0f172a" />`;
+            }
+
+            return `
+                <svg viewBox="0 0 40 48" class="w-full h-full">
+                    <!-- Head & Body Base -->
+                    <rect x="18" y="27" width="4" height="5" fill="${skin}" />
+                    <rect x="8" y="12" width="24" height="18" rx="9" fill="${skin}" stroke="#0f172a" stroke-width="1.5" />
+                    <!-- Hair -->
+                    ${hairSVG}
+                    <!-- Eyes -->
+                    ${eyesSVG}
+                    <!-- Blush & Mouth -->
+                    <circle cx="11" cy="23" r="1.5" fill="#f43f5e" opacity="0.5"/>
+                    <circle cx="29" cy="23" r="1.5" fill="#f43f5e" opacity="0.5"/>
+                    <path d="M 17 25 Q 20 27 23 25" stroke="#0f172a" stroke-width="1.5" stroke-linecap="round" fill="none" />
+                    <!-- Outfit -->
+                    ${outfitSVG}
+                </svg>
+            `;
+        }
+
+        function updateAvatarPreviews() {
+            const svg = renderAvatarSVG();
+            
+            // Render on campus map player
+            const mapPlayer = document.getElementById('game-player');
+            if (mapPlayer) mapPlayer.innerHTML = svg;
+
+            // Render in header badge
+            const headerAvatar = document.getElementById('header-avatar-preview');
+            if (headerAvatar) headerAvatar.innerHTML = svg;
+
+            // Render in character modal preview
+            const customizerAvatar = document.getElementById('customizer-avatar-preview');
+            if (customizerAvatar) customizerAvatar.innerHTML = svg;
+
+            const nameEl = document.getElementById('header-player-name');
+            if (nameEl) nameEl.innerText = playerConfig.name;
+        }
+
+        function openCharacterModal() {
+            document.getElementById('custom-player-name').value = playerConfig.name;
+            updateAvatarPreviews();
+            document.getElementById('character-modal').classList.remove('hidden');
+        }
+
+        function setCustomTrait(key, val) {
+            playerConfig[key] = val;
+            updateAvatarPreviews();
+            playSound('select');
+        }
+
+        function saveCharacter() {
+            const inputName = document.getElementById('custom-player-name').value.trim();
+            if (inputName) playerConfig.name = inputName;
+            updateAvatarPreviews();
+            closeModal('character-modal');
+            logItems.unshift(`🪞 [캐릭터 설정] '${playerConfig.name}' 캐릭터 스타일을 변경했습니다.`);
+            updateGameUI();
+            playSound('correct');
+        }
+
+        // Floating Score Visual Notification Trigger
+        function triggerScoreToast(delta, x, y) {
+            const toast = document.createElement('div');
+            toast.className = `fixed font-pixel font-bold text-sm z-50 pointer-events-none animate-score-float ${
+                delta >= 0 ? 'text-amber-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]' : 'text-rose-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]'
+            }`;
+            toast.innerText = delta >= 0 ? `+${delta}점!` : `${delta}점`;
+            
+            // Position toast near click or center screen
+            toast.style.left = x ? `${x}px` : '50%';
+            toast.style.top = y ? `${y}px` : '40%';
+
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 1200);
+        }
+
+        // Web Audio API for Retro Sound Effects
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+
+        function initAudio() {
+            if (!audioCtx) audioCtx = new AudioCtx();
+        }
+
+        function playSound(type) {
+            try {
+                initAudio();
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                const now = audioCtx.currentTime;
+
+                if (type === 'correct') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.setValueAtTime(659.25, now + 0.1);
+                    osc.frequency.setValueAtTime(783.99, now + 0.2);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                    osc.start(now);
+                    osc.stop(now + 0.4);
+                } else if (type === 'wrong') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, now);
+                    osc.frequency.setValueAtTime(164.81, now + 0.15);
+                    gain.gain.setValueAtTime(0.3, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                } else if (type === 'select') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(440, now);
+                    osc.frequency.setValueAtTime(880, now + 0.08);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+                    osc.start(now);
+                    osc.stop(now + 0.2);
+                }
+            } catch (e) {}
+        }
+
+        // ==========================================
+        // 1. ESCAPE ROOM QUIZ DATA & LOGIC
+        // ==========================================
+        let unlockedKeys = [];
+        let currentFilter = 'all';
+        let currentQuizIndex = 0;
+
+        const quizData = [
+            {
+                id: 1, category: 'credit', icon: '📚', title: '총 이수 학점', type: '고교학점제 핵심',
+                question: '고등학교 3년 동안 졸업을 위해 총 이수해야 하는 학점은 몇 학점일까요?',
+                options: ['204학점', '192학점', '180학점', '160학점'], answer: 1,
+                explanation: '고교학점제에서 3년간 졸업에 필요한 총 이수 학점은 192학점(교과 174학점 + 창체 18학점)입니다.'
+            },
+            {
+                id: 2, category: 'credit', icon: '⏱️', title: '1학점의 기준', type: '고교학점제 개념',
+                question: '고교학점제에서 1학점이란 50분 수업을 몇 회 이수하는 것을 의미할까요?',
+                options: ['10회', '12회', '16회', '20회'], answer: 2,
+                explanation: '1학점은 50분 기준 16회 수업을 이수하는 단위입니다.'
+            },
+            {
+                id: 3, category: 'credit', icon: '📋', title: '학점 이수 조건 (출석)', type: '이수 기준',
+                question: '과목 이수를 위해 만족해야 하는 최소 출석률은 얼마일까요?',
+                options: ['수업일수의 1/2 이상', '수업일수의 2/3 이상', '수업일수의 3/4 이상', '수업일수의 80% 이상'], answer: 1,
+                explanation: '과목을 이수하기 위해서는 해당 과목 수업일수의 2/3 이상을 출석해야 합니다.'
+            },
+            {
+                id: 4, category: 'credit', icon: '🎯', title: '학업성취율 기준', type: '이수 기준',
+                question: '과목 이수를 위해 달성해야 하는 최소 학업성취율 기준은 얼마일까요?',
+                options: ['30% 이상', '40% 이상', '50% 이상', '60% 이상'], answer: 1,
+                explanation: '과목 이수를 위한 최소 학업성취율은 40% 이상입니다.'
+            },
+            {
+                id: 5, category: 'credit', icon: '🛠️', title: '최소 성취수준 보장지도', type: '학습 지원',
+                question: '학업성취율 40% 미만으로 미이수(I) 위험이 발생할 때 학교에서 제공하는 제도는?',
+                options: ['최소 성취수준 보장지도', '야간 자율학습', '방학 강제 퇴학', '학점 과태료 부여'], answer: 0,
+                explanation: '미이수가 발생하지 않도록 예방 지도 및 보충 이수 등 최소 성취수준 보장지도를 운영합니다.'
+            },
+            {
+                id: 6, category: 'credit', icon: '🧭', title: '과목 선택 구조', type: '교육과정',
+                question: '고교학점제 선택 과목의 세 가지 분류에 해당하지 않는 것은?',
+                options: ['일반선택과목', '진로선택과목', '융합선택과목', '암기전용과목'], answer: 3,
+                explanation: '선택 과목은 학생의 적성과 흥미에 따라 일반선택, 진로선택, 융합선택과목으로 구성됩니다.'
+            },
+            {
+                id: 7, category: 'credit', icon: '🏫', title: '전면 도입 시기', type: '제도 역사',
+                question: '고등학교 전체 학년에 고교학점제가 전면 적용되는 신입생 입학 연도는?',
+                options: ['2022년', '2023년', '2025년', '2028년'], answer: 2,
+                explanation: '2025학년도 고등학교 1학년 신입생부터 고교학점제가 전면 적용되었습니다.'
+            },
+            {
+                id: 8, category: 'credit', icon: '💡', title: '학생 개별 시간표', type: '수업 운영',
+                question: '고교학점제에서 학생들의 시간표 특징으로 가장 올바른 것은?',
+                options: ['반 전체가 동일한 시간표', '자신이 선택한 과목에 따른 맞춤형 개별 시간표', '선생님이 지정해 준 시간표만 이수', '매일 무작위 시간표'], answer: 1,
+                explanation: '학생들은 진로와 적성에 맞춰 수강 신청을 하고 맞춤형 개별 시간표에 따라 이동 수업을 듣습니다.'
+            },
+            {
+                id: 9, category: 'credit', icon: '🤝', title: '공동교육과정', type: '수강 기회',
+                question: '우리 학교에 개설되지 않은 과목을 타 학교나 지역사회와 연계하여 듣는 제도는?',
+                options: ['공동교육과정', '위탁수강 거부제', '자율 야간 이동제', '방과후 원격제'], answer: 0,
+                explanation: '소인수 과목이나 미개설 과목은 온·오프라인 공동교육과정을 통해 이수할 수 있습니다.'
+            },
+            {
+                id: 10, category: 'credit', icon: '🎓', title: '학점 이수와 졸업', type: '졸업 조건',
+                question: '고등학교 3년 졸업 결정의 핵심 기준 두 가지는?',
+                options: ['수능 점수 + 봉사시간', '출석률(2/3) + 누적 학점(192학점)', '중간고사 점수 + 기말고사 점수', '선생님 추천 + 반장 경력'], answer: 1,
+                explanation: '과목별 출석률(2/3 이상)과 성취율(40% 이상)을 충족하여 3년간 192학점을 취득해야 졸업할 수 있습니다.'
+            },
+            {
+                id: 11, category: 'fun', icon: '👑', title: '센스 퀴즈 1탄', type: '재미 넌센스',
+                question: '세상에서 가장 가난한 왕은 누구일까요?',
+                options: ['세종대왕', '최저임금', '알렉산더', '사자왕'], answer: 1,
+                explanation: '정답은 최저임금! (임금이 가장 적은 왕입니다 😂)'
+            },
+            {
+                id: 12, category: 'fun', icon: '🦍', title: '센스 퀴즈 2탄', type: '재미 넌센스',
+                question: '왕이 길을 가다 넘어지면 무엇이 될까요?',
+                options: ['킹콩', '킹카', '왕비', '임금님'], answer: 0,
+                explanation: '정답은 킹콩! (King + 쿵 넘어져서 킹콩입니다!)'
+            },
+            {
+                id: 13, category: 'fun', icon: '🍌', title: '센스 퀴즈 3탄', type: '재미 넌센스',
+                question: '바나나가 웃으면 무엇이라고 할까요?',
+                options: ['바나나킥', '바나나웃음', '바나나 스마일', '델몬트'], answer: 0,
+                explanation: '정답은 바나나킥! (바나나가 킥킥 웃는 모습입니다!)'
+            },
+            {
+                id: 14, category: 'fun', icon: '🦆', title: '센스 퀴즈 4탄', type: '재미 넌센스',
+                question: '오리가 얼면 무엇이 될까요?',
+                options: ['오리엔탈', '언덕', '얼음오리', '덕수궁'], answer: 1,
+                explanation: '정답은 언덕! (언 오리 -> 언 덕!)'
+            },
+            {
+                id: 15, category: 'fun', icon: '💊', title: '센스 퀴즈 5탄', type: '재미 넌센스',
+                question: '세상에서 가장 빠른 약은 무슨 약일까요?',
+                options: ['감기약', '영양제', '알약', '한약'], answer: 2,
+                explanation: '정답은 알약! (Quick! / 미리 알아차리는 알약입니다!)'
+            }
+        ];
+
+        function renderObjects() {
+            const grid = document.getElementById('object-grid');
+            grid.innerHTML = '';
+
+            const filtered = quizData.filter(q => {
+                if (currentFilter === 'credit') return q.category === 'credit';
+                if (currentFilter === 'fun') return q.category === 'fun';
+                return true;
+            });
+
+            filtered.forEach((q) => {
+                const isSolved = unlockedKeys.includes(q.id);
+                const btn = document.createElement('button');
+                btn.onclick = () => openQuizModal(q.id - 1);
+
+                btn.className = `p-3 rounded-xl border-2 text-left flex flex-col justify-between transition-all duration-200 relative overflow-hidden h-28 ${
+                    isSolved 
+                    ? 'bg-emerald-950/80 border-emerald-500/80 text-emerald-200' 
+                    : 'bg-slate-800/90 border-slate-600 hover:border-sky-400 text-white'
+                }`;
+
+                btn.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="text-2xl ${isSolved ? '' : 'animate-float'}">${q.icon}</span>
+                        <span class="text-[10px] font-pixel px-1.5 py-0.5 rounded ${
+                            q.category === 'credit' 
+                            ? 'bg-sky-500/20 text-sky-300 border border-sky-500/30' 
+                            : 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
+                        }">#${q.id}</span>
+                    </div>
+                    <div>
+                        <div class="text-xs font-bold truncate text-slate-100 mb-0.5">${q.title}</div>
+                        <div class="text-[10px] font-pixel ${isSolved ? 'text-emerald-400' : 'text-amber-400'}">
+                            ${isSolved ? '🔑 해독 완료' : '🔒 미해독'}
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(btn);
+            });
+        }
+
+        function filterObjects(type) {
+            currentFilter = type;
+            document.getElementById('btn-filter-all').className = `px-3 py-1.5 rounded-lg text-xs font-bold ${type === 'all' ? 'bg-sky-500 text-slate-950' : 'bg-slate-800 text-slate-300'}`;
+            document.getElementById('btn-filter-credit').className = `px-3 py-1.5 rounded-lg text-xs font-bold ${type === 'credit' ? 'bg-sky-500 text-slate-950' : 'bg-slate-800 text-slate-300'}`;
+            document.getElementById('btn-filter-fun').className = `px-3 py-1.5 rounded-lg text-xs font-bold ${type === 'fun' ? 'bg-slate-800 text-slate-300' : 'bg-slate-800 text-slate-300'}`;
+            renderObjects();
+        }
+
+        function openQuizModal(index) {
+            currentQuizIndex = index;
+            const q = quizData[index];
+            const isSolved = unlockedKeys.includes(q.id);
+
+            document.getElementById('modal-icon').innerText = q.icon;
+            document.getElementById('modal-title').innerText = `단서 #${q.id} - ${q.title}`;
+            document.getElementById('modal-badge').innerText = q.type;
+            document.getElementById('modal-question').innerText = q.question;
+
+            const optionsContainer = document.getElementById('modal-options');
+            optionsContainer.innerHTML = '';
+            const explanationBox = document.getElementById('modal-explanation');
+            explanationBox.classList.add('hidden');
+
+            q.options.forEach((opt, idx) => {
+                const optBtn = document.createElement('button');
+                optBtn.className = `w-full p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition flex items-center justify-between ${
+                    isSolved && idx === q.answer
+                    ? 'bg-emerald-900/60 border-emerald-500 text-emerald-200'
+                    : 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-200'
+                }`;
+                
+                optBtn.innerHTML = `
+                    <span>${idx + 1}. ${opt}</span>
+                    <span class="text-xs">${isSolved && idx === q.answer ? '✅' : '➡️'}</span>
+                `;
+                optBtn.onclick = () => handleAnswerSelect(idx);
+                optionsContainer.appendChild(optBtn);
+            });
+
+            if (isSolved) {
+                document.getElementById('explanation-text').innerText = q.explanation;
+                explanationBox.classList.remove('hidden');
+            }
+            document.getElementById('quiz-modal').classList.remove('hidden');
+        }
+
+        function closeQuizModal() {
+            document.getElementById('quiz-modal').classList.add('hidden');
+        }
+
+        function handleAnswerSelect(selectedIdx) {
+            const q = quizData[currentQuizIndex];
+            if (selectedIdx === q.answer) {
+                playSound('correct');
+                if (!unlockedKeys.includes(q.id)) {
+                    unlockedKeys.push(q.id);
+                    updateQuizProgress();
+                }
+                document.getElementById('explanation-text').innerText = q.explanation;
+                document.getElementById('modal-explanation').classList.remove('hidden');
+                renderObjects();
+
+                if (unlockedKeys.length === 15) {
+                    unlockPortal();
+                }
+            } else {
+                playSound('wrong');
+                alert('❌ 아쉽네요! 다시 해설과 질문을 살피고 도전해 보세요.');
+            }
+        }
+
+        function updateQuizProgress() {
+            const count = unlockedKeys.length;
+            document.getElementById('key-counter').innerText = `${count} / 15`;
+            const pct = Math.round((count / 15) * 100);
+            document.getElementById('progress-bar').style.width = `${pct}%`;
+        }
+
+        function unlockPortal() {
+            const portalBanner = document.getElementById('portal-banner');
+            portalBanner.className = 'mt-4 p-4 bg-emerald-950/90 border-2 border-emerald-500 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left shadow-lg';
+            
+            document.getElementById('portal-title').className = 'font-bold text-sm text-emerald-300';
+            document.getElementById('portal-title').innerText = '🌀 STAGE 2 차원 포탈 [열림!]';
+            document.getElementById('portal-desc').innerText = '15개 단서 해독 완료! 3개년 학년별 수강 설계 게임에 입장하세요!';
+            
+            const btn = document.getElementById('enter-game-btn');
+            btn.disabled = false;
+            btn.className = 'w-full sm:w-auto px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-xl font-bold font-pixel text-xs cursor-pointer shadow-lg transition';
+        }
+
+        function bypassAndOpenGame() {
+            for (let i = 1; i <= 15; i++) {
+                if (!unlockedKeys.includes(i)) unlockedKeys.push(i);
+            }
+            updateQuizProgress();
+            unlockPortal();
+            openMissionGame();
+            playSound('correct');
+        }
+
+        // ==========================================
+        // 2. MISSION 192 V2 GAME LOGIC & STATE
+        // ==========================================
+        const TARGET_CREDITS = 192;
+        let activeGrade = 1; // 1학년, 2학년, 3학년 선택 상태
+        let targetCareerGoal = "자율 융합 계열";
+        let logItems = ["고등학교 입학! 3년(192학점) 학년별 맞춤 수강 계획을 시작합니다."];
+        let playerPos = { x: 45, y: 43 };
+
+        // Selected Courses Data by Grade
+        let selectedCourses = {
+            1: [], // 1학년 과목
+            2: [], // 2학년 과목
+            3: []  // 3학년 과목
+        };
+
+        // Course Database categorized by Buildings AND Grade Levels
+        const courseDatabase = {
+            "미술·디자인관": {
+                1: [{ name: "음악·미술 공통", credit: 6, category: "예술", desc: "1학년 예체능 감성 역량 함양" }],
+                2: [
+                    { name: "미술 창작", credit: 6, category: "예술", desc: "아이디어를 시각적 매체로 표현" },
+                    { name: "시각 디자인", credit: 6, category: "예술", desc: "디자인적 사고와 조형 문제 해결" }
+                ],
+                3: [
+                    { name: "영상 미디어 제작", credit: 8, category: "예술", desc: "디지털 멀티미디어 기획 및 촬영·편집" },
+                    { name: "융합 예술 탐구", credit: 8, category: "예술", desc: "기술과 예술이 결합된 인터랙티브 창작" }
+                ]
+            },
+            "과학관": {
+                1: [
+                    { name: "통합과학", credit: 10, category: "과학", desc: "1학년 공통 기초 과학 이해" },
+                    { name: "과학탐구실험", credit: 4, category: "과학", desc: "실험을 통한 과학적 탐구 기능 습득" }
+                ],
+                2: [
+                    { name: "물리학 Ⅰ", credit: 8, category: "과학", desc: "역학과 에너지의 원리 탐구" },
+                    { name: "화학 Ⅰ", credit: 8, category: "과학", desc: "물질의 구조와 반응 원리" },
+                    { name: "생명과학 Ⅰ", credit: 8, category: "과학", desc: "생명 현상과 인체 생리학 이해" }
+                ],
+                3: [
+                    { name: "생명과학 Ⅱ · 바이오", credit: 10, category: "과학", desc: "유전학, 분자생물학 및 바이오 헬스" },
+                    { name: "물리학 Ⅱ · 첨단공학", credit: 10, category: "과학", desc: "전자기학과 현대 물리학 고급 과정" },
+                    { name: "지구시스템 과학", credit: 8, category: "과학", desc: "지구 환경과 우주 시스템 탐구" }
+                ]
+            },
+            "사회·인문관": {
+                1: [
+                    { name: "통합사회", credit: 10, category: "사회", desc: "1학년 공통 인간과 사회의 이해" },
+                    { name: "한국사", credit: 6, category: "사회", desc: "1학년 공통 역사적 의식 함양" }
+                ],
+                2: [
+                    { name: "경제", credit: 8, category: "사회", desc: "시장 경제 구조와 금융 의사결정" },
+                    { name: "세계사 · 동아시아사", credit: 8, category: "인문", desc: "글로벌 역사 및 문화적 맥락" },
+                    { name: "정치와 법", credit: 8, category: "사회", desc: "민주적 법치사회와 권리 보장" }
+                ],
+                3: [
+                    { name: "사회문제 탐구", credit: 8, category: "사회", desc: "현대 사회 현상 조사 및 대안 제시" },
+                    { name: "국제 관계와 한국 외교", credit: 8, category: "사회", desc: "글로벌 정치 체제와 통상 이해" }
+                ]
+            },
+            "수학관": {
+                1: [{ name: "공통수학 (Ⅰ·Ⅱ)", credit: 16, category: "수학", desc: "1학년 필수 기본 수학 역량" }],
+                2: [
+                    { name: "수학 Ⅰ · Ⅱ", credit: 12, category: "수학", desc: "지수·로그, 삼각함수, 수열 및 기본 미적분" },
+                    { name: "확률과 통계", credit: 8, category: "수학", desc: "데이터 분석과 확률적 추론" }
+                ],
+                3: [
+                    { name: "미적분학", credit: 10, category: "수학", desc: "이공계 필수 자연 현상 모델링" },
+                    { name: "인공지능 수학", credit: 8, category: "IT", desc: "AI 알고리즘의 기초가 되는 행렬과 벡터" },
+                    { name: "기하", credit: 8, category: "수학", desc: "공간도형과 이차곡선 구조 이해" }
+                ]
+            },
+            "언어·문화관": {
+                1: [
+                    { name: "공통국어", credit: 10, category: "인문", desc: "1학년 공통 비판적 사고 및 독해" },
+                    { name: "공통영어", credit: 10, category: "인문", desc: "1학년 공통 글로벌 소통 언어" },
+                    { name: "체육 & 창의적 체험활동", credit: 22, category: "공통", desc: "1~3년 지속 건강 체육 및 창체 활동" }
+                ],
+                2: [
+                    { name: "독서와 작문", credit: 8, category: "인문", desc: "학술 논리적 글쓰기와 정보 수집" },
+                    { name: "프로그래밍 기초", credit: 8, category: "IT", desc: "파이썬 및 컴퓨팅 사고력 구현" },
+                    { name: "영어 회화 · 독해 Ⅰ", credit: 8, category: "인문", desc: "실전 비즈니스 및 학술 영어 표현" }
+                ],
+                3: [
+                    { name: "AI · 빅데이터 실습", credit: 10, category: "IT", desc: "데이터 수집, 정제 및 머신러닝 파이프라인" },
+                    { name: "언어와 매체", credit: 8, category: "인문", desc: "뉴미디어 정보 분석 및 커뮤니케이션" },
+                    { name: "심화 영어 회화", credit: 8, category: "인문", desc: "글로벌 학술 토론 및 프레젠테이션" }
+                ]
+            }
+        };
+
+        function openMissionGame() {
+            document.getElementById('escape-room-section').classList.add('hidden');
+            document.getElementById('mission-game-section').classList.remove('hidden');
+            document.getElementById('quiz-progress-box').classList.add('hidden');
+            
+            // Auto-load 1st grade foundational courses if empty
+            if (getTotalCredits() === 0) {
+                initFirstGradeDefaults();
+            }
+            setActiveGrade(1);
+            updateGameUI();
+        }
+
+        function initFirstGradeDefaults() {
+            // 1학년 공통 과목 기본 등록 (64학점)
+            const defaults = [
+                { name: "공통국어", credit: 10, category: "인문", grade: 1 },
+                { name: "공통수학 (Ⅰ·Ⅱ)", credit: 16, category: "수학", grade: 1 },
+                { name: "공통영어", credit: 10, category: "인문", grade: 1 },
+                { name: "통합사회", credit: 10, category: "사회", grade: 1 },
+                { name: "통합과학", credit: 10, category: "과학", grade: 1 },
+                { name: "음악·미술 공통", credit: 8, category: "예술", grade: 1 }
+            ];
+            selectedCourses[1] = defaults;
+            logItems.unshift("📌 [1학년 기본 설정] 고1 필수 공통 교육과정 64학점이 수강 등록되었습니다.");
+        }
+
+        function exitMissionGame() {
+            document.getElementById('mission-game-section').classList.add('hidden');
+            document.getElementById('escape-room-section').classList.remove('hidden');
+            document.getElementById('quiz-progress-box').classList.remove('hidden');
+        }
+
+        function setActiveGrade(grade) {
+            activeGrade = grade;
+            
+            // Update Tab UI
+            [1, 2, 3].forEach(g => {
+                const btn = document.getElementById(`grade-tab-${g}`);
+                if (g === activeGrade) {
+                    btn.className = "px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-sky-500 text-slate-950 shadow-lg scale-105";
+                } else {
+                    btn.className = "px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:bg-slate-700";
+                }
+            });
+
+            document.getElementById('map-grade-title').innerText = `[${activeGrade}학년]`;
+            document.getElementById('center-grade-indicator').innerText = `현재 선택: ${activeGrade}학년 과목`;
+
+            playSound('select');
+            updateGameUI();
+        }
+
+        function getGradeCredits(grade) {
+            return selectedCourses[grade].reduce((sum, c) => sum + c.credit, 0);
+        }
+
+        function getTotalCredits() {
+            return getGradeCredits(1) + getGradeCredits(2) + getGradeCredits(3);
+        }
+
+        function updateGameUI() {
+            // 1. Calculate credit totals
+            const g1 = getGradeCredits(1);
+            const g2 = getGradeCredits(2);
+            const g3 = getGradeCredits(3);
+            const total = g1 + g2 + g3;
+            const pct = Math.min(100, Math.round((total / TARGET_CREDITS) * 100));
+
+            // 2. Score Calculation Engine
+            // Academic credit score (Max 400): proportional to total credits vs 192
+            const creditScore = Math.min(400, Math.round((total / 192) * 400));
+            
+            // Career alignment score (Max 300)
+            const careerScore = Math.min(300, Math.round((total / 192) * 300));
+
+            // Diversity & Balance score (Max 300)
+            let catCounts = {};
+            [1, 2, 3].forEach(g => {
+                selectedCourses[g].forEach(c => {
+                    catCounts[c.category] = (catCounts[c.category] || 0) + c.credit;
+                });
+            });
+            const catTypesCount = Object.keys(catCounts).length;
+            const balanceScore = Math.min(300, catTypesCount * 50);
+
+            const newTotalScore = creditScore + careerScore + balanceScore;
+            
+            // Show floating toast if score changed
+            if (currentTotalScore !== 0 && newTotalScore !== currentTotalScore) {
+                const diff = newTotalScore - currentTotalScore;
+                triggerScoreToast(diff);
+            }
+            currentTotalScore = newTotalScore;
+
+            // Update Header Score
+            const headerScore = document.getElementById('header-score-num');
+            if (headerScore) headerScore.innerText = `${currentTotalScore}점`;
+
+            // Update Score Breakdown Metrics
+            const mCredit = document.getElementById('score-credit-metric');
+            const mCareer = document.getElementById('score-career-metric');
+            const mBalance = document.getElementById('score-balance-metric');
+            if (mCredit) mCredit.innerText = `${creditScore} / 400`;
+            if (mCareer) mCareer.innerText = `${careerScore} / 300`;
+            if (mBalance) mBalance.innerText = `${balanceScore} / 300`;
+
+            // HUD & Credit Progress update
+            const hudNum = document.getElementById('hud-credit-num');
+            const hudBar = document.getElementById('hud-credit-bar');
+            const subG1 = document.getElementById('sub-g1-credit');
+            const subG2 = document.getElementById('sub-g2-credit');
+            const subG3 = document.getElementById('sub-g3-credit');
+            const hudPct = document.getElementById('hud-credit-pct');
+
+            if (hudNum) hudNum.innerText = total;
+            if (hudBar) hudBar.style.width = `${pct}%`;
+            if (subG1) subG1.innerText = g1;
+            if (subG2) subG2.innerText = g2;
+            if (subG3) subG3.innerText = g3;
+            if (hudPct) hudPct.innerText = `${pct}% 완료`;
+
+            // 3. Grade tab badges
+            const b1 = document.getElementById('grade-1-badge');
+            const b2 = document.getElementById('grade-2-badge');
+            const b3 = document.getElementById('grade-3-badge');
+            if (b1) b1.innerText = `${g1}학점`;
+            if (b2) b2.innerText = `${g2}학점`;
+            if (b3) b3.innerText = `${g3}학점`;
+
+            // 4. Update Course Schedule List Panel
+            const scheduleGrid = document.getElementById('schedule-grid');
+            if (scheduleGrid) {
+                scheduleGrid.innerHTML = '';
+                let hasAnyCourses = false;
+
+                [1, 2, 3].forEach(g => {
+                    const list = selectedCourses[g];
+                    if (list.length > 0) {
+                        hasAnyCourses = true;
+                        list.forEach((c) => {
+                            const item = document.createElement('div');
+                            item.className = 'p-2 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between text-slate-200';
+                            item.innerHTML = `
+                                <div class="flex items-center gap-2">
+                                    <span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${g === 1 ? 'bg-sky-500/20 text-sky-300' : g === 2 ? 'bg-amber-500/20 text-amber-300' : 'bg-emerald-500/20 text-emerald-300'}">${g}학년</span>
+                                    <span class="font-medium text-xs">${c.name}</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-sky-400 font-pixel font-bold text-[10px]">+${c.credit}학점</span>
+                                    <button onclick="toggleSubjectFromList(${g}, '${c.name}', event)" class="text-rose-400 hover:text-rose-300 text-xs font-bold px-1.5 py-0.5 rounded bg-rose-950/50 hover:bg-rose-900/50">✕</button>
+                                </div>
+                            `;
+                            scheduleGrid.appendChild(item);
+                        });
+                    }
+                });
+
+                if (!hasAnyCourses) {
+                    scheduleGrid.innerHTML = '<div class="text-center text-xs text-slate-500 py-4">신청된 수강 과목이 없습니다. 건물을 터치하여 수강 신청하세요.</div>';
+                }
+            }
+
+            // 5. Activity Log Box
+            const logBox = document.getElementById('log-box');
+            if (logBox) {
+                logBox.innerHTML = logItems.map(item => `<div>${item}</div>`).join('');
+            }
+
+            // 6. Trigger Real-time Career Analysis
+            analyzeCareerDirection();
+        }
+
+        function toggleSubjectFromList(grade, name, evt) {
+            const list = selectedCourses[grade];
+            const idx = list.findIndex(c => c.name === name);
+            if (idx >= 0) {
+                const removed = list.splice(idx, 1)[0];
+                logItems.unshift(`❌ [${grade}학년 취소] '${removed.name}' (${removed.credit}학점) 수강을 취소했습니다.`);
+                playSound('wrong');
+                if (evt) triggerScoreToast(-25, evt.clientX, evt.clientY);
+                updateGameUI();
+            }
+        }
+
+        function openRoomModal(roomName) {
+            const modal = document.getElementById('room-modal');
+            document.getElementById('room-modal-title').innerText = roomName;
+            document.getElementById('room-grade-badge').innerText = `[${activeGrade}학년 과목]`;
+
+            const list = document.getElementById('room-subjects-list');
+            list.innerHTML = '';
+
+            const buildingData = courseDatabase[roomName] || {};
+            const gradeSubjects = buildingData[activeGrade] || [];
+
+            if (gradeSubjects.length === 0) {
+                list.innerHTML = `<div class="col-span-2 text-center text-xs text-slate-400 py-6">이 건물에는 ${activeGrade}학년에 수강 가능한 개설 과목이 없습니다. 타 학년 탭을 활용해 보세요.</div>`;
+            } else {
+                gradeSubjects.forEach(subj => {
+                    const isSelected = selectedCourses[activeGrade].some(c => c.name === subj.name);
+
+                    const card = document.createElement('div');
+                    card.className = `p-3.5 rounded-xl border text-left transition flex flex-col justify-between space-y-2 ${
+                        isSelected 
+                        ? 'bg-sky-950/80 border-sky-400' 
+                        : 'bg-slate-900 border-slate-700 hover:border-slate-500'
+                    }`;
+
+                    card.innerHTML = `
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <span class="font-bold text-sm text-sky-200">${subj.name}</span>
+                                <span class="text-xs font-pixel px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 border border-sky-500/30">+${subj.credit} 학점</span>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-1">${subj.desc}</p>
+                        </div>
+
+                        <div class="flex items-center justify-between border-t border-slate-800 pt-2 mt-2">
+                            <span class="text-[10px] text-amber-300 font-bold">분야: ${subj.category}</span>
+                            <button onclick="toggleSubject('${subj.name}', ${subj.credit}, '${subj.category}', '${subj.desc}')" class="px-3 py-1.5 rounded-lg text-xs font-bold ${
+                                isSelected 
+                                ? 'bg-rose-600 hover:bg-rose-500 text-white' 
+                                : 'bg-sky-500 hover:bg-sky-400 text-slate-950'
+                            }">
+                                ${isSelected ? '수강 취소' : `${activeGrade}학년 신청`}
+                            </button>
+                        </div>
+                    `;
+                    list.appendChild(card);
+                });
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function toggleSubject(name, credit, category, desc) {
+            const currentGradeList = selectedCourses[activeGrade];
+            const idx = currentGradeList.findIndex(c => c.name === name);
+
+            if (idx >= 0) {
+                // Cancel course
+                currentGradeList.splice(idx, 1);
+                logItems.unshift(`❌ [${activeGrade}학년 취소] '${name}' (${credit}학점) 수강을 취소했습니다.`);
+                playSound('wrong');
+            } else {
+                // Check Grade Maximum
+                const currentGradeTotal = getGradeCredits(activeGrade);
+                if (currentGradeTotal + credit > 72) {
+                    alert(`⚠️ ${activeGrade}학년 최대 학점(72학점)을 초과할 수 없습니다!`);
+                    return;
+                }
+                currentGradeList.push({ name, credit, category, desc, grade: activeGrade });
+                logItems.unshift(`✅ [${activeGrade}학년 수강신청] '${name}' (${credit}학점) 신규 신청 완료!`);
+                playSound('select');
+            }
+
+            updateGameUI();
+            openRoomModal(document.getElementById('room-modal-title').innerText);
+
+            if (getTotalCredits() >= TARGET_CREDITS) {
+                setTimeout(() => {
+                    showCompletionResult();
+                }, 400);
+            }
+        }
+
+        function openCareerModal() {
+            document.getElementById('career-modal').classList.remove('hidden');
+        }
+
+        function setCareerGoal(goal) {
+            targetCareerGoal = goal;
+            logItems.unshift(`🧭 [진로목표 변경] 희망 진로를 '${goal}'(으)로 지정했습니다.`);
+            playSound('correct');
+            updateGameUI();
+            closeModal('career-modal');
+        }
+
+        function showTutorialModal() {
+            document.getElementById('tutorial-modal').classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        // Real-Time Career Analysis Engine
+        function analyzeCareerDirection() {
+            let catScores = { "IT": 0, "과학": 0, "수학": 0, "예술": 0, "사회": 0, "인문": 0 };
+            let totalCredits = 0;
+
+            [1, 2, 3].forEach(g => {
+                selectedCourses[g].forEach(c => {
+                    if (catScores[c.category] !== undefined) {
+                        catScores[c.category] += c.credit;
+                    }
+                    totalCredits += c.credit;
+                });
+            });
+
+            // Find dominant categories
+            let sortedCats = Object.keys(catScores).sort((a, b) => catScores[b] - catScores[a]);
+            let top1 = sortedCats[0];
+            let top2 = sortedCats[1];
+
+            let recommendedCareer = "자율 융합 인재";
+            let descText = "";
+
+            if (top1 === "IT" || (top1 === "수학" && top2 === "IT")) {
+                recommendedCareer = "🤖 AI · 소프트웨어 · 공학 계열";
+                descText = "IT/컴퓨팅 및 수학적 수강 비중이 높습니다. 컴퓨터공학, AI 소프트웨어, 로봇공학 진로에 매우 적합합니다.";
+            } else if (top1 === "과학" || (top1 === "수학" && top2 === "과학")) {
+                recommendedCareer = "🔬 바이오 · 의약 · 자연과학 계열";
+                descText = "생명과학, 화학 등 자연 과학 심화 수강 비중이 높습니다. 의학, 약학, 생명공학 분야로의 진학을 강력 추천합니다.";
+            } else if (top1 === "예술") {
+                recommendedCareer = "🎨 미디어 · 콘텐츠 · 디자인 계열";
+                descText = "시각 예술, 미디어 및 영상 제작 과목 이수율이 높습니다. 시각디자인, 영상제작, 미디어커뮤니케이션에 적합합니다.";
+            } else if (top1 === "사회") {
+                recommendedCareer = "🏛️ 경영 · 경제 · 사회과학 계열";
+                descText = "경제, 정치, 사회문제 탐구 이수가 두드러집니다. 경영학, 경제학, 행정 및 법학 분야 설계에 맞춤입니다.";
+            } else if (top1 === "인문") {
+                recommendedCareer = "📖 인문 · 언어 · 글로벌 계열";
+                descText = "국어, 영어, 글로벌 매체 및 역사 이수 비중이 높습니다. 어문학, 언론홍보, 국제학 계열에 유리합니다.";
+            } else {
+                recommendedCareer = "🌟 융합 학문 자율 탐색 계열";
+                descText = "다양한 영역의 학문 학점을 균형있게 수강하고 계십니다. 융합전공 및 자율전공학부에 적합합니다.";
+            }
+
+            document.getElementById('career-recommend-title').innerText = recommendedCareer;
+            document.getElementById('career-recommend-desc').innerText = descText;
+
+            // Render category breakdown progress bars
+            const barContainer = document.getElementById('category-bars');
+            barContainer.innerHTML = '';
+
+            const topCategoriesToShow = sortedCats.slice(0, 4);
+            topCategoriesToShow.forEach(cat => {
+                const score = catScores[cat];
+                const pct = totalCredits > 0 ? Math.round((score / totalCredits) * 100) : 0;
+
+                const row = document.createElement('div');
+                row.className = "flex items-center gap-2 text-[11px]";
+                row.innerHTML = `
+                    <span class="w-12 text-slate-400 font-bold">${cat}</span>
+                    <div class="flex-1 bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
+                        <div class="bg-sky-400 h-full rounded-full transition-all duration-300" style="width: ${pct}%"></div>
+                    </div>
+                    <span class="w-8 text-right font-pixel text-amber-300">${pct}%</span>
+                `;
+                barContainer.appendChild(row);
+            });
+
+            return recommendedCareer;
+        }
+
+        function showCompletionResult() {
+            confetti({ particleCount: 200, spread: 90, origin: { y: 0.5 } });
+
+            const total = getTotalCredits();
+            document.getElementById('r-final-credit').innerText = total;
+
+            let totalSubjCount = selectedCourses[1].length + selectedCourses[2].length + selectedCourses[3].length;
+            document.getElementById('r-subjects').innerText = `${totalSubjCount}개 과목`;
+
+            const finalCareer = analyzeCareerDirection();
+            document.getElementById('r-career').innerText = finalCareer;
+
+            // Determine Major Recommendations, Improvement Areas, and Skills based on Career Direction
+            let recommendedMajors = [];
+            let improvements = [];
+            let keySkills = [];
+
+            if (finalCareer.includes("AI") || finalCareer.includes("공학")) {
+                recommendedMajors = ["컴퓨터공학과", "인공지능(AI)학과", "소프트웨어학부", "데이터사이언스학과", "로봇응용공학과"];
+                improvements = [
+                    "3학년 진로·융합 선택에서 수학(미적분/기하) 및 프로그래밍 기초 탐구를 더욱 심화해보세요.",
+                    "컴퓨팅 사고력을 증명할 수 있는 수행평가 및 교내 프로젝트 탐구 보고서 연계 작성을 권장합니다."
+                ];
+                keySkills = ["알고리즘 분석 및 파이썬 코딩 능력", "수학적/논리적 문제 해결력", "디지털 데이터 리터러시"];
+            } else if (finalCareer.includes("바이오") || finalCareer.includes("의약")) {
+                recommendedMajors = ["생명공학과", "의예·약학과", "화학과", "바이오메디컬공학과", "식품생명공학과"];
+                improvements = [
+                    "화학 Ⅰ·Ⅱ 및 생명과학 Ⅱ의 연계성을 높이고 과학 탐구 실험 참여 및 실습 이력을 보완하면 좋습니다.",
+                    "학술 논문 탐구 및 세부능력 특기사항(세특)에서 실험 설계 경험을 부각해보세요."
+                ];
+                keySkills = ["과학적 탐구 및 가설 검증 능력", "생명 윤리 의식 및 논리적 독해력", "실험 데이터 분석력"];
+            } else if (finalCareer.includes("디자인") || finalCareer.includes("콘텐츠")) {
+                recommendedMajors = ["시각디자인학과", "미디어커뮤니케이션학과", "영상제작학과", "디지털콘텐츠학과", "산업디자인학과"];
+                improvements = [
+                    "디자인 기획력과 스토리텔링을 결합할 수 있는 인문·매체 관련 과목과의 융합 이수를 권장합니다.",
+                    "포트폴리오 작성 시 디지털 스케치 및 영상 편집 프로젝트 이수를 정리해두세요."
+                ];
+                keySkills = ["시각적 미디어 표현 및 포토샵/영상 편집 능력", "스토리텔링 및 창의적 발상", "공감 및 커뮤니케이션"];
+            } else if (finalCareer.includes("경영") || finalCareer.includes("사회")) {
+                recommendedMajors = ["경영학과", "경제학과", "행정학과", "정치외교학과", "사회학과"];
+                improvements = [
+                    "사회 문제 해결 과목 이수 시 통계 자료 분석(확률과 통계) 역량을 함께 결합하면 큰 강점이 됩니다.",
+                    "시사 이슈 토론 및 경제 정책 관련 프로젝트 탐구를 진행해보세요."
+                ];
+                keySkills = ["수치 분석 및 데이터 기반 의사결정 능력", "논리적 토론 및 설득력", "글로벌 사회 이슈 이해력"];
+            } else if (finalCareer.includes("인문") || finalCareer.includes("언어")) {
+                recommendedMajors = ["국어국문·창작학과", "영어영문학과", "미디어학부", "글로벌통상학과", "역사콘텐츠학과"];
+                improvements = [
+                    "비판적 독해력과 함께 디지털 매체(뉴미디어) 활용 탐구를 추가하면 최신 입시 트렌드에 부합합니다.",
+                    "학술적 논리 글쓰기 및 심화 외국어 토론 이력을 쌓아두세요."
+                ];
+                keySkills = ["학술적 텍스트 분석 및 논리적 글쓰기", "다국어 의사소통 능력", "인문학적 비판적 사고력"];
+            } else {
+                recommendedMajors = ["자율전공학부", "융합인재학부", "글로벌융합학부", "자연·인문 융합계열"];
+                improvements = [
+                    "다양한 분야를 균형 있게 이수한 만큼, 3학년에서는 1~2개 관심 진로 분야로 주제를 좁혀 심화 탐구를 권장합니다.",
+                    "융합적 흥미를 증명할 수 있는 학문 간 연계 프로젝트 보고서를 작성해보세요."
+                ];
+                keySkills = ["다방면 학문 유연성 및 문제 통합 능력", "자기주도 학습 역량", "협업 및 프로젝트 리더십"];
+            }
+
+            // Build Schedule Summary HTML
+            let scheduleHTML = '';
+            [1, 2, 3].forEach(g => {
+                const subs = selectedCourses[g];
+                scheduleHTML += `
+                    <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 print-card">
+                        <div class="font-bold text-sky-300 mb-1 font-pixel text-[11px] print-text-dark">📅 ${g}학년 이수 과목 (${getGradeCredits(g)}학점)</div>
+                        <div class="flex flex-wrap gap-1 text-[11px]">
+                            ${subs.map(s => `<span class="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-slate-200 print-text-dark">${s.name} <b class="text-sky-400 font-pixel">+${s.credit}</b></span>`).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Populate Report Briefing Block
+            document.getElementById('r-report-briefing').innerHTML = `
+                <!-- 1. Major Recommendations -->
+                <div class="p-3 bg-slate-950 rounded-xl border border-sky-500/40 print-card">
+                    <div class="font-bold text-sky-300 text-xs mb-1.5 flex items-center gap-1.5 print-text-dark">
+                        <span>🎯</span> <b>맞춤 추천 학과 및 전공 분야</b>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5">
+                        ${recommendedMajors.map(m => `<span class="px-2.5 py-1 bg-sky-500/20 text-sky-200 font-bold rounded-lg border border-sky-500/30 text-xs print-text-dark">${m}</span>`).join('')}
+                    </div>
+                </div>
+
+                <!-- 2. Areas to Supplement & Advice -->
+                <div class="p-3 bg-slate-950 rounded-xl border border-amber-500/40 print-card">
+                    <div class="font-bold text-amber-300 text-xs mb-1.5 flex items-center gap-1.5 print-text-dark">
+                        <span>💡</span> <b>최종 수강 계획 보완점 및 이수 팁</b>
+                    </div>
+                    <ul class="list-disc list-inside space-y-1 text-slate-300 text-[11px] print-text-dark">
+                        ${improvements.map(imp => `<li>${imp}</li>`).join('')}
+                    </ul>
+                </div>
+
+                <!-- 3. Key Competencies to Foster -->
+                <div class="p-3 bg-slate-950 rounded-xl border border-emerald-500/40 print-card">
+                    <div class="font-bold text-emerald-300 text-xs mb-1.5 flex items-center gap-1.5 print-text-dark">
+                        <span>🚀</span> <b>앞으로 집중적으로 키워야 할 핵심 역량</b>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px]">
+                        ${keySkills.map((sk, idx) => `
+                            <div class="p-2 bg-slate-900 rounded-lg border border-slate-800 text-emerald-200 font-medium text-center print-card print-text-dark">
+                                <span class="text-emerald-400 font-pixel text-[10px] block">SKILL #${idx+1}</span>
+                                ${sk}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- 4. 3-Year Course List Summary -->
+                <div class="space-y-2">
+                    <div class="font-bold text-slate-300 text-xs flex items-center gap-1 print-text-dark">
+                        <span>📚</span> <b>3개년 이수 과목 최종 명세서</b>
+                    </div>
+                    ${scheduleHTML}
+                </div>
+            `;
+
+            document.getElementById('result-modal').classList.remove('hidden');
+        }
+
+        // Keyboard Movement Controls for Campus Map
+        window.addEventListener('keydown', (e) => {
+            const key = e.key.toLowerCase();
+            const step = 3;
+            let moved = false;
+
+            if (key === 'arrowleft' || key === 'a') {
+                playerPos.x = Math.max(4, playerPos.x - step);
+                moved = true;
+            } else if (key === 'arrowright' || key === 'd') {
+                playerPos.x = Math.min(88, playerPos.x + step);
+                moved = true;
+            } else if (key === 'arrowup' || key === 'w') {
+                playerPos.y = Math.max(6, playerPos.y - step);
+                moved = true;
+            } else if (key === 'arrowdown' || key === 's') {
+                playerPos.y = Math.min(84, playerPos.y + step);
+                moved = true;
+            }
+
+            if (moved) {
+                const playerEl = document.getElementById('game-player');
+                if (playerEl) {
+                    playerEl.style.left = `${playerPos.x}%`;
+                    playerEl.style.top = `${playerPos.y}%`;
+                }
+            }
+        });
+
+        function resetPlayerPos() {
+            playerPos = { x: 45, y: 43 };
+            const playerEl = document.getElementById('game-player');
+            if (playerEl) {
+                playerEl.style.left = `${playerPos.x}%`;
+                playerEl.style.top = `${playerPos.y}%`;
+            }
+        }
+
+        window.onload = function() {
+            renderObjects();
+            updateQuizProgress();
+            updateAvatarPreviews();
+        };
+    </script>
+</body>
+</html>

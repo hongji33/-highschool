@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>고교학점제 방탈출 & MISSION 192 v2</title>
+    <title>고교학점제 방탈출 & MISSION 192</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -107,6 +107,13 @@
             filter: brightness(1.2);
             box-shadow: 0 0 0 4px rgba(56,189,248,0.8), 0 10px 20px rgba(0,0,0,0.6);
             z-index: 10;
+        }
+        .building.career-needs-visit {
+            animation: careerPulse 1.4s ease-in-out infinite;
+        }
+        @keyframes careerPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(249,115,22,0.55); }
+            50% { box-shadow: 0 0 0 8px rgba(249,115,22,0); }
         }
 
         .b-art { left: 4%; top: 6%; background: #fca5a5; }
@@ -341,7 +348,7 @@
             </div>
             <div>
                 <h1 class="text-lg sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-cyan-300 to-blue-200">
-                    고교학점제 방탈출 & MISSION 192 v2
+                    고교학점제 방탈출 & MISSION 192
                 </h1>
                 <p class="text-xs text-slate-400">15개 방탈출 단서를 해독하고, 고교 3개년 192학점 맞춤 수강계획을 설계하세요!</p>
             </div>
@@ -359,9 +366,9 @@
             </button>
 
             <!-- Real-time Total Score Counter -->
-            <div class="bg-slate-950/90 border border-amber-500/50 px-3 py-1.5 rounded-xl text-center min-w-[90px]">
+            <div class="bg-slate-950/90 border border-amber-500/50 px-3 py-1.5 rounded-xl text-center min-w-[110px]">
                 <div class="text-[10px] text-amber-400 font-bold">수강 종합점수</div>
-                <div id="header-score-num" class="text-sm sm:text-base font-black text-amber-300 font-pixel">0점</div>
+                <div id="header-score-num" class="text-sm sm:text-base font-black text-amber-300 font-pixel">0 / 1000점</div>
             </div>
 
             <!-- Escape Room Progress Tracker -->
@@ -444,20 +451,22 @@
             </div>
 
             <!-- Quick "how to play" guide for first-time students -->
-            <div class="bg-slate-900 border border-sky-500/30 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-stretch gap-3 sm:gap-4">
-                <div class="flex-1 flex items-center gap-3 bg-slate-950/60 rounded-xl px-4 py-3">
-                    <div class="w-11 h-11 rounded-full bg-sky-500 text-slate-950 font-black flex items-center justify-center text-xl flex-shrink-0">1</div>
+            <div class="bg-slate-900 border border-sky-500/30 rounded-2xl p-4 sm:p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <div class="flex items-center gap-3 bg-slate-950/60 rounded-xl px-4 py-3">
+                    <div class="w-11 h-11 rounded-full bg-orange-500 text-slate-950 font-black flex items-center justify-center text-xl flex-shrink-0">1</div>
+                    <div class="text-sm sm:text-base font-bold text-slate-700 text-left leading-snug"><b class="text-orange-600">진로상담센터</b>에서 목표부터 정해요<br><span class="text-xs font-semibold text-slate-500">먼저 방문하면 가이드를 받아요!</span></div>
+                </div>
+                <div class="flex items-center gap-3 bg-slate-950/60 rounded-xl px-4 py-3">
+                    <div class="w-11 h-11 rounded-full bg-sky-500 text-slate-950 font-black flex items-center justify-center text-xl flex-shrink-0">2</div>
                     <div class="text-sm sm:text-base font-bold text-slate-700 text-left leading-snug"><b class="text-sky-300">학년 탭</b>에서 학년을 골라요<br><span class="text-xs font-semibold text-slate-500">1학년은 이미 자동 완료!</span></div>
                 </div>
-                <div class="hidden sm:flex items-center text-slate-600 text-2xl">→</div>
-                <div class="flex-1 flex items-center gap-3 bg-slate-950/60 rounded-xl px-4 py-3">
-                    <div class="w-11 h-11 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-xl flex-shrink-0">2</div>
+                <div class="flex items-center gap-3 bg-slate-950/60 rounded-xl px-4 py-3">
+                    <div class="w-11 h-11 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-xl flex-shrink-0">3</div>
                     <div class="text-sm sm:text-base font-bold text-slate-700 text-left leading-snug">방향키로 <b class="text-amber-300">건물 안까지</b> 걸어가요<br><span class="text-xs font-semibold text-slate-500">자동으로 과목 신청 창이 열려요</span></div>
                 </div>
-                <div class="hidden sm:flex items-center text-slate-600 text-2xl">→</div>
-                <div class="flex-1 flex items-center gap-3 bg-slate-950/60 rounded-xl px-4 py-3">
-                    <div class="w-11 h-11 rounded-full bg-emerald-500 text-slate-950 font-black flex items-center justify-center text-xl flex-shrink-0">3</div>
-                    <div class="text-sm sm:text-base font-bold text-slate-700 text-left leading-snug"><b class="text-emerald-300">192학점</b>을 다 채우면 완성!<br><span class="text-xs font-semibold text-slate-500">진로상담센터에서 희망 진로도 정해보세요</span></div>
+                <div class="flex items-center gap-3 bg-slate-950/60 rounded-xl px-4 py-3">
+                    <div class="w-11 h-11 rounded-full bg-emerald-500 text-slate-950 font-black flex items-center justify-center text-xl flex-shrink-0">4</div>
+                    <div class="text-sm sm:text-base font-bold text-slate-700 text-left leading-snug"><b class="text-emerald-300">192학점</b>을 다 채우면 완성!<br><span class="text-xs font-semibold text-slate-500">목표 진로에 맞는 과목으로 채워보세요</span></div>
                 </div>
             </div>
 
@@ -508,12 +517,13 @@
                 
                 <!-- Left Panel: Interactive Campus Map (7 Cols) -->
                 <div class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xl flex flex-col justify-between">
-                    <div class="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
-                        <div class="flex items-center gap-2">
+                    <div class="flex items-center justify-between mb-3 border-b border-slate-800 pb-2 flex-wrap gap-y-1.5">
+                        <div class="flex items-center gap-2 flex-wrap">
                             <span class="text-xl">🏫</span>
                             <h2 class="text-sm sm:text-base font-bold text-sky-300">
                                 <span id="map-grade-title" class="text-amber-400 font-black">[1학년]</span> 수강 신청 캠퍼스
                             </h2>
+                            <span id="map-grade-status-badge" class="text-[11px] sm:text-xs font-bold px-2 py-0.5 rounded-full"></span>
                         </div>
                         <span class="text-[11px] text-slate-400">⌨️ 방향키로 건물 안까지 이동하세요</span>
                     </div>
@@ -555,6 +565,7 @@
                         </div>
 
                         <div id="building-진로상담센터" class="building b-career">
+                            <span id="career-visit-badge" class="hidden absolute -top-3 -right-2 bg-orange-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full shadow-lg whitespace-nowrap">먼저 방문!</span>
                             <span class="text-lg">🧭</span>
                             <span class="text-xs sm:text-sm font-black">진로상담센터</span>
                             <span class="text-[10px] text-amber-100 font-bold">희망 진로 설정</span>
@@ -597,6 +608,15 @@
                             </div>
                             <div class="text-xs text-slate-300 leading-relaxed" id="career-recommend-desc">
                                 과목 선택 비율에 기반하여 최적의 진로 적성을 실시간 분석 중입니다.
+                            </div>
+
+                            <!-- Goal vs. actual-courses mismatch warning (shown only when relevant) -->
+                            <div id="career-mismatch-banner" class="hidden p-2.5 bg-amber-50 border border-amber-400 rounded-lg text-[11px] sm:text-xs text-amber-800 leading-relaxed">
+                                <div id="career-mismatch-text" class="mb-2"></div>
+                                <div class="flex flex-wrap gap-1.5">
+                                    <button onclick="openCareerModal()" class="px-2.5 py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg text-[10px] sm:text-[11px]">🧭 희망 계열 다시 정하기</button>
+                                    <button onclick="adoptActualCategoryAsGoal()" class="px-2.5 py-1 bg-white hover:bg-amber-100 border border-amber-400 text-amber-800 font-bold rounded-lg text-[10px] sm:text-[11px]">✅ 신청한 과목 계열로 목표 변경</button>
+                                </div>
                             </div>
 
                             <!-- Real-time Score Breakdown Metrics -->
@@ -725,8 +745,8 @@
                 <div class="flex items-center gap-3">
                     <span class="text-3xl">🧭</span>
                     <div>
-                        <h2 class="text-lg font-bold text-amber-300">진로상담센터</h2>
-                        <p class="text-xs text-slate-400">목표하는 희망 진로 계열을 지정해보세요.</p>
+                        <h2 id="career-modal-heading" class="text-lg font-bold text-amber-300">진로상담센터</h2>
+                        <p id="career-modal-sub" class="text-xs text-slate-400">목표하는 희망 진로 계열을 지정해보세요.</p>
                     </div>
                 </div>
                 <button onclick="closeModal('career-modal')" class="text-slate-400 hover:text-white text-2xl font-bold">✕</button>
@@ -736,7 +756,7 @@
                 목표 진로 계열을 지정하면 과목 추천 가이드를 받을 수 있습니다. 수강 신청에 따라 진로 방향이 실시간 진단되기도 합니다.
             </p>
 
-            <div class="grid grid-cols-2 gap-2.5 mb-5">
+            <div id="career-goal-grid" class="grid grid-cols-2 gap-2.5 mb-3">
                 <button onclick="setCareerGoal('공학·IT 계열')" class="p-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-left font-bold text-xs text-sky-300 flex items-center justify-between">
                     <span>💻 공학·IT 계열</span>
                     <span>➡️</span>
@@ -761,6 +781,21 @@
                     <span>🌟 자율 융합 계열</span>
                     <span>➡️</span>
                 </button>
+            </div>
+
+            <div id="career-skip-row" class="text-center mb-5">
+                <button onclick="closeModal('career-modal')" class="text-[11px] sm:text-xs text-slate-500 underline">아직 잘 모르겠어요, 나중에 정할게요</button>
+            </div>
+
+            <!-- Recommended-subjects guide, shown after a goal is chosen -->
+            <div id="career-guide-panel" class="hidden mb-5 p-4 bg-sky-50 border-2 border-sky-300 rounded-xl">
+                <div id="career-guide-title" class="font-black text-sky-800 text-sm mb-2 flex items-center gap-1.5"></div>
+                <p id="career-guide-blurb" class="text-xs sm:text-sm text-slate-700 leading-relaxed mb-2"></p>
+                <div class="text-[11px] sm:text-xs text-slate-600 font-bold mb-1">📚 추천 과목</div>
+                <div id="career-guide-subjects" class="flex flex-wrap gap-1.5 mb-2"></div>
+                <div class="text-[11px] sm:text-xs text-slate-600 font-bold mb-1">🏫 방문하면 좋은 건물</div>
+                <div id="career-guide-buildings" class="flex flex-wrap gap-1.5 mb-3"></div>
+                <button onclick="resetCareerGoalPicker()" class="text-[11px] sm:text-xs text-sky-700 font-bold underline">↩ 다른 계열 다시 선택하기</button>
             </div>
 
             <div class="flex justify-end">
@@ -1038,6 +1073,9 @@
 
             <!-- ACTION BUTTONS -->
             <div class="flex flex-col sm:flex-row items-center justify-end gap-2 border-t border-slate-800 pt-3 no-print">
+                <button onclick="closeModal('result-modal')" class="w-full sm:w-auto px-4 py-2.5 bg-sky-100 hover:bg-sky-200 text-sky-800 font-bold rounded-xl text-xs transition">
+                    ← 이전 화면으로 (계속 수정하기)
+                </button>
                 <button onclick="location.reload()" class="w-full sm:w-auto px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-xs transition">
                     🔄 다시 처음부터 설계하기
                 </button>
@@ -1619,6 +1657,7 @@
         };
 
         let hasEnteredMissionGame = false;
+        let isOnboardingCareerGoal = false;
 
         function openMissionGame() {
             document.getElementById('escape-room-section').classList.add('hidden');
@@ -1635,11 +1674,17 @@
                 // to make it obvious that's where their choices actually begin.
                 hasEnteredMissionGame = true;
                 setActiveGrade(2);
+                // Guide them to set a career goal FIRST, before picking any courses
+                setTimeout(() => {
+                    isOnboardingCareerGoal = true;
+                    openCareerModal();
+                }, 350);
             } else {
                 // Returning visit: keep whichever grade they were last working on
                 setActiveGrade(activeGrade);
             }
             updateGameUI();
+            updateCareerBuildingHighlight();
         }
 
         function initFirstGradeDefaults() {
@@ -1677,6 +1722,18 @@
 
             document.getElementById('map-grade-title').innerText = `[${activeGrade}학년]`;
             document.getElementById('center-grade-indicator').innerText = `현재 선택: ${activeGrade}학년 과목`;
+
+            const statusBadge = document.getElementById('map-grade-status-badge');
+            if (statusBadge) {
+                if (activeGrade === 1) {
+                    statusBadge.innerText = '✅ 1학년 작성완료! 2학년부터 신청하세요~';
+                    statusBadge.className = 'text-[11px] sm:text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-300';
+                } else {
+                    statusBadge.innerText = `📝 ${activeGrade}학년 과목 선택 중`;
+                    statusBadge.className = 'text-[11px] sm:text-xs font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-300';
+                }
+            }
+
             updateMissionGuideNote();
 
             playSound('select');
@@ -1753,7 +1810,7 @@
 
             // Update Header Score
             const headerScore = document.getElementById('header-score-num');
-            if (headerScore) headerScore.innerText = `${currentTotalScore}점`;
+            if (headerScore) headerScore.innerText = `${currentTotalScore} / 1000점`;
 
             // Update Score Breakdown Metrics
             const mCredit = document.getElementById('score-credit-metric');
@@ -1925,15 +1982,107 @@
         }
 
         function openCareerModal() {
+            const heading = document.getElementById('career-modal-heading');
+            const sub = document.getElementById('career-modal-sub');
+            if (isOnboardingCareerGoal) {
+                heading.innerText = '🧭 먼저, 어떤 분야에 관심 있나요?';
+                sub.innerText = '과목을 고르기 전에 목표부터 정하면, 어떤 건물에서 어떤 과목을 골라야 할지 훨씬 쉬워져요!';
+            } else {
+                heading.innerText = '진로상담센터';
+                sub.innerText = '목표하는 희망 진로 계열을 지정해보세요.';
+            }
+
+            // If a goal was already chosen before, show its guide again; otherwise show the picker
+            if (careerGuideData[targetCareerGoal]) {
+                showCareerGuide(targetCareerGoal);
+            } else {
+                resetCareerGoalPicker();
+            }
             document.getElementById('career-modal').classList.remove('hidden');
         }
+
+        // Recommendation content shown to the student right after picking a career goal
+        const careerGuideData = {
+            '공학·IT 계열': {
+                icon: '💻',
+                blurb: '컴퓨터공학, AI·소프트웨어, 로봇공학 같은 진로에 관심이 있다면 이 계열이 잘 맞아요.',
+                subjects: ['프로그래밍 기초', '인공지능 수학', 'AI·빅데이터 실습', '미적분학'],
+                buildings: ['언어·문화관', '수학관', '과학관']
+            },
+            '과학·의약 계열': {
+                icon: '🔬',
+                blurb: '의학, 약학, 생명공학처럼 생명·자연 현상을 다루는 진로에 관심이 있다면 이 계열이 잘 맞아요.',
+                subjects: ['물리학 Ⅰ', '화학 Ⅰ', '생명과학 Ⅰ', '생명과학 Ⅱ · 바이오'],
+                buildings: ['과학관', '수학관']
+            },
+            '예술·디자인 계열': {
+                icon: '🎨',
+                blurb: '시각디자인, 영상제작, 미디어콘텐츠처럼 창작·표현을 다루는 진로에 관심이 있다면 이 계열이 잘 맞아요.',
+                subjects: ['미술 창작', '시각 디자인', '영상 미디어 제작', '융합 예술 탐구'],
+                buildings: ['미술·디자인관']
+            },
+            '경영·사회 계열': {
+                icon: '🏛️',
+                blurb: '경영학, 경제학, 행정·법학처럼 사회와 조직을 다루는 진로에 관심이 있다면 이 계열이 잘 맞아요.',
+                subjects: ['경제', '정치와 법', '사회문제 탐구', '국제 관계와 한국 외교'],
+                buildings: ['사회·인문관']
+            },
+            '인문·언어 계열': {
+                icon: '📖',
+                blurb: '어문학, 언론홍보, 국제학처럼 언어와 사람의 이야기를 다루는 진로에 관심이 있다면 이 계열이 잘 맞아요.',
+                subjects: ['독서와 작문', '영어 회화 · 독해 Ⅰ', '언어와 매체', '심화 영어 회화'],
+                buildings: ['언어·문화관', '사회·인문관']
+            },
+            '자율 융합 탐색': {
+                icon: '🌟',
+                blurb: '아직 진로를 하나로 정하지 못했어도 괜찮아요! 여러 분야를 골고루 경험하며 나에게 맞는 길을 찾아가보세요.',
+                subjects: ['다양한 학년의 과목을 고루 살펴보세요'],
+                buildings: ['미술·디자인관', '과학관', '사회·인문관', '수학관', '언어·문화관']
+            }
+        };
 
         function setCareerGoal(goal) {
             targetCareerGoal = goal;
             logItems.unshift(`🧭 [진로목표 변경] 희망 진로를 '${goal}'(으)로 지정했습니다.`);
             playSound('correct');
+            isOnboardingCareerGoal = false;
             updateGameUI();
-            closeModal('career-modal');
+            updateCareerBuildingHighlight();
+            showCareerGuide(goal);
+        }
+
+        // Renders the recommendation guide UI for a given goal (no logging/sound — safe to call on modal reopen)
+        function showCareerGuide(goal) {
+            const guide = careerGuideData[goal];
+            if (!guide) return;
+            document.getElementById('career-goal-grid').classList.add('hidden');
+            document.getElementById('career-skip-row').classList.add('hidden');
+            const panel = document.getElementById('career-guide-panel');
+            panel.classList.remove('hidden');
+            document.getElementById('career-guide-title').innerHTML = `${guide.icon} <span>${goal}을(를) 선택했어요!</span>`;
+            document.getElementById('career-guide-blurb').innerText = guide.blurb;
+            document.getElementById('career-guide-subjects').innerHTML = guide.subjects.map(s =>
+                `<span class="px-2 py-1 bg-sky-500/20 text-sky-800 font-bold rounded-lg border border-sky-500/30 text-[11px]">${s}</span>`
+            ).join('');
+            document.getElementById('career-guide-buildings').innerHTML = guide.buildings.map(b =>
+                `<span class="px-2 py-1 bg-amber-500/20 text-amber-800 font-bold rounded-lg border border-amber-500/30 text-[11px]">🏫 ${b}</span>`
+            ).join('');
+        }
+
+        function resetCareerGoalPicker() {
+            document.getElementById('career-guide-panel').classList.add('hidden');
+            document.getElementById('career-goal-grid').classList.remove('hidden');
+            document.getElementById('career-skip-row').classList.remove('hidden');
+        }
+
+        // Pulses the 진로상담센터 building on the map + shows a "먼저 방문!" badge
+        // until the student has actually chosen a career goal.
+        function updateCareerBuildingHighlight() {
+            const building = document.getElementById('building-진로상담센터');
+            const badge = document.getElementById('career-visit-badge');
+            const goalIsSet = targetCareerGoal !== '자율 융합 계열';
+            if (building) building.classList.toggle('career-needs-visit', !goalIsSet);
+            if (badge) badge.classList.toggle('hidden', goalIsSet);
         }
 
         function showTutorialModal() {
@@ -1959,9 +2108,30 @@
             if (modalId === 'tutorial-modal') {
                 isOnboardingTutorial = false;
             }
+            if (modalId === 'career-modal') {
+                isOnboardingCareerGoal = false;
+            }
         }
 
         // Real-Time Career Analysis Engine
+        // Maps the career-center goal strings to the internal course-category keys, and back
+        const goalToCategoryKey = {
+            '공학·IT 계열': 'IT',
+            '과학·의약 계열': '과학',
+            '예술·디자인 계열': '예술',
+            '경영·사회 계열': '사회',
+            '인문·언어 계열': '인문'
+            // '자율 융합 탐색' intentionally has no fixed category — no mismatch check for it
+        };
+        const categoryKeyToGoal = {
+            'IT': '공학·IT 계열',
+            '과학': '과학·의약 계열',
+            '예술': '예술·디자인 계열',
+            '사회': '경영·사회 계열',
+            '인문': '인문·언어 계열'
+        };
+        let lastAnalyzedTopCategory = null;
+
         function analyzeCareerDirection() {
             let catScores = { "IT": 0, "과학": 0, "수학": 0, "예술": 0, "사회": 0, "인문": 0 };
             let totalCredits = 0;
@@ -2005,6 +2175,8 @@
 
             document.getElementById('career-recommend-title').innerText = recommendedCareer;
             document.getElementById('career-recommend-desc').innerText = descText;
+            lastAnalyzedTopCategory = top1;
+            updateCareerMismatchBanner(top1, totalCredits);
 
             // Render category breakdown progress bars
             const barContainer = document.getElementById('category-bars');
@@ -2028,6 +2200,38 @@
             });
 
             return recommendedCareer;
+        }
+
+        // Compares the student's stated career-center goal against what their actual course
+        // choices point to, and shows a gentle nudge banner if they don't match.
+        function updateCareerMismatchBanner(top1, totalCredits) {
+            const banner = document.getElementById('career-mismatch-banner');
+            if (!banner) return;
+
+            const expectedCategory = goalToCategoryKey[targetCareerGoal];
+            // Only warn once the student has actually started choosing 2/3학년 courses,
+            // has a specific (non-자율) goal set, and that goal doesn't match their picks.
+            const grade23Credits = getGradeCredits(2) + getGradeCredits(3);
+            const mismatched = expectedCategory && expectedCategory !== top1 && grade23Credits >= 8;
+
+            if (!mismatched) {
+                banner.classList.add('hidden');
+                return;
+            }
+
+            const actualGoalLabel = categoryKeyToGoal[top1] || '자율 융합 탐색';
+            document.getElementById('career-mismatch-text').innerHTML =
+                `⚠️ <b>${playerConfig.name}</b>님이 진로상담센터에서 정한 희망 계열은 <b class="text-amber-900">'${targetCareerGoal}'</b>이지만, 지금까지 신청한 과목은 <b class="text-amber-900">'${actualGoalLabel}'</b>에 더 가까워요. 어떻게 할까요?`;
+            banner.classList.remove('hidden');
+        }
+
+        function adoptActualCategoryAsGoal() {
+            const newGoal = categoryKeyToGoal[lastAnalyzedTopCategory];
+            if (!newGoal) return;
+            targetCareerGoal = newGoal;
+            logItems.unshift(`✅ [진로목표 조정] 실제 신청 과목에 맞춰 희망 진로를 '${newGoal}'(으)로 변경했습니다.`);
+            playSound('correct');
+            updateGameUI();
         }
 
         function showCompletionResult() {

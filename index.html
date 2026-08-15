@@ -623,9 +623,9 @@
                     </div>
 
                     <!-- Selected Courses Breakdown by Grade -->
-                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-3 flex-1 flex flex-col">
+                    <div class="bg-slate-900 border-2 border-amber-500/50 p-4 rounded-2xl space-y-3 flex-1 flex flex-col">
                         <div class="flex items-center justify-between">
-                            <h3 class="text-sm sm:text-base font-bold text-sky-300 flex items-center gap-2">
+                            <h3 class="text-sm sm:text-base font-bold text-amber-600 flex items-center gap-2">
                                 <span class="text-lg">📚</span> 학년별 수강 신청 목록
                             </h3>
                             <span class="text-[10px] text-slate-400">클릭 시 신청 취소</span>
@@ -637,8 +637,8 @@
                     </div>
 
                     <!-- School Activity Log -->
-                    <div class="bg-slate-900 border border-slate-800 p-3.5 rounded-2xl space-y-2">
-                        <h3 class="text-sm sm:text-base font-bold text-sky-300 flex items-center gap-2">
+                    <div class="bg-slate-900 border-2 border-slate-300 p-3.5 rounded-2xl space-y-2">
+                        <h3 class="text-sm sm:text-base font-bold text-slate-600 flex items-center gap-2">
                             <span class="text-lg">📜</span> 수강 및 진로 기록
                         </h3>
                         <div id="log-box" class="bg-slate-950 p-3 rounded-xl border border-slate-800 max-h-[110px] overflow-y-auto text-xs text-slate-300 space-y-1 leading-relaxed">
@@ -785,29 +785,33 @@
 
             <div class="space-y-3 text-xs sm:text-sm">
                 <div class="p-3.5 bg-slate-950 rounded-xl border border-sky-500/40">
-                    <div class="font-bold text-sky-300 mb-1 flex items-center gap-1.5"><span>🎓</span> 총 이수 학점 : 192학점</div>
-                    <p class="text-slate-300 leading-relaxed">3년간 졸업하려면 <b class="text-amber-300">교과 174학점 + 창의적 체험활동 18학점 = 총 192학점</b>을 이수해야 합니다. 1학점은 50분 수업 16회 기준입니다.</p>
+                    <div class="font-bold text-sky-300 mb-1 flex items-center gap-1.5"><span>🎓</span> 192학점, 도대체 뭘까요?</div>
+                    <p class="text-slate-300 leading-relaxed">고등학교를 졸업하려면 3년 동안 <b class="text-amber-300">192학점만큼 수업을 들어야</b> 해요. 학점은 "이 수업을 들었다"는 <b class="text-amber-300">개근 도장 같은 것</b>이라고 생각하면 쉬워요. 국어·수학 같은 교과 수업으로 174학점, 동아리·행사 같은 창의적 체험활동으로 18학점을 채워서 총 192학점이 됩니다.</p>
                 </div>
 
                 <div class="p-3.5 bg-slate-950 rounded-xl border border-amber-500/40">
-                    <div class="font-bold text-amber-300 mb-1 flex items-center gap-1.5"><span>📅</span> 학년별 배분 (권장)</div>
-                    <div class="grid grid-cols-3 gap-2 text-center">
+                    <div class="font-bold text-amber-300 mb-1 flex items-center gap-1.5"><span>📅</span> 1·2·3학년, 무엇이 다를까요?</div>
+                    <div class="grid grid-cols-3 gap-2 text-center mb-2">
                         <div class="p-2 bg-slate-900 rounded-lg border border-slate-800">
                             <div class="text-sky-300 font-bold">1학년</div>
-                            <div class="font-pixel text-amber-300 mt-1">약 64학점</div>
-                            <div class="text-slate-400 mt-1">공통 과목 중심</div>
+                            <div class="font-pixel text-amber-300 mt-1">64학점</div>
+                            <div class="text-slate-400 mt-1">전원 동일</div>
                         </div>
                         <div class="p-2 bg-slate-900 rounded-lg border border-slate-800">
                             <div class="text-sky-300 font-bold">2학년</div>
-                            <div class="font-pixel text-amber-300 mt-1">약 64학점</div>
-                            <div class="text-slate-400 mt-1">일반/진로 선택</div>
+                            <div class="font-pixel text-amber-300 mt-1">64학점</div>
+                            <div class="text-slate-400 mt-1">내가 선택</div>
                         </div>
                         <div class="p-2 bg-slate-900 rounded-lg border border-slate-800">
                             <div class="text-sky-300 font-bold">3학년</div>
-                            <div class="font-pixel text-amber-300 mt-1">약 64학점</div>
-                            <div class="text-slate-400 mt-1">진로/융합 선택</div>
+                            <div class="font-pixel text-amber-300 mt-1">64학점</div>
+                            <div class="text-slate-400 mt-1">내가 선택</div>
                         </div>
                     </div>
+                    <ul class="list-disc list-inside space-y-1.5 text-slate-300 leading-relaxed">
+                        <li><b class="text-sky-300">1학년:</b> 국어·수학·영어·통합사회·통합과학처럼 <b class="text-amber-300">모든 학생이 똑같이 배우는 기초 공통과목</b>이에요. 아직 진로가 정해지지 않아도 되니까, 이 게임에서도 자동으로 채워져 있어요.</li>
+                        <li><b class="text-sky-300">2·3학년:</b> 이때부터는 나의 <b class="text-amber-300">흥미·적성·희망 진로에 맞춰 직접 과목을 골라</b> 시간표를 만들어요. 그래서 게임에서도 2학년부터는 여러분이 직접 건물에 들어가 과목을 신청해야 해요.</li>
+                    </ul>
                 </div>
 
                 <div class="p-3.5 bg-slate-950 rounded-xl border border-emerald-500/40">
@@ -839,16 +843,37 @@
 
     <!-- INTRO / TITLE SPLASH MODAL -->
     <div id="intro-modal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md hidden flex items-center justify-center p-3 z-50">
-        <div class="modal-card max-w-lg w-full p-6 sm:p-8 text-center text-slate-100 relative border-2 border-sky-500/80">
+        <div class="modal-card max-w-xl w-full p-6 sm:p-8 text-center text-slate-100 relative border-2 border-sky-500/80 max-h-[92vh] overflow-y-auto">
             <div class="w-16 h-16 mx-auto bg-sky-500 rounded-2xl flex items-center justify-center text-slate-950 text-4xl font-black shadow-lg mb-4">
                 <i class="fa-solid fa-graduation-cap"></i>
             </div>
             <h1 class="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-cyan-300 to-blue-200 mb-2">
                 고교학점제 방탈출 & MISSION 192
             </h1>
-            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed mb-6">
+            <p class="text-xs sm:text-sm text-slate-500 leading-relaxed mb-5">
                 15개 방탈출 단서를 해독하고, 고교 3개년 192학점 맞춤 수강계획을 설계하는 게임입니다.
             </p>
+
+            <div class="bg-sky-50 border border-sky-300 rounded-2xl p-4 text-left mb-6">
+                <div class="font-black text-sky-800 text-sm mb-2 flex items-center gap-1.5">
+                    <span>🙋</span> 중3인 나에게, 이게 왜 필요할까?
+                </div>
+                <ul class="space-y-2 text-xs sm:text-sm text-slate-700 leading-relaxed">
+                    <li class="flex items-start gap-2">
+                        <span class="text-sky-600 font-black flex-shrink-0">①</span>
+                        <span><b class="text-sky-800">고1이 되면 진짜로</b> 이런 식으로 과목을 직접 골라 시간표를 만들어요. 미리 연습해두면 실제 수강신청 때 당황하지 않아요.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-sky-600 font-black flex-shrink-0">②</span>
+                        <span>내가 뭘 잘하고 뭘 좋아하는지, 어떤 과목을 들으면 <b class="text-sky-800">원하는 진로에 가까워지는지</b> 미리 감을 잡을 수 있어요.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-sky-600 font-black flex-shrink-0">③</span>
+                        <span>졸업을 위해 꼭 채워야 하는 <b class="text-sky-800">192학점이 뭔지</b>, 왜 이렇게 나뉘어 있는지 게임으로 재미있게 이해할 수 있어요.</span>
+                    </li>
+                </ul>
+            </div>
+
             <button onclick="startIntroFlow()" class="w-full px-5 py-3 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-bold rounded-xl text-sm shadow-lg transition">
                 🎮 시작하기 (캐릭터 설정하러 가기)
             </button>
@@ -1666,11 +1691,19 @@
             const gradeCredits = getGradeCredits(activeGrade);
 
             if (remaining === 0) {
-                note.innerHTML = `<span class="text-sm">🎉</span><span><b class="text-emerald-300">목표 192학점을 모두 채웠어요!</b> 잠시 후 최종 수강 계획서 & 진로 리포트가 자동으로 열립니다.</span>`;
+                note.innerHTML = `<span class="text-sm">🎉</span><span><b class="text-emerald-300">목표 192학점을 모두 채웠어요!</b> 3년 동안 들어야 할 수업을 다 계획한 거예요. 잠시 후 최종 수강 계획서 & 진로 리포트가 자동으로 열립니다.</span>`;
                 return;
             }
 
-            note.innerHTML = `<span class="text-sm">🧭</span><span>지금은 <b class="text-sky-300">${activeGrade}학년</b> 과목을 고르는 중이에요! 방향키(WASD)로 캠퍼스를 이동해 건물 안으로 들어가면 자동으로 과목 신청 창이 열립니다. <b class="text-amber-300">목표까지 ${remaining}학점 남았어요.</b> (현재 ${activeGrade}학년 ${gradeCredits}/72학점)</span>`;
+            if (activeGrade === 1) {
+                // Grade 1 is auto-filled — don't say "choosing", explain it's already done and point to grade 2
+                note.innerHTML = `<span class="text-sm">✅</span><span><b class="text-sky-300">1학년 ${gradeCredits}학점은 이미 다 채워져 있어요!</b> 진로가 아직 안 정해져도 되도록, 전국 모든 학생이 국어·수학·영어 같은 <b class="text-amber-300">공통과목</b>을 똑같이 배우기 때문이에요. (내용이 궁금하면 오른쪽 "학년별 수강 신청 목록"을 확인해보세요) 진짜 선택은 <b class="text-amber-300">2학년 탭</b>부터 시작돼요!</span>`;
+                return;
+            }
+
+            const whyText = `2·3학년부터는 <b class="text-amber-300">내 흥미와 진로에 맞는 과목</b>을 직접 골라야 해요. 그래야 나에게 맞는 시간표가 완성돼요.`;
+
+            note.innerHTML = `<span class="text-sm">🧭</span><span>지금은 <b class="text-sky-300">${activeGrade}학년</b> 과목을 고르는 중이에요! ${whyText} 방향키(WASD)로 캠퍼스를 이동해 건물 안으로 들어가면 자동으로 과목 신청 창이 열립니다. <b class="text-amber-300">졸업까지 ${remaining}학점 더 채워야 해요.</b> (현재 ${activeGrade}학년 ${gradeCredits}/72학점)</span>`;
         }
 
         function getGradeCredits(grade) {

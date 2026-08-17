@@ -974,7 +974,7 @@
                 <div class="p-3.5 bg-slate-950 rounded-xl border border-purple-500/40">
                     <div class="font-bold text-purple-300 mb-1 flex items-center gap-1.5"><span>🏫</span> MISSION 192 플레이 방법</div>
                     <ul class="list-disc list-inside space-y-1 text-slate-300 leading-relaxed">
-                        <li>먼저 <b class="text-purple-700">어떤 고등학교(일반고/특성화고·마이스터고/예술체육고)</b>로 진학할지 선택해요. 유형에 따라 캠퍼스 건물과 과목이 달라져요.</li>
+                        <li>먼저 <b class="text-purple-700">어떤 고등학교(일반고 / 특목고 / 직업계고)</b>로 진학할지 선택해요. 특목고는 과학고·외고·예술고·체육고 중 세부 선택도 할 수 있어요. 유형에 따라 캠퍼스 건물과 과목이 달라져요.</li>
                         <li><b class="text-purple-700">1학년 공통과목 64학점은 게임 시작과 동시에 자동으로 채워집니다.</b> 실질적인 선택은 2학년부터 시작되며, 1학년 과목도 언제든 취소·변경 가능합니다.</li>
                         <li>방향키/WASD로 캠퍼스를 이동해 건물 안까지 걸어 들어가면 수강 신청 창이 자동으로 열립니다.</li>
                         <li>학년 탭을 바꿔가며 각 학년에 맞는 과목을 신청하세요. 핵심 목표는 <b class="text-purple-700">3년간 총 192학점</b>을 완성하는 거예요. (한 학년에 너무 몰아 담진 못하도록 학년당 담을 수 있는 학점에도 살짝 여유 있는 한도가 있어요 — 화면에서 실시간으로 확인할 수 있어요!)</li>
@@ -996,39 +996,70 @@
             <div class="text-center mb-4">
                 <div class="text-3xl mb-1">🧑‍🎓</div>
                 <h2 class="text-lg sm:text-xl font-black text-sky-300">어떤 고등학교를 생각하고 있나요?</h2>
-                <p class="text-xs sm:text-sm text-slate-400 mt-1">선택한 유형에 맞는 캠퍼스 건물과 과목, 진로 가이드가 준비돼요. 아직 안 정했어도 괜찮아요, 언제든 마음이 바뀔 수 있어요!</p>
+                <p class="text-xs sm:text-sm text-slate-400 mt-1">고등학교는 크게 <b class="text-slate-200">일반고 / 특목고 / 직업계고</b>로 나뉘어요. 선택한 유형에 맞는 캠퍼스 건물과 과목, 진로 가이드가 준비돼요. 아직 안 정했어도 괜찮아요!</p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <button onclick="selectSchoolType('general')" class="p-4 bg-slate-900 hover:bg-sky-50 border-2 border-slate-700 hover:border-sky-400 rounded-2xl text-left transition group">
                     <div class="text-3xl mb-2">🏫</div>
-                    <div class="font-black text-sm text-sky-300 mb-1">일반고 (인문계)</div>
-                    <p class="text-[11px] text-slate-400 leading-relaxed mb-2">국어·수학·영어 등 보통교과 중심으로, 다양한 학과 진학을 폭넓게 준비해요.</p>
+                    <div class="font-black text-sm text-sky-300 mb-1">일반고</div>
+                    <p class="text-[11px] text-slate-400 leading-relaxed mb-2">대학 진학 등 다양한 진로를 준비하는 학교예요. 내 진로에 맞춰 다양한 선택과목을 스스로 골라 학점을 이수해요.</p>
                     <ul class="text-[10px] text-slate-500 space-y-1 list-disc list-inside">
                         <li>내신 + 수능을 함께 준비</li>
                         <li>다양한 학과로 진학 가능</li>
+                        <li>선택과목 폭이 가장 넓음</li>
+                    </ul>
+                </button>
+                <button onclick="showSpecialSchoolSubtypes()" class="p-4 bg-slate-900 hover:bg-purple-50 border-2 border-slate-700 hover:border-purple-400 rounded-2xl text-left transition group">
+                    <div class="text-3xl mb-2">🔬</div>
+                    <div class="font-black text-sm text-purple-400 mb-1">특목고</div>
+                    <p class="text-[11px] text-slate-400 leading-relaxed mb-2">과학고·외고·국제고·예술고·체육고 등, 특정 분야에 소질이 있는 학생을 위한 학교예요.</p>
+                    <ul class="text-[10px] text-slate-500 space-y-1 list-disc list-inside">
+                        <li>학교 특성에 맞는 심화·전문 과목</li>
+                        <li>소수 정예 집중 교육</li>
+                        <li>실기고사·특기자 전형 활용</li>
                     </ul>
                 </button>
                 <button onclick="selectSchoolType('vocational')" class="p-4 bg-slate-900 hover:bg-amber-50 border-2 border-slate-700 hover:border-amber-400 rounded-2xl text-left transition group">
                     <div class="text-3xl mb-2">🛠️</div>
-                    <div class="font-black text-sm text-amber-400 mb-1">특성화고·마이스터고</div>
-                    <p class="text-[11px] text-slate-400 leading-relaxed mb-2">산업 현장에서 바로 활용할 수 있는 전문 기술과 실무 역량을 배워요.</p>
+                    <div class="font-black text-sm text-amber-400 mb-1">직업계고 <span class="text-[9px] font-normal">(특성화고·마이스터고)</span></div>
+                    <p class="text-[11px] text-slate-400 leading-relaxed mb-2">특정 분야의 직업 교육과 취업을 중심으로 배우는 학교예요. 전공·실무 과목을 중심으로 학점을 이수해요.</p>
                     <ul class="text-[10px] text-slate-500 space-y-1 list-disc list-inside">
-                        <li>산업체 현장실습 참여</li>
+                        <li>산업체 현장실습·취업 연계</li>
                         <li>국가기술자격증 취득</li>
-                        <li>취업 · 진학 모두 가능</li>
+                        <li>졸업 후 바로 취업 또는 진학</li>
                     </ul>
                 </button>
-                <button onclick="selectSchoolType('arts_sports')" class="p-4 bg-slate-900 hover:bg-pink-50 border-2 border-slate-700 hover:border-pink-400 rounded-2xl text-left transition group">
-                    <div class="text-3xl mb-2">🎭</div>
-                    <div class="font-black text-sm text-pink-600 mb-1">예술·체육계열 고교</div>
-                    <p class="text-[11px] text-slate-400 leading-relaxed mb-2">미술·음악·무용·체육 등 예술·체육 전문 실기와 이론을 집중적으로 배워요.</p>
-                    <ul class="text-[10px] text-slate-500 space-y-1 list-disc list-inside">
-                        <li>개인 레슨 · 전공 실기 중심</li>
-                        <li>콩쿠르 · 대회 참가 기회</li>
-                        <li>실기고사·포트폴리오 전형</li>
-                    </ul>
-                </button>
+            </div>
+
+            <!-- 특목고 세부 유형 선택 (처음에는 숨김) -->
+            <div id="special-subtypes-grid" class="hidden mt-3">
+                <div class="text-xs font-bold text-purple-400 mb-2 flex items-center gap-1.5">
+                    <button onclick="hideSpecialSchoolSubtypes()" class="text-slate-400 hover:text-slate-200 mr-1">← 뒤로</button>
+                    어떤 특목고를 희망하나요?
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    <button onclick="selectSchoolType('science_high')" class="p-3 bg-slate-900 hover:bg-emerald-50 border-2 border-slate-700 hover:border-emerald-400 rounded-xl text-left transition">
+                        <div class="text-2xl mb-1">🔬</div>
+                        <div class="font-black text-xs text-emerald-400 mb-1">과학고</div>
+                        <p class="text-[10px] text-slate-400">수학·과학 심화과목 중심, 이공계 연구·대학 진학 준비</p>
+                    </button>
+                    <button onclick="selectSchoolType('language_high')" class="p-3 bg-slate-900 hover:bg-sky-50 border-2 border-slate-700 hover:border-sky-400 rounded-xl text-left transition">
+                        <div class="text-2xl mb-1">🌍</div>
+                        <div class="font-black text-xs text-sky-400 mb-1">외고·국제고</div>
+                        <p class="text-[10px] text-slate-400">외국어·국제 관계 심화, 글로벌 진로 준비</p>
+                    </button>
+                    <button onclick="selectSchoolType('arts_high')" class="p-3 bg-slate-900 hover:bg-pink-50 border-2 border-slate-700 hover:border-pink-400 rounded-xl text-left transition">
+                        <div class="text-2xl mb-1">🎨</div>
+                        <div class="font-black text-xs text-pink-400 mb-1">예술고</div>
+                        <p class="text-[10px] text-slate-400">미술·음악·무용 전문 실기, 예술대학 진학 준비</p>
+                    </button>
+                    <button onclick="selectSchoolType('sports_high')" class="p-3 bg-slate-900 hover:bg-orange-50 border-2 border-slate-700 hover:border-orange-400 rounded-xl text-left transition">
+                        <div class="text-2xl mb-1">🏃</div>
+                        <div class="font-black text-xs text-orange-400 mb-1">체육고</div>
+                        <p class="text-[10px] text-slate-400">전공 종목 실기, 선수·지도자·체육대학 진학 준비</p>
+                    </button>
+                </div>
             </div>
 
             <p class="text-[11px] text-slate-500 text-center mt-4">💡 학교 유형에 따라 교육과정과 과목 구성은 다르지만, <b class="text-slate-300">3년간 192학점을 채워야 졸업</b>하는 고교학점제의 큰 틀은 어떤 유형이든 적용돼요.</p>
@@ -1900,7 +1931,7 @@
             },
 
             vocational: {
-                label: '특성화고·마이스터고 (직업·전문계열)',
+                label: '직업계고 (특성화고·마이스터고)',
                 icon: '🛠️',
                 blurb: '산업 현장에서 바로 활용할 수 있는 전문 기술과 실무 역량을 배워요.',
                 realityFacts: [
@@ -2099,15 +2130,15 @@
                 }
             },
 
-            arts_sports: {
-                label: '예술·체육계열 고교',
-                icon: '🎭',
-                blurb: '미술·음악·무용·체육 등 예술·체육 전문 실기와 이론을 집중적으로 배워요.',
+            arts_high: {
+                label: '예술고 (특목고)',
+                icon: '🎨',
+                blurb: '미술·음악·무용 등 예술 전문 실기와 이론을 집중적으로 배우는 특목고예요.',
                 realityFacts: [
                     '전공 실기 수업 비중이 매우 높고, 개인 레슨·소그룹 형태로 진행되는 경우가 많아요',
-                    '콩쿠르·대회·오디션 등 실전 경험을 쌓을 기회가 많아요',
-                    '실기고사·포트폴리오 등 예체능 특기자 전형으로 대학에 진학해요',
-                    '전공에 따라 실기실·연습실·체육관 등 전용 시설에서 수업해요'
+                    '콩쿠르·오디션·전시 등 실전 경험을 쌓을 기회가 많아요',
+                    '실기고사·포트폴리오 등 예체능 특기자 전형으로 예술대학에 진학해요',
+                    '전공에 따라 실기실·연습실·갤러리 등 전용 시설에서 수업해요'
                 ],
                 slots: {
                     'slot-art': { name: '미술·디자인관', icon: '🎨', desc: '실기 · 조형 · 디자인' },
@@ -2227,7 +2258,7 @@
                     }
                 },
                 // 전공별 "사실상 필수"인 핵심 과목 — 진로상담센터에서 전공을 고르면 자동으로 신청된다
-                // (예술·체육고는 전공 실기가 커리큘럼의 중심이라 학생이 매번 고르는 게 아니기 때문)
+                // (예술고·체육고 등 특목고는 전공 실기가 커리큘럼의 중심이라 학생이 매번 고르는 게 아니기 때문)
                 requiredCoreSubjects: {
                     '미술·디자인관': { 2: '드로잉·소묘 실기', 3: '전공 실기 심화' },
                     '음악관': { 2: '전공 실기(기악/성악)', 3: '전공 실기 심화' },
@@ -2288,10 +2319,394 @@
                     '체육 전공': '무용·체육',
                     '예술 이론·기획 전공': '인문'
                 }
+            },
+
+            // ── 과학고 ───────────────────────────────────────────────
+            science_high: {
+                label: '과학고 (특목고)',
+                icon: '🔬',
+                blurb: '수학·과학 심화과목을 중심으로 이공계 연구·대학 진학을 집중 준비하는 특목고예요.',
+                realityFacts: [
+                    '수학·물리·화학·생물·지구과학 등 심화 과목 비중이 매우 높아요',
+                    '연구실 탐구 활동, R&E(Research & Education) 프로젝트에 참여해요',
+                    '과학·수학올림피아드, 각종 탐구대회에 참가할 기회가 많아요',
+                    '졸업 후 대부분 이공계 대학으로 진학해요'
+                ],
+                slots: {
+                    'slot-art': { name: '생명과학관', icon: '🧬', desc: '생물 · 유전 · 바이오' },
+                    'slot-science': { name: '물리·화학관', icon: '⚗️', desc: '물리 · 화학 · 실험' },
+                    'slot-social': { name: '수학관', icon: '📐', desc: '고급수학 · 통계 · 정보' },
+                    'slot-common': { name: '보통교과관', icon: '📘', desc: '국어 · 영어 · 사회' },
+                    'slot-math': { name: 'AI·소프트웨어관', icon: '💻', desc: 'AI · 프로그래밍 · 데이터' },
+                    'slot-language': { name: '과학사·철학관', icon: '🔭', desc: '과학사 · 수학사 · 탐구' }
+                },
+                courseDatabase: {
+                    "생명과학관": {
+                        1: [{ name: "생명과학 Ⅰ", credit: 6, category: "과학", desc: "1학년 생명 현상의 기초 이해" }],
+                        2: [
+                            { name: "생명과학 Ⅱ", credit: 8, category: "과학", desc: "세포·유전·진화 심화 이론" },
+                            { name: "고급 생명과학", credit: 8, category: "과학", desc: "분자생물학·유전공학 전문 심화 탐구" },
+                            { name: "생명과학 실험", credit: 8, category: "과학", desc: "세포 배양·PCR 등 생물 실험 실습" },
+                            { name: "바이오·의약 탐구", credit: 8, category: "과학", desc: "신약 개발·생명공학 분야 R&E 탐구" }
+                        ],
+                        3: [
+                            { name: "바이오 논문 탐구", credit: 10, category: "과학", desc: "연구 논문 분석과 소논문 작성" },
+                            { name: "생태·환경 과학", credit: 8, category: "과학", desc: "생태계와 환경 문제의 과학적 접근" },
+                            { name: "뇌·신경과학 입문", credit: 8, category: "과학", desc: "신경계와 인지과학 기초 탐구" }
+                        ]
+                    },
+                    "물리·화학관": {
+                        1: [{ name: "물리학 Ⅰ / 화학 Ⅰ", credit: 8, category: "과학", desc: "1학년 물리·화학 기초 이론" }],
+                        2: [
+                            { name: "물리학 Ⅱ", credit: 8, category: "과학", desc: "전자기학·현대물리 심화" },
+                            { name: "화학 Ⅱ", credit: 8, category: "과학", desc: "유기화학·반응속도론 심화" },
+                            { name: "고급 물리학", credit: 8, category: "과학", desc: "양자역학·상대성이론 입문" },
+                            { name: "고급 화학", credit: 8, category: "과학", desc: "물질 구조와 스펙트럼 분석" }
+                        ],
+                        3: [
+                            { name: "물리·화학 R&E 프로젝트", credit: 10, category: "과학", desc: "직접 설계한 연구 주제로 탐구 수행" },
+                            { name: "전기·전자 물리 실험", credit: 8, category: "과학", desc: "회로·반도체 등 실험 심화" },
+                            { name: "천체·지구과학 특강", credit: 8, category: "과학", desc: "천체물리·지구시스템 과학 탐구" }
+                        ]
+                    },
+                    "수학관": {
+                        1: [{ name: "공통수학(Ⅰ·Ⅱ) 심화", credit: 10, category: "수학", desc: "1학년 고급 수학 기초" }],
+                        2: [
+                            { name: "수학 Ⅰ·Ⅱ", credit: 10, category: "수학", desc: "함수·수열·미적분 심화" },
+                            { name: "미적분", credit: 8, category: "수학", desc: "미분·적분 이론과 응용" },
+                            { name: "확률과 통계", credit: 8, category: "수학", desc: "확률 분포와 통계적 추정" },
+                            { name: "기하", credit: 8, category: "수학", desc: "공간도형과 벡터 이론" }
+                        ],
+                        3: [
+                            { name: "고급 수학 Ⅰ·Ⅱ", credit: 12, category: "수학", desc: "대학 수준 수학올림피아드 대비" },
+                            { name: "수학 소논문 탐구", credit: 8, category: "수학", desc: "수학적 추론과 증명으로 소논문 작성" },
+                            { name: "이산수학·알고리즘", credit: 8, category: "IT", desc: "알고리즘과 이산수학 기초" }
+                        ]
+                    },
+                    "AI·소프트웨어관": {
+                        1: [{ name: "정보·컴퓨팅 기초", credit: 6, category: "IT", desc: "1학년 컴퓨팅 사고와 정보 소양" }],
+                        2: [
+                            { name: "프로그래밍·알고리즘", credit: 8, category: "IT", desc: "파이썬·C++ 기초와 알고리즘 구현" },
+                            { name: "인공지능 수학", credit: 8, category: "IT", desc: "행렬·선형대수 AI 응용 수학" },
+                            { name: "데이터과학 기초", credit: 8, category: "IT", desc: "데이터 수집·분석·시각화 실습" }
+                        ],
+                        3: [
+                            { name: "AI·머신러닝 실습", credit: 10, category: "IT", desc: "머신러닝 모델 설계와 학습 실습" },
+                            { name: "정보올림피아드 특강", credit: 8, category: "IT", desc: "KOI·IOI 대비 문제 해결 전략" },
+                            { name: "소프트웨어 프로젝트", credit: 8, category: "IT", desc: "팀 프로젝트로 실제 서비스 개발" }
+                        ]
+                    },
+                    "과학사·철학관": {
+                        1: [{ name: "과학사와 탐구", credit: 6, category: "인문", desc: "1학년 과학의 역사와 철학적 이해" }],
+                        2: [
+                            { name: "과학 글쓰기", credit: 8, category: "인문", desc: "과학 보고서·소논문 작성법" },
+                            { name: "과학과 사회", credit: 6, category: "사회", desc: "과학기술이 사회에 미치는 영향 탐구" },
+                            { name: "과학 독해와 영어", credit: 8, category: "인문", desc: "영문 과학 논문·자료 독해 실습" }
+                        ],
+                        3: [
+                            { name: "과학 발표와 토론", credit: 8, category: "인문", desc: "학술 발표와 과학적 토론 능력 함양" },
+                            { name: "미래 기술 윤리", credit: 6, category: "인문", desc: "AI·바이오 등 첨단기술의 윤리적 쟁점" },
+                            { name: "자율 연구 프로젝트", credit: 10, category: "과학", desc: "스스로 정한 주제로 연구 수행" }
+                        ]
+                    },
+                    "보통교과관": {
+                        1: [
+                            { name: "공통국어", credit: 10, category: "인문", desc: "1학년 공통 비판적 사고 및 독해" },
+                            { name: "공통영어", credit: 10, category: "인문", desc: "1학년 공통 글로벌 소통 언어" },
+                            { name: "창의적 체험활동", credit: 16, category: "공통", desc: "1~3년 동아리·봉사·진로 체험" }
+                        ],
+                        2: [
+                            { name: "독서와 작문", credit: 8, category: "인문", desc: "학술 논리적 글쓰기와 정보 수집" },
+                            { name: "심화 영어 독해", credit: 8, category: "인문", desc: "영문 과학·학술 자료 독해" },
+                            { name: "통합사회", credit: 6, category: "사회", desc: "인문·사회적 소양 기초" }
+                        ],
+                        3: [
+                            { name: "심화 국어", credit: 8, category: "인문", desc: "논술·자기소개서 심화 글쓰기" },
+                            { name: "영어 회화·토론", credit: 8, category: "인문", desc: "학술 영어 발표와 토론" },
+                            { name: "사회문제 탐구", credit: 6, category: "사회", desc: "과학기술 관련 사회 현안 탐구" }
+                        ]
+                    }
+                },
+                careerGoals: [
+                    { goal: '이공계·연구 계열', icon: '🔬', colorClass: 'text-emerald-300' },
+                    { goal: '의학·약학·바이오 계열', icon: '🧬', colorClass: 'text-sky-300' },
+                    { goal: 'AI·컴퓨터공학 계열', icon: '💻', colorClass: 'text-purple-300' },
+                    { goal: '수학·통계 계열', icon: '📐', colorClass: 'text-amber-300' },
+                    { goal: '자율 융합 탐색', icon: '🌟', colorClass: 'text-cyan-300', label: '자율 탐색' }
+                ],
+                careerGuideData: {
+                    '이공계·연구 계열': { icon: '🔬', blurb: '물리·화학·생물 등 자연과학 연구나 공학 분야 진로에 관심이 있다면 잘 맞아요.', subjects: ['고급 물리학', '고급 화학', '물리·화학 R&E 프로젝트', '자율 연구 프로젝트'], buildings: ['물리·화학관', '생명과학관'], quote: '"실험하다 밤을 새운 날도 있지만, 결과가 나왔을 때 그 성취감은 정말 최고예요." — 이공계 계열 선배' },
+                    '의학·약학·바이오 계열': { icon: '🧬', blurb: '의대·약대·바이오·생명공학 진로에 관심이 있다면 생명과학·화학 심화가 핵심이에요.', subjects: ['고급 생명과학', '생명과학 실험', '바이오·의약 탐구', '화학 Ⅱ'], buildings: ['생명과학관', '물리·화학관'], quote: '"생명 현상을 이해할수록 의학에 대한 확신이 생겼어요." — 바이오 계열 선배' },
+                    'AI·컴퓨터공학 계열': { icon: '💻', blurb: 'AI·소프트웨어·컴퓨터공학 진로에 관심이 있다면 수학과 프로그래밍이 핵심이에요.', subjects: ['프로그래밍·알고리즘', 'AI·머신러닝 실습', '인공지능 수학', '이산수학·알고리즘'], buildings: ['AI·소프트웨어관', '수학관'], quote: '"수학이 곧 코딩의 기반이에요. 여기 오니 그 연결이 보이더라고요." — AI 계열 선배' },
+                    '수학·통계 계열': { icon: '📐', blurb: '수학·통계·데이터 분야 진로에 관심이 있다면 고급 수학과 통계가 핵심이에요.', subjects: ['고급 수학 Ⅰ·Ⅱ', '수학 소논문 탐구', '확률과 통계', '데이터과학 기초'], buildings: ['수학관', 'AI·소프트웨어관'], quote: '"수학올림피아드 준비하면서 논리적으로 생각하는 힘이 정말 늘었어요." — 수학 계열 선배' },
+                    '자율 융합 탐색': { icon: '🌟', blurb: '아직 세부 진로를 정하지 못했어도 괜찮아요! 다양한 과학·수학 분야를 골고루 탐색해보세요.', subjects: ['다양한 학년의 과목을 골고루 살펴보세요'], buildings: ['생명과학관', '물리·화학관', '수학관', 'AI·소프트웨어관', '과학사·철학관'] }
+                },
+                categoryInsights: {
+                    '과학': { label: '🔬 자연과학·이공계 계열', desc: '과학 탐구 중심 과목 비중이 높습니다. 자연과학·의약·공학 계열 진학에 적합합니다.', majors: ['물리학과', '화학과', '생명과학과', '의예과', '약학과'], improvements: ['R&E 탐구 결과를 소논문으로 정리해두면 학생부에 큰 강점이 됩니다.', '과학올림피아드 참가 이력을 체계적으로 기록해두세요.'], skills: ['과학적 탐구 설계 및 실험 능력', '데이터 분석과 논리적 추론', '소논문 작성 및 발표 능력'] },
+                    'IT': { label: '💻 AI·컴퓨터공학 계열', desc: 'IT·프로그래밍 과목 비중이 높습니다. AI·소프트웨어 공학 진로에 적합합니다.', majors: ['컴퓨터공학과', 'AI학과', '전기전자공학과', '수학과', '데이터사이언스학과'], improvements: ['알고리즘 문제 해결 능력을 꾸준히 키우고 정보올림피아드에 도전해보세요.', '직접 개발한 프로젝트를 포트폴리오로 정리해두세요.'], skills: ['알고리즘 구현 및 문제 해결력', 'AI 모델 설계와 데이터 분석', '소프트웨어 개발 및 팀 협업'] },
+                    '수학': { label: '📐 수학·통계 계열', desc: '수학 심화 과목 비중이 높습니다. 순수 수학·통계·금융 수학 진로에 적합합니다.', majors: ['수학과', '통계학과', '금융수학과', '물리학과', '경제학과'], improvements: ['수학 소논문과 올림피아드 참가를 통해 수학적 역량을 증명해보세요.'], skills: ['수학적 추론 및 증명 능력', '통계·확률 분석 능력', '추상적 사고력'] },
+                    '인문': { label: '📖 과학 글쓰기·인문 계열', desc: '과학 글쓰기·영어 등 소통 과목 비중이 높습니다.', majors: ['과학기술학과', '과학철학과', '과학저널리즘학과'], improvements: ['과학 글쓰기와 영어 독해를 꾸준히 연습해보세요.'], skills: ['과학 보고서 및 소논문 작성', '영문 자료 독해 능력', '학술 토론 및 발표'] }
+                },
+                defaultReport: { majors: ['자연과학부(자율전공)', '융합과학기술학부'], improvements: ['다양한 분야를 탐색한 만큼 3학년에서 R&E 주제를 하나로 좁혀보세요.'], skills: ['과학적 탐구력', '논리적 사고', '자기주도 연구 역량'] },
+                goalCategoryMap: { '이공계·연구 계열': '과학', '의학·약학·바이오 계열': '과학', 'AI·컴퓨터공학 계열': 'IT', '수학·통계 계열': '수학' },
+                requiredCoreSubjects: {}
+            },
+
+            // ── 외고·국제고 ───────────────────────────────────────────
+            language_high: {
+                label: '외고·국제고 (특목고)',
+                icon: '🌍',
+                blurb: '외국어와 국제 관계를 깊이 배우며 글로벌 진로를 준비하는 특목고예요.',
+                realityFacts: [
+                    '영어·제2외국어(독어·불어·스페인어·중국어·일본어 등) 심화 수업이 많아요',
+                    '모의유엔(MUN)·국제 토론·교환학생 프로그램에 참여할 기회가 있어요',
+                    '어문학·국제학·법학·외교 분야 진학에 유리해요',
+                    '독서·토론·발표 중심의 수업 방식이 많아요'
+                ],
+                slots: {
+                    'slot-art': { name: '영어심화관', icon: '🇬🇧', desc: '심화 영어 · 학술 독해' },
+                    'slot-science': { name: '제2외국어관', icon: '🌏', desc: '독어 · 불어 · 스페인어 · 중국어 등' },
+                    'slot-social': { name: '국제관계·사회관', icon: '🏛️', desc: '국제정치 · 경제 · 법' },
+                    'slot-common': { name: '보통교과관', icon: '📘', desc: '국어 · 수학 · 과학' },
+                    'slot-math': { name: '인문·역사관', icon: '📚', desc: '세계사 · 문학 · 철학' },
+                    'slot-language': { name: '글로벌 탐구관', icon: '🌐', desc: '모의유엔 · 국제 프로젝트' }
+                },
+                courseDatabase: {
+                    "영어심화관": {
+                        1: [{ name: "공통영어 심화", credit: 8, category: "인문", desc: "1학년 심화 영어 읽기·쓰기·듣기" }],
+                        2: [
+                            { name: "영어 독해와 작문", credit: 10, category: "인문", desc: "학술 영어 독해와 에세이 작성" },
+                            { name: "영어 회화 심화", credit: 8, category: "인문", desc: "토론·발표 중심 고급 영어 회화" },
+                            { name: "영어 문학 감상", credit: 8, category: "인문", desc: "영미 문학 작품 분석과 비평" },
+                            { name: "영어 토론·토론 전략", credit: 8, category: "인문", desc: "디베이트 전략과 논증 훈련" }
+                        ],
+                        3: [
+                            { name: "고급 영어 Ⅰ·Ⅱ", credit: 12, category: "인문", desc: "대학 수준 영어 학술 읽기와 쓰기" },
+                            { name: "학술 영어 작문", credit: 8, category: "인문", desc: "리서치 페이퍼와 학술 에세이 작성" },
+                            { name: "영어권 문화 탐구", credit: 8, category: "인문", desc: "영미 문화·역사와 현대 이슈 탐구" }
+                        ]
+                    },
+                    "제2외국어관": {
+                        1: [{ name: "제2외국어 기초", credit: 6, category: "인문", desc: "1학년 선택 제2외국어 기초 회화" }],
+                        2: [
+                            { name: "제2외국어 Ⅰ", credit: 10, category: "인문", desc: "중급 독해·회화와 문법 심화" },
+                            { name: "제2외국어 문화", credit: 6, category: "인문", desc: "해당 언어권 문화·역사·사회 탐구" },
+                            { name: "제2외국어 독해", credit: 8, category: "인문", desc: "원문 텍스트 독해와 번역 훈련" }
+                        ],
+                        3: [
+                            { name: "제2외국어 Ⅱ", credit: 10, category: "인문", desc: "상급 회화·쓰기와 공인 자격 대비" },
+                            { name: "비교 언어학 입문", credit: 8, category: "인문", desc: "언어 구조 비교와 언어학 기초" },
+                            { name: "통역·번역 기초", credit: 8, category: "인문", desc: "외국어 통역·번역 실무 기초" }
+                        ]
+                    },
+                    "국제관계·사회관": {
+                        1: [{ name: "통합사회 심화", credit: 6, category: "사회", desc: "1학년 글로벌 사회 이해 기초" }],
+                        2: [
+                            { name: "국제 정치와 외교", credit: 8, category: "사회", desc: "국제 관계 이론과 외교 정책 분석" },
+                            { name: "세계 경제와 무역", credit: 8, category: "사회", desc: "국제 경제 질서와 무역 이슈 탐구" },
+                            { name: "국제법과 인권", credit: 6, category: "사회", desc: "국제법 기초와 인권 보호 체계 이해" },
+                            { name: "비교 문화와 다양성", credit: 8, category: "사회", desc: "세계 문화 비교와 다문화 이해" }
+                        ],
+                        3: [
+                            { name: "글로벌 현안 탐구", credit: 10, category: "사회", desc: "기후·분쟁·빈곤 등 국제 이슈 심화 분석" },
+                            { name: "국제 기구와 협력", credit: 8, category: "사회", desc: "UN·WTO 등 국제기구의 역할 이해" },
+                            { name: "지역학 탐구", credit: 8, category: "사회", desc: "아시아·유럽·미주 등 지역별 심층 탐구" }
+                        ]
+                    },
+                    "인문·역사관": {
+                        1: [{ name: "공통국어 심화", credit: 8, category: "인문", desc: "1학년 비판적 독해와 논리적 글쓰기" }],
+                        2: [
+                            { name: "세계사", credit: 8, category: "인문", desc: "근현대 세계사와 국제 질서 변화" },
+                            { name: "문학과 사상", credit: 8, category: "인문", desc: "동서양 문학 작품과 사상 비교 탐구" },
+                            { name: "철학과 논리", credit: 8, category: "인문", desc: "철학적 사유와 논리적 추론 훈련" }
+                        ],
+                        3: [
+                            { name: "동아시아사", credit: 8, category: "인문", desc: "한·중·일 역사와 현대 동아시아 이해" },
+                            { name: "역사 소논문 탐구", credit: 8, category: "인문", desc: "역사적 주제 탐구와 소논문 작성" },
+                            { name: "고전 읽기와 토론", credit: 8, category: "인문", desc: "동서양 고전 텍스트 독해와 토론" }
+                        ]
+                    },
+                    "글로벌 탐구관": {
+                        1: [{ name: "진로와 국제 감각", credit: 6, category: "인문", desc: "1학년 글로벌 진로 탐색 기초" }],
+                        2: [
+                            { name: "모의유엔(MUN)", credit: 8, category: "인문", desc: "국제 의제 토론과 외교 협상 실습" },
+                            { name: "글로벌 이슈 프로젝트", credit: 8, category: "인문", desc: "팀으로 국제 현안 해결책을 제안" },
+                            { name: "해외 교류와 문화 체험", credit: 6, category: "인문", desc: "교환학생·해외 연수 연계 탐구" }
+                        ],
+                        3: [
+                            { name: "국제 학술 대회 준비", credit: 10, category: "인문", desc: "국제 학술 포럼 참가와 논문 발표" },
+                            { name: "외교·국제 진로 탐구", credit: 8, category: "인문", desc: "외교관·국제기구 직원 진로 설계" },
+                            { name: "다국어 미디어 분석", credit: 8, category: "인문", desc: "여러 나라 언어로 된 뉴스 비교 분석" }
+                        ]
+                    },
+                    "보통교과관": {
+                        1: [
+                            { name: "공통수학", credit: 8, category: "수학", desc: "1학년 공통 수학 기초" },
+                            { name: "통합과학", credit: 6, category: "과학", desc: "1학년 공통 과학 기초" },
+                            { name: "창의적 체험활동", credit: 14, category: "공통", desc: "1~3년 동아리·봉사·진로 체험" }
+                        ],
+                        2: [
+                            { name: "수학 Ⅰ·Ⅱ", credit: 8, category: "수학", desc: "기초 수학 계속 학습" },
+                            { name: "한국사", credit: 6, category: "사회", desc: "한국사 이해와 역사적 맥락" }
+                        ],
+                        3: [
+                            { name: "확률과 통계", credit: 6, category: "수학", desc: "데이터 분석에 필요한 통계 기초" },
+                            { name: "생활과 과학", credit: 6, category: "과학", desc: "일상 속 과학 현상 탐구" }
+                        ]
+                    }
+                },
+                careerGoals: [
+                    { goal: '어문학·언어학 계열', icon: '📖', colorClass: 'text-sky-300' },
+                    { goal: '국제학·외교·정치 계열', icon: '🏛️', colorClass: 'text-amber-300' },
+                    { goal: '경제·경영·무역 계열', icon: '💼', colorClass: 'text-emerald-300' },
+                    { goal: '언론·미디어·홍보 계열', icon: '📡', colorClass: 'text-pink-300' },
+                    { goal: '자율 융합 탐색', icon: '🌟', colorClass: 'text-cyan-300', label: '자율 탐색' }
+                ],
+                careerGuideData: {
+                    '어문학·언어학 계열': { icon: '📖', blurb: '영어영문학·불어·독어·중어·일어·언어학 등 어문계열 진로에 관심이 있다면 잘 맞아요.', subjects: ['고급 영어 Ⅰ·Ⅱ', '제2외국어 Ⅱ', '비교 언어학 입문', '통역·번역 기초'], buildings: ['영어심화관', '제2외국어관'], quote: '"외국어를 자유롭게 구사하는 날이 오면 세상이 다르게 보여요." — 어문 계열 선배' },
+                    '국제학·외교·정치 계열': { icon: '🏛️', blurb: '국제학·외교학·정치학·행정학 진로에 관심이 있다면 국제관계 과목이 핵심이에요.', subjects: ['국제 정치와 외교', '국제법과 인권', '모의유엔(MUN)', '글로벌 현안 탐구'], buildings: ['국제관계·사회관', '글로벌 탐구관'], quote: '"MUN에서 외교 협상을 직접 경험하면서 이 길이 내 길임을 확신했어요." — 외교 계열 선배' },
+                    '경제·경영·무역 계열': { icon: '💼', blurb: '경제학·경영학·무역학 진로에 관심이 있다면 세계 경제와 통계 과목이 도움이 돼요.', subjects: ['세계 경제와 무역', '글로벌 현안 탐구', '국제 기구와 협력', '확률과 통계'], buildings: ['국제관계·사회관', '보통교과관'], quote: '"경제를 전 세계 관점으로 볼 수 있는 안목이 생겼어요." — 경제 계열 선배' },
+                    '언론·미디어·홍보 계열': { icon: '📡', blurb: '언론·방송·홍보·미디어 진로에 관심이 있다면 영어와 글쓰기 역량이 핵심이에요.', subjects: ['학술 영어 작문', '다국어 미디어 분석', '영어 문학 감상', '글로벌 이슈 프로젝트'], buildings: ['영어심화관', '글로벌 탐구관'], quote: '"뉴스를 여러 언어로 비교해 읽으면서 미디어 리터러시가 생겼어요." — 미디어 계열 선배' },
+                    '자율 융합 탐색': { icon: '🌟', blurb: '아직 세부 진로를 정하지 못했어도 괜찮아요! 다양한 언어·국제·인문 분야를 골고루 탐색해보세요.', subjects: ['다양한 학년의 과목을 골고루 살펴보세요'], buildings: ['영어심화관', '제2외국어관', '국제관계·사회관', '인문·역사관', '글로벌 탐구관'] }
+                },
+                categoryInsights: {
+                    '인문': { label: '📖 어문학·인문·글로벌 계열', desc: '언어와 인문 과목 비중이 높습니다. 어문학·국제학·언론 분야 진학에 유리합니다.', majors: ['영어영문학과', '불어불문학과', '국제학과', '언론학과', '외교학과'], improvements: ['언어 실력을 증명할 수 있는 공인 어학 점수를 취득해두세요.', '모의유엔 참가나 국제 교류 경험을 기록해두세요.'], skills: ['다국어 의사소통 능력', '국제 감각과 문화 이해력', '학술 영어 읽기·쓰기'] },
+                    '사회': { label: '🏛️ 국제·정치·경제 계열', desc: '국제관계·사회 과목 비중이 높습니다. 국제학·정치외교·경제 분야에 적합합니다.', majors: ['국제관계학과', '정치외교학과', '경제학과', '무역학과', '행정학과'], improvements: ['글로벌 현안을 꾸준히 탐구하고 소논문으로 정리해보세요.'], skills: ['국제 현안 분석 능력', '논리적 토론과 설득력', '글로벌 관점의 사고'] }
+                },
+                defaultReport: { majors: ['국제학부(자율전공)', '글로벌리더학과'], improvements: ['외국어 실력과 국제 감각을 함께 키워보세요.'], skills: ['다국어 소통', '국제 감각', '논리적 글쓰기'] },
+                goalCategoryMap: { '어문학·언어학 계열': '인문', '국제학·외교·정치 계열': '사회', '경제·경영·무역 계열': '사회', '언론·미디어·홍보 계열': '인문' },
+                requiredCoreSubjects: {}
+            },
+
+            // ── 체육고 ────────────────────────────────────────────────
+            sports_high: {
+                label: '체육고 (특목고)',
+                icon: '🏃',
+                blurb: '전공 종목 실기와 스포츠 과학을 집중적으로 배우며 선수·지도자·체육대학 진학을 준비하는 특목고예요.',
+                realityFacts: [
+                    '하루 일과의 상당 부분을 전공 종목 훈련에 써요',
+                    '전국체전·소년체전 등 각종 대회에 선수로 참가해요',
+                    '체육 실기고사·체력테스트·수상 실적으로 체육대학에 진학해요',
+                    '스포츠 과학·트레이닝 이론을 함께 배워요'
+                ],
+                slots: {
+                    'slot-art': { name: '전공 종목 실기관', icon: '🏟️', desc: '전공 종목 실기 훈련' },
+                    'slot-science': { name: '체력 트레이닝관', icon: '💪', desc: '기초체력 · 웨이트 · 컨디셔닝' },
+                    'slot-social': { name: '스포츠 과학관', icon: '🧪', desc: '운동생리 · 트레이닝 이론' },
+                    'slot-common': { name: '보통교과관', icon: '📘', desc: '국어 · 영어 · 수학 · 사회' },
+                    'slot-math': { name: '스포츠 진로관', icon: '🎯', desc: '지도법 · 심리 · 마케팅' },
+                    'slot-language': { name: '스포츠 이론관', icon: '📋', desc: '경기 규칙 · 전술 · 분석' }
+                },
+                courseDatabase: {
+                    "전공 종목 실기관": {
+                        1: [{ name: "체육 기초 체력", credit: 6, category: "무용·체육", desc: "1학년 기초 체력과 전공 종목 입문" }],
+                        2: [
+                            { name: "전공 실기(1기)", credit: 12, category: "무용·체육", desc: "전공 종목 집중 실기 훈련 1차시" },
+                            { name: "경기 기술 심화", credit: 8, category: "무용·체육", desc: "전공 종목 기술 요소 심화 훈련" },
+                            { name: "팀·협동 훈련", credit: 6, category: "무용·체육", desc: "팀플레이와 협동 전술 훈련" }
+                        ],
+                        3: [
+                            { name: "전공 실기(2기)", credit: 14, category: "무용·체육", desc: "대회·진학 대비 전공 종목 심화 실기" },
+                            { name: "경기 시뮬레이션", credit: 8, category: "무용·체육", desc: "실전 경기 상황 반복 훈련" },
+                            { name: "스포츠 포트폴리오", credit: 6, category: "무용·체육", desc: "수상 이력과 실기 역량 정리" }
+                        ]
+                    },
+                    "체력 트레이닝관": {
+                        1: [{ name: "기초 체력 훈련", credit: 6, category: "무용·체육", desc: "1학년 심폐지구력·근력 기초 훈련" }],
+                        2: [
+                            { name: "웨이트 트레이닝", credit: 8, category: "무용·체육", desc: "근력·파워 향상 저항 훈련" },
+                            { name: "스피드·민첩성 훈련", credit: 8, category: "무용·체육", desc: "반응속도와 민첩성 강화 훈련" },
+                            { name: "유연성·회복 훈련", credit: 6, category: "무용·체육", desc: "스트레칭과 피로 회복 트레이닝" },
+                            { name: "수영·크로스트레이닝", credit: 6, category: "무용·체육", desc: "부상 방지를 위한 교차 훈련" }
+                        ],
+                        3: [
+                            { name: "피크 퍼포먼스 훈련", credit: 10, category: "무용·체육", desc: "대회 시즌에 맞춘 컨디션 피크 조절" },
+                            { name: "재활·부상 예방", credit: 8, category: "무용·체육", desc: "스포츠 부상 예방과 재활 운동 이론" },
+                            { name: "영양·식이 전략", credit: 6, category: "무용·체육", desc: "운동 수행력을 높이는 영양 섭취 전략" }
+                        ]
+                    },
+                    "스포츠 과학관": {
+                        1: [{ name: "스포츠 과학 기초", credit: 6, category: "무용·체육", desc: "1학년 운동과학의 기본 개념" }],
+                        2: [
+                            { name: "운동생리학", credit: 8, category: "무용·체육", desc: "운동 시 신체 반응과 생리학적 원리" },
+                            { name: "트레이닝 이론", credit: 8, category: "무용·체육", desc: "과학적 훈련 계획과 부하 조절 이론" },
+                            { name: "바이오메카닉스 기초", credit: 8, category: "무용·체육", desc: "신체 움직임 분석과 동작 효율화" }
+                        ],
+                        3: [
+                            { name: "스포츠 데이터 분석", credit: 8, category: "무용·체육", desc: "경기 데이터 수집과 퍼포먼스 분석" },
+                            { name: "스포츠 의학 입문", credit: 8, category: "무용·체육", desc: "스포츠 부상 유형과 처치 기초" },
+                            { name: "스포츠 과학 프로젝트", credit: 8, category: "무용·체육", desc: "자신의 훈련 데이터로 탐구 보고서 작성" }
+                        ]
+                    },
+                    "스포츠 이론관": {
+                        1: [{ name: "경기 규칙과 역사", credit: 6, category: "무용·체육", desc: "1학년 전공 종목 규칙·역사 이해" }],
+                        2: [
+                            { name: "경기 전술·분석", credit: 8, category: "무용·체육", desc: "경기 영상 분석과 전술 이해" },
+                            { name: "스포츠 심리학", credit: 8, category: "무용·체육", desc: "멘탈 관리와 집중력 향상 전략" },
+                            { name: "스포츠 역사와 문화", credit: 6, category: "무용·체육", desc: "스포츠 사회학과 올림픽 역사" }
+                        ],
+                        3: [
+                            { name: "코칭 기초 이론", credit: 8, category: "무용·체육", desc: "지도자가 되기 위한 코칭 방법론" },
+                            { name: "심판·경기 운영", credit: 6, category: "무용·체육", desc: "심판 자격과 경기 운영 실무" },
+                            { name: "스포츠 진로 설계", credit: 8, category: "무용·체육", desc: "선수·지도자·스포츠산업 진로 탐구" }
+                        ]
+                    },
+                    "스포츠 진로관": {
+                        1: [{ name: "진로와 스포츠", credit: 6, category: "무용·체육", desc: "1학년 스포츠 분야 진로 탐색" }],
+                        2: [
+                            { name: "스포츠 마케팅과 산업", credit: 8, category: "무용·체육", desc: "스포츠 비즈니스·마케팅 기초" },
+                            { name: "스포츠 미디어", credit: 6, category: "무용·체육", desc: "스포츠 방송·SNS·콘텐츠 제작" },
+                            { name: "건강 체육 지도법", credit: 8, category: "무용·체육", desc: "생활체육 지도자 기초 자격 준비" }
+                        ],
+                        3: [
+                            { name: "스포츠 행정·정책", credit: 8, category: "무용·체육", desc: "체육 행정과 스포츠 관련 정책 이해" },
+                            { name: "스포츠 창업 기초", credit: 8, category: "무용·체육", desc: "스포츠 분야 창업 아이디어와 사례" },
+                            { name: "글로벌 스포츠 탐구", credit: 8, category: "무용·체육", desc: "국제 스포츠 이벤트와 글로벌 진출" }
+                        ]
+                    },
+                    "보통교과관": {
+                        1: [
+                            { name: "공통국어", credit: 8, category: "인문", desc: "1학년 공통 국어 독해와 글쓰기" },
+                            { name: "공통영어", credit: 8, category: "인문", desc: "1학년 공통 영어 기초" },
+                            { name: "창의적 체험활동", credit: 14, category: "공통", desc: "1~3년 동아리·봉사·진로 체험" }
+                        ],
+                        2: [
+                            { name: "수학 기초", credit: 6, category: "수학", desc: "기초 수학 학습" },
+                            { name: "한국사", credit: 6, category: "사회", desc: "한국사 이해" },
+                            { name: "영어 회화 기초", credit: 6, category: "인문", desc: "실용 영어 회화" }
+                        ],
+                        3: [
+                            { name: "독서와 작문", credit: 6, category: "인문", desc: "진학·취업을 위한 글쓰기" },
+                            { name: "세계사", credit: 6, category: "사회", desc: "세계사 기초 이해" },
+                            { name: "통합과학", credit: 6, category: "과학", desc: "과학 기초 소양" }
+                        ]
+                    }
+                },
+                careerGoals: [
+                    { goal: '전문 선수 계열', icon: '🏆', colorClass: 'text-amber-300' },
+                    { goal: '체육 지도자·교육 계열', icon: '🎯', colorClass: 'text-sky-300' },
+                    { goal: '스포츠 과학·의학 계열', icon: '🧪', colorClass: 'text-emerald-300' },
+                    { goal: '스포츠 경영·마케팅 계열', icon: '💼', colorClass: 'text-pink-300' },
+                    { goal: '자율 융합 탐색', icon: '🌟', colorClass: 'text-cyan-300', label: '자율 탐색' }
+                ],
+                careerGuideData: {
+                    '전문 선수 계열': { icon: '🏆', blurb: '프로 선수·국가대표 등 전문 운동선수 진로에 관심이 있다면 실기와 컨디셔닝이 핵심이에요.', subjects: ['전공 실기(2기)', '경기 시뮬레이션', '피크 퍼포먼스 훈련', '스포츠 심리학'], buildings: ['전공 종목 실기관', '체력 트레이닝관'], quote: '"훈련이 힘들 때 대회에서 얻은 메달이 다시 일어나게 해줘요." — 선수 계열 선배' },
+                    '체육 지도자·교육 계열': { icon: '🎯', blurb: '코치·감독·체육 교사·생활체육 지도자 진로에 관심이 있다면 지도법과 이론이 중요해요.', subjects: ['코칭 기초 이론', '건강 체육 지도법', '스포츠 심리학', '트레이닝 이론'], buildings: ['스포츠 진로관', '스포츠 이론관'], quote: '"선수로 뛰다가 가르치는 쪽이 더 적성에 맞는다는 걸 알았어요." — 지도자 계열 선배' },
+                    '스포츠 과학·의학 계열': { icon: '🧪', blurb: '스포츠 과학자·트레이너·스포츠 의학 진로에 관심이 있다면 과학 지식이 함께 필요해요.', subjects: ['운동생리학', '바이오메카닉스 기초', '스포츠 데이터 분석', '스포츠 의학 입문'], buildings: ['스포츠 과학관', '스포츠 이론관'], quote: '"몸의 원리를 알면 훈련도, 부상 회복도 더 스마트하게 할 수 있어요." — 스포츠과학 선배' },
+                    '스포츠 경영·마케팅 계열': { icon: '💼', blurb: '스포츠 에이전트·마케터·스포츠 행정 진로에 관심이 있다면 비즈니스 감각이 필요해요.', subjects: ['스포츠 마케팅과 산업', '스포츠 행정·정책', '스포츠 창업 기초', '글로벌 스포츠 탐구'], buildings: ['스포츠 진로관', '스포츠 이론관'], quote: '"스포츠를 비즈니스로 연결하는 스포츠 에이전트가 목표예요." — 스포츠경영 선배' },
+                    '자율 융합 탐색': { icon: '🌟', blurb: '아직 세부 진로를 정하지 못했어도 괜찮아요! 실기·과학·경영 등 다양한 방향을 탐색해보세요.', subjects: ['다양한 학년의 과목을 골고루 살펴보세요'], buildings: ['전공 종목 실기관', '체력 트레이닝관', '스포츠 과학관', '스포츠 이론관', '스포츠 진로관'] }
+                },
+                categoryInsights: {
+                    '무용·체육': { label: '🏃 체육·스포츠 계열', desc: '체육 실기·이론 과목 비중이 높습니다. 선수·지도자·체육대학 진학에 적합합니다.', majors: ['체육교육과', '스포츠과학과', '사회체육학과', '경호무도학과', '물리치료학과'], improvements: ['대회·수상 이력을 체계적으로 기록하고, 실기 포트폴리오를 준비해보세요.'], skills: ['전공 종목 실기력', '스포츠 과학 지식', '멘탈 관리와 집중력'] }
+                },
+                defaultReport: { majors: ['체육학부(자율전공)', '스포츠과학과'], improvements: ['다양한 체육 분야를 경험한 만큼, 진로를 선수·지도자·스포츠산업 중 하나로 좁혀보세요.'], skills: ['전문 종목 역량', '스포츠 과학 이해', '팀워크와 리더십'] },
+                goalCategoryMap: { '전문 선수 계열': '무용·체육', '체육 지도자·교육 계열': '무용·체육', '스포츠 과학·의학 계열': '무용·체육', '스포츠 경영·마케팅 계열': '무용·체육' },
+                requiredCoreSubjects: {}
             }
         };
 
-        let schoolType = null; // 'general' | 'vocational' | 'arts_sports' — set via the school-type modal
+        let schoolType = null; // 'general' | 'vocational' | 'science_high' | 'language_high' | 'arts_high' | 'sports_high'
+
 
         let hasEnteredMissionGame = false;
         let isOnboardingCareerGoal = false;
@@ -2385,6 +2800,16 @@
             `).join('');
         }
 
+        function showSpecialSchoolSubtypes() {
+            document.querySelectorAll('#school-type-modal .grid.grid-cols-1.sm\\:grid-cols-3').forEach(el => el.classList.add('hidden'));
+            document.getElementById('special-subtypes-grid').classList.remove('hidden');
+        }
+
+        function hideSpecialSchoolSubtypes() {
+            document.getElementById('special-subtypes-grid').classList.add('hidden');
+            document.querySelectorAll('#school-type-modal .grid.grid-cols-1.sm\\:grid-cols-3').forEach(el => el.classList.remove('hidden'));
+        }
+
         function selectSchoolType(type) {
             schoolType = type;
             const track = trackData[type];
@@ -2424,6 +2849,9 @@
             targetCareerGoal = "자율 융합 계열";
             logItems.unshift('🔁 [진학 유형 변경] 2·3학년 수강 내역을 초기화하고 새로운 진학 유형을 선택합니다.');
 
+            // Always start at the main 3-card grid, not the special subtype sub-menu
+            document.getElementById('special-subtypes-grid').classList.add('hidden');
+            document.querySelectorAll('#school-type-modal .grid.grid-cols-1.sm\\:grid-cols-3').forEach(el => el.classList.remove('hidden'));
             document.getElementById('school-type-modal').classList.remove('hidden');
         }
 

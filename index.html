@@ -2800,7 +2800,8 @@
                 const currentGradeTotal = getGradeCredits(activeGrade);
                 if (currentGradeTotal + credit > 72) {
                     const remaining = 72 - currentGradeTotal;
-                    alert(`⚠️ ${activeGrade}학년은 이미 ${currentGradeTotal}학점을 담아서, 최대 72학점 중 ${remaining}학점밖에 남지 않았어요.\n다른 학년 탭으로 옮기거나, 이미 신청한 과목을 취소하고 다시 골라보세요!`);
+                    const nextGrade = activeGrade === 2 ? '3학년' : activeGrade === 3 ? '2학년' : '다른 학년';
+                    alert(`⚠️ ${activeGrade}학년은 이미 ${currentGradeTotal}학점을 담아서, 최대 72학점 중 ${remaining}학점밖에 남지 않았어요.\n${nextGrade} 탭으로 옮기거나, 이미 신청한 과목을 취소하고 다시 골라보세요!`);
                     return;
                 }
                 currentGradeList.push({ name, credit, category, desc, grade: activeGrade });

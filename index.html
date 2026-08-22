@@ -84,6 +84,9 @@
         .road.h { left: 0; right: 0; top: 46%; height: 70px; }
         .road.v { top: 0; bottom: 0; left: 46%; width: 70px; }
 
+        /* Prevent pixel-font score/credit displays from line-breaking mid-number */
+        .font-pixel { white-space: nowrap; }
+
         .building {
             position: absolute;
             width: 27%;
@@ -436,7 +439,7 @@
             <!-- Real-time Total Score Counter -->
             <div class="bg-slate-950/90 border border-amber-500/50 px-3 py-1.5 rounded-xl text-center min-w-[110px]">
                 <div class="text-[10px] text-amber-400 font-bold">수강 종합점수</div>
-                <div id="header-score-num" class="text-sm sm:text-base font-black text-amber-300 font-pixel">0 / 1000점</div>
+                <div id="header-score-num" class="text-sm sm:text-base font-black text-amber-300 font-pixel whitespace-nowrap">0 / 1000점</div>
             </div>
 
             <!-- Escape Room Progress Tracker -->
@@ -581,7 +584,7 @@
                 <div class="w-full lg:w-1/2 flex flex-col gap-1.5 bg-slate-950 p-3 rounded-xl border border-slate-800">
                     <div class="flex justify-between items-center text-xs">
                         <span class="font-bold text-sky-300">🎓 3년간 누적 수강 학점 (목표 192학점)</span>
-                        <span class="font-pixel text-amber-400 font-bold"><span id="hud-credit-num">64</span> / 192 학점</span>
+                        <span class="font-pixel text-amber-400 font-bold whitespace-nowrap"><span id="hud-credit-num">64</span> / 192 학점</span>
                     </div>
                     <div class="bg-slate-900 h-4 rounded-full overflow-hidden p-0.5 border border-slate-700 relative">
                         <div id="hud-credit-bar" class="bg-gradient-to-r from-blue-500 via-sky-400 to-cyan-300 h-full rounded-full transition-all duration-300" style="width: 33%"></div>
@@ -724,16 +727,16 @@
                             <!-- Real-time Score Breakdown Metrics -->
                             <div class="grid grid-cols-3 gap-2 pt-2 border-t border-slate-800 text-center">
                                 <div class="bg-slate-900 p-2 rounded-lg border border-slate-800">
-                                    <span class="text-[10px] text-slate-400 block">학업 이수 점수</span>
-                                    <span id="score-credit-metric" class="text-xs font-bold text-sky-300 font-pixel">0 / 400</span>
+                                    <span class="text-[10px] text-slate-400 block">학업 이수</span>
+                                    <span id="score-credit-metric" class="text-xs font-bold text-sky-300 font-pixel whitespace-nowrap">0/400</span>
                                 </div>
                                 <div class="bg-slate-900 p-2 rounded-lg border border-slate-800">
-                                    <span class="text-[10px] text-slate-400 block">진로 적합 점수</span>
-                                    <span id="score-career-metric" class="text-xs font-bold text-amber-300 font-pixel">0 / 300</span>
+                                    <span class="text-[10px] text-slate-400 block">진로 적합</span>
+                                    <span id="score-career-metric" class="text-xs font-bold text-amber-300 font-pixel whitespace-nowrap">0/300</span>
                                 </div>
                                 <div class="bg-slate-900 p-2 rounded-lg border border-slate-800">
-                                    <span class="text-[10px] text-slate-400 block">융합 균형 점수</span>
-                                    <span id="score-balance-metric" class="text-xs font-bold text-emerald-300 font-pixel">0 / 300</span>
+                                    <span class="text-[10px] text-slate-400 block">융합 균형</span>
+                                    <span id="score-balance-metric" class="text-xs font-bold text-emerald-300 font-pixel whitespace-nowrap">0/300</span>
                                 </div>
                             </div>
 
@@ -775,11 +778,98 @@
 
     </main>
 
-    <!-- Source citation footer -->
-    <footer class="w-full max-w-6xl mx-auto mt-2 mb-3 px-2 no-print">
-        <p class="text-[10px] text-slate-600 text-center leading-relaxed">
-            출처: 교육부 고교학점제 정책브리핑(2025) · 국가교육위원회 2026 고교학점제 운영 개선 대책 · 2022 개정 교육과정 | 이 게임은 중3 진로연계학기 교육 목적으로 제작되었습니다.
-        </p>
+    <!-- Source citation footer (expandable) -->
+    <footer class="w-full max-w-6xl mx-auto mt-2 mb-4 no-print">
+        <details class="bg-slate-900/80 border border-slate-700 rounded-2xl overflow-hidden">
+            <summary class="px-4 py-3 text-[11px] text-slate-400 cursor-pointer hover:text-slate-200 flex items-center gap-2 select-none list-none">
+                <span class="text-base">📚</span>
+                <span><b class="text-slate-300">고교학점제 정보 출처</b> (교육부 공식 · 최신 확인) — 클릭해서 펼치기</span>
+            </summary>
+            <div class="px-4 pb-4 pt-2 text-[10px] sm:text-[11px] text-slate-400 leading-relaxed space-y-3 border-t border-slate-800">
+                <p class="text-slate-300">이 게임의 내용은 교육부가 운영하는 <b>대한민국 정책브리핑(korea.kr)</b> 최신 자료와 교육부 공식 보도자료를 바탕으로 제작되었습니다. 확인일: 2026-08-22</p>
+
+                <table class="w-full border-collapse text-[10px]">
+                    <thead>
+                        <tr class="border-b border-slate-700">
+                            <th class="text-left py-1.5 pr-3 text-slate-300 font-bold w-2/5">게임 속 설명</th>
+                            <th class="text-left py-1.5 text-slate-300 font-bold">공식 출처</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800">
+                        <tr>
+                            <td class="py-2 pr-3 align-top text-slate-400">
+                                3년간 <b class="text-slate-200">192학점</b> (교과 174 + 창체 18)<br>졸업요건
+                            </td>
+                            <td class="py-2 align-top">
+                                <span class="text-slate-300">"졸업기준이 204단위에서 192학점으로 조정된다. 교과 174학점, 창체 18학점"</span><br>
+                                <a href="https://www.korea.kr/special/policyCurationView.do?newsId=148866513" target="_blank" rel="noopener" class="text-sky-400 hover:underline">✅ 정책브리핑 — 고교학점제 종합추진계획 (2021.02)</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 pr-3 align-top text-slate-400">
+                                <b class="text-slate-200">1학점</b> = 50분 × 16회<br>수업량 기준
+                            </td>
+                            <td class="py-2 align-top">
+                                <span class="text-slate-300">"1단위 17회 → 1학점 16회"</span><br>
+                                <a href="https://www.korea.kr/news/policyNewsView.do?newsId=148884132" target="_blank" rel="noopener" class="text-sky-400 hover:underline">✅ 정책브리핑 — 2025년 고교학점제 전면 적용 (2021.02)</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 pr-3 align-top text-slate-400">
+                                <b class="text-slate-200">1학년 공통과목</b> 중심,<br>2·3학년 선택과목 확대
+                            </td>
+                            <td class="py-2 align-top">
+                                <span class="text-slate-300">"1학년은 공통과목 위주로 이수하고 2·3학년은 선택과목 비중이 늘어난다"</span><br>
+                                <a href="https://www.korea.kr/news/policyNewsView.do?newsId=148938941" target="_blank" rel="noopener" class="text-sky-400 hover:underline">✅ 정책브리핑 — 고교학점제 진로·학업설계 지원서비스 개통 (2025.01)</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 pr-3 align-top text-slate-400">
+                                이수기준 원칙:<br><b class="text-slate-200">출석 2/3 + 성취율 40%</b>
+                            </td>
+                            <td class="py-2 align-top">
+                                <span class="text-slate-300">"과목출석률(수업횟수의 2/3 이상)과 학업성취율(40% 이상)을 충족해야 하며, 3년간 누적 학점이 192학점 이상이면 졸업"</span><br>
+                                <a href="https://www.korea.kr/special/policyCurationView.do?newsId=148866513" target="_blank" rel="noopener" class="text-sky-400 hover:underline">✅ 정책브리핑 — 고교학점제 종합추진계획 (2021.02)</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 pr-3 align-top text-slate-400">
+                                <b class="text-sky-300">2026년 완화:</b><br>선택과목 → 출석만 적용
+                            </td>
+                            <td class="py-2 align-top">
+                                <span class="text-slate-300">"선택 과목의 경우 기준에서 학업성취율은 제외되고 출석률만 적용된다. 공통 과목은 현행대로 출석률과 학업성취율을 충족해야 하고, 창의적 체험활동의 경우 학년별 전체 수업일수의 2/3 이상 출석한 경우 학점을 이수한 것으로 인정"</span><br>
+                                <a href="https://www.korea.kr/news/policyNewsView.do?newsId=148958710" target="_blank" rel="noopener" class="text-sky-400 hover:underline">✅ 정책브리핑 — 고교학점제 학점 이수기준 완화 (2026.01.28)</a><br>
+                                <a href="https://www.moe.go.kr/boardCnts/viewRenew.do?boardID=294&lev=0&statusYN=W&s=moe&m=020402&opType=N&boardSeq=105223" target="_blank" rel="noopener" class="text-sky-400 hover:underline">✅ 교육부 공식 보도자료 — 고교학점제 안착을 위한 지원 대책 (2026.01.28)</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 pr-3 align-top text-slate-400">
+                                <b class="text-slate-200">내신 평가 방식</b><br>성취평가제 확대 + 석차5등급
+                            </td>
+                            <td class="py-2 align-top">
+                                <span class="text-slate-300">"2025학년도부터 공통과목·일반선택은 성취도(A~E)+석차5등급 병기, 진로선택·융합선택은 성취도만 기재. 기존 9등급제에서 5등급제로 전환"</span><br>
+                                <a href="https://www.korea.kr/news/policyNewsView.do?newsId=148938941" target="_blank" rel="noopener" class="text-sky-400 hover:underline">✅ 정책브리핑 — 2025 고교학점제 관련 내신 개편 (2025.01)</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 pr-3 align-top text-slate-400">
+                                <b class="text-slate-200">공동교육과정</b><br>미개설 과목 이수
+                            </td>
+                            <td class="py-2 align-top">
+                                <span class="text-slate-300">"학교에서 개설하지 않은 선택과목은 다른 학교나 온라인학교를 통해 이수할 수 있으며, 과목 미이수 시 온라인 보충과정 플랫폼을 통해 학점 취득 가능"</span><br>
+                                <a href="https://www.moe.go.kr/boardCnts/viewRenew.do?boardID=294&lev=0&statusYN=W&s=moe&m=020402&opType=N&boardSeq=105223" target="_blank" rel="noopener" class="text-sky-400 hover:underline">✅ 교육부 보도자료 — 고교학점제 안착 지원 대책, 공동교육과정 조항 (2026.01.28)</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="mt-2 pt-2 border-t border-slate-800 text-slate-500 flex flex-wrap gap-x-4 gap-y-1">
+                    <span>출처: 대한민국 정책브리핑(korea.kr) / 교육부(moe.go.kr)</span>
+                    <span>확인일: 2026-08-22</span>
+                    <span>문의: 교육부 고교학점제지원과 044-203-6718</span>
+                </div>
+            </div>
+        </details>
     </footer>
 
     <!-- QUIZ MODAL -->
@@ -817,27 +907,27 @@
     <!-- BUILDING SUBJECT SELECTOR MODAL -->
     <div id="room-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md hidden flex items-center justify-center p-3 z-50">
         <div class="modal-card max-w-2xl w-full p-5 sm:p-6 text-slate-100 relative max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-4">
+            <div class="flex items-start justify-between gap-2 border-b border-slate-700 pb-3 mb-4 flex-wrap">
                 <div class="flex items-center gap-3">
-                    <span id="room-icon" class="text-3xl">🎨</span>
+                    <span id="room-icon" class="text-3xl flex-shrink-0">🎨</span>
                     <div>
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-2 flex-wrap">
                             <h2 id="room-modal-title" class="text-lg font-bold text-sky-300">건물 이름</h2>
-                            <span id="room-grade-badge" class="px-2 py-0.5 rounded text-xs font-bold bg-amber-400 text-slate-950">[1학년 과목]</span>
+                            <span id="room-grade-badge" class="px-2 py-0.5 rounded text-xs font-bold bg-amber-400 text-slate-950 whitespace-nowrap">[1학년 과목]</span>
                         </div>
                         <p class="text-xs text-slate-400">해당 학년의 과목을 선택하여 3개년 수강 계획에 반영해보세요.</p>
                     </div>
                 </div>
-                <div class="flex items-center gap-3">
-                    <div class="bg-slate-950 border border-emerald-500/50 px-3 py-1.5 rounded-xl text-center">
-                        <div class="text-[9px] text-emerald-400 font-bold leading-none">이 학년 담을 수 있는 학점</div>
-                        <div id="room-grade-capacity-badge" class="text-xs font-black text-emerald-300 font-pixel mt-1">0 / 72</div>
+                <div class="flex items-center gap-2 flex-shrink-0">
+                    <div class="bg-slate-950 border border-emerald-500/50 px-2.5 py-1.5 rounded-xl text-center min-w-[80px]">
+                        <div class="text-[8px] text-emerald-400 font-bold leading-none whitespace-nowrap">이 학년 담을 수 있는 학점</div>
+                        <div id="room-grade-capacity-badge" class="text-sm font-black text-emerald-300 font-pixel leading-tight">0/72</div>
                     </div>
-                    <div class="bg-slate-950 border border-sky-500/50 px-3 py-1.5 rounded-xl text-center">
-                        <div class="text-[9px] text-sky-400 font-bold leading-none">누적 학점</div>
-                        <div id="room-credit-badge" class="text-xs font-black text-amber-300 font-pixel mt-1">0 / 192</div>
+                    <div class="bg-slate-950 border border-sky-500/50 px-2.5 py-1.5 rounded-xl text-center min-w-[72px]">
+                        <div class="text-[8px] text-sky-400 font-bold leading-none whitespace-nowrap">누적 학점</div>
+                        <div id="room-credit-badge" class="text-sm font-black text-amber-300 font-pixel leading-tight">0/192</div>
                     </div>
-                    <button onclick="closeModal('room-modal')" class="text-slate-400 hover:text-white text-2xl font-bold">✕</button>
+                    <button onclick="closeModal('room-modal')" class="text-slate-400 hover:text-white text-2xl font-bold flex-shrink-0">✕</button>
                 </div>
             </div>
 
@@ -995,6 +1085,27 @@
                             </ul>
                         </div>
                         <p class="text-[10px] text-slate-500 leading-relaxed">💡 즉, 2학년·3학년에 내가 직접 고르는 선택과목은 <b class="text-slate-300">출석만 잘하면 학점을 받을 수 있어요</b>. 원래는 성적(40% 이상)도 봤는데 2026년부터 선택과목은 완화됐어요.</p>
+                    </div>
+                </div>
+
+                <div class="p-3.5 bg-slate-950 rounded-xl border border-amber-500/40">
+                    <div class="font-bold text-amber-300 mb-1 flex items-center gap-1.5"><span>📝</span> 내신 평가 방식 <span class="text-[9px] text-amber-400 font-normal ml-1 border border-amber-400/50 rounded px-1.5 py-0.5">2025 개정</span></div>
+                    <div class="space-y-2 text-xs text-slate-300 leading-relaxed">
+                        <div class="grid grid-cols-3 gap-1.5 text-center text-[10px]">
+                            <div class="p-1.5 bg-slate-900 rounded border border-slate-700">
+                                <div class="font-bold text-sky-300 mb-0.5">공통과목 (1학년)</div>
+                                <div class="text-slate-400">성취도(A~E)<br>+ 석차 <b class="text-amber-300">5등급</b> 병기</div>
+                            </div>
+                            <div class="p-1.5 bg-slate-900 rounded border border-slate-700">
+                                <div class="font-bold text-emerald-300 mb-0.5">일반선택과목</div>
+                                <div class="text-slate-400">성취도(A~E)<br>+ 석차 <b class="text-amber-300">5등급</b> 병기</div>
+                            </div>
+                            <div class="p-1.5 bg-slate-900 rounded border border-slate-700">
+                                <div class="font-bold text-purple-300 mb-0.5">진로·융합선택</div>
+                                <div class="text-slate-400">성취도(A~E)<br><span class="text-emerald-400">등급 없음</span> (절대평가)</div>
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-slate-500">※ 2025학년도부터 내신은 기존 9등급제 → 5등급제로 바뀌었고, 진로선택·융합선택과목은 등급 없이 성취도(A·B·C·D·E)만 기재해요.</p>
                     </div>
                 </div>
 
@@ -1267,7 +1378,7 @@
             <div class="my-3 p-3.5 bg-slate-950 rounded-2xl border-2 border-sky-500/60 flex flex-col sm:flex-row items-center justify-around gap-3 print-card result-stats-row">
                 <div class="text-center result-stat">
                     <span class="text-[10px] text-slate-400 font-pixel block result-stat-label">FINAL CREDITS</span>
-                    <div class="text-3xl font-black text-cyan-300 font-pixel result-stat-value nowrap-print">
+                    <div class="text-3xl font-black text-cyan-300 font-pixel result-stat-value nowrap-print whitespace-nowrap">
                         <span id="r-final-credit">0</span> / 192 학점
                     </div>
                 </div>
@@ -1290,7 +1401,7 @@
 
             <!-- Source citation (visible when printing) -->
             <p class="text-[9px] text-slate-500 text-center mt-2 leading-relaxed print-text-dark">
-                출처: 교육부 고교학점제 정책브리핑(2025) · 국가교육위원회 2026 고교학점제 운영 개선 대책 · 2022 개정 교육과정
+                출처: 교육부 정책브리핑 — 고교학점제 종합추진계획(2021) · 고교학점제 이수기준 완화(2026.01.28) · 2022 개정 교육과정 | 교육부 고교학점제지원과 044-203-6718
             </p>
 
             <!-- ACTION BUTTONS -->
@@ -1574,7 +1685,7 @@
                 id: 6, category: 'credit', icon: '🧭', title: '과목 선택 구조', type: '교육과정',
                 question: '고교학점제 선택 과목의 세 가지 분류에 해당하지 않는 것은?',
                 options: ['일반선택과목', '진로선택과목', '융합선택과목', '암기전용과목'], answer: 3,
-                explanation: '선택 과목은 학생의 적성과 흥미에 따라 일반선택, 진로선택, 융합선택과목으로 구성됩니다.'
+                explanation: '선택 과목은 학생의 적성과 흥미에 따라 일반선택, 진로선택, 융합선택과목으로 구성됩니다. 2025학년도부터는 일반선택은 성취도(A~E) + 석차5등급 병기, 진로선택·융합선택은 성취도만 기재해요.'
             },
             {
                 id: 7, category: 'credit', icon: '🏫', title: '전면 도입 시기', type: '제도 역사',
@@ -1592,7 +1703,7 @@
                 id: 9, category: 'credit', icon: '🤝', title: '공동교육과정', type: '수강 기회',
                 question: '우리 학교에 개설되지 않은 과목을 타 학교나 지역사회와 연계하여 듣는 제도는?',
                 options: ['공동교육과정', '위탁수강 거부제', '자율 야간 이동제', '방과후 원격제'], answer: 0,
-                explanation: '소인수 과목이나 미개설 과목은 온·오프라인 공동교육과정을 통해 이수할 수 있습니다.'
+                explanation: '소인수 과목이나 미개설 과목은 온·오프라인 공동교육과정을 통해 다른 학교나 온라인학교에서 이수할 수 있습니다. 2026년부터는 과목 미이수 시 온라인 보충과정 플랫폼으로 학점을 취득하는 방법도 생겼어요.'
             },
             {
                 id: 10, category: 'credit', icon: '🎓', title: '학점 이수와 졸업', type: '졸업 조건',
@@ -2744,6 +2855,7 @@
 
         let hasEnteredMissionGame = false;
         let isOnboardingCareerGoal = false;
+        let hasShownSimplificationNote = false; // 학점 단순화 안내 — 내 전공 건물 첫 진입 시 한 번만 표시
 
         function openMissionGame() {
             document.getElementById('escape-room-section').classList.add('hidden');
@@ -2881,6 +2993,7 @@
             selectedCourses[2] = [];
             selectedCourses[3] = [];
             targetCareerGoal = "자율 융합 계열";
+            hasShownSimplificationNote = false;
             logItems.unshift('🔁 [진학 유형 변경] 2·3학년 수강 내역을 초기화하고 새로운 진학 유형을 선택합니다.');
 
             // Always start at the main 3-card grid, not the special subtype sub-menu
@@ -3038,9 +3151,9 @@
             const mCredit = document.getElementById('score-credit-metric');
             const mCareer = document.getElementById('score-career-metric');
             const mBalance = document.getElementById('score-balance-metric');
-            if (mCredit) mCredit.innerText = `${creditScore} / 400`;
-            if (mCareer) mCareer.innerText = `${careerScore} / 300`;
-            if (mBalance) mBalance.innerText = `${balanceScore} / 300`;
+            if (mCredit) mCredit.innerText = `${creditScore}/400`;
+            if (mCareer) mCareer.innerText = `${careerScore}/300`;
+            if (mBalance) mBalance.innerText = `${balanceScore}/300`;
 
             // HUD & Credit Progress update
             const hudNum = document.getElementById('hud-credit-num');
@@ -3162,12 +3275,12 @@
             const modal = document.getElementById('room-modal');
             document.getElementById('room-modal-title').innerText = roomName;
             document.getElementById('room-grade-badge').innerText = `[${activeGrade}학년 과목]`;
-            document.getElementById('room-credit-badge').innerText = `${getTotalCredits()} / ${TARGET_CREDITS}`;
+            document.getElementById('room-credit-badge').innerText = `${getTotalCredits()}/${TARGET_CREDITS}`;
 
             const gradeCreditsNow = getGradeCredits(activeGrade);
             const capacityBadge = document.getElementById('room-grade-capacity-badge');
-            capacityBadge.innerText = `${gradeCreditsNow} / 72`;
-            capacityBadge.className = `text-xs font-black font-pixel mt-1 ${gradeCreditsNow >= 60 ? 'text-rose-400' : 'text-emerald-300'}`;
+            capacityBadge.innerText = `${gradeCreditsNow}/72`;
+            capacityBadge.className = `text-sm font-black font-pixel leading-tight ${gradeCreditsNow >= 60 ? 'text-rose-400' : 'text-emerald-300'}`;
 
             const slotInfo = Object.values(trackData[schoolType].slots).find(s => s.name === roomName);
             document.getElementById('room-icon').textContent = slotInfo ? slotInfo.icon : '🏫';
@@ -3184,6 +3297,11 @@
                 } else if (roomName === '보통교과관') {
                     lockNotice.className = 'mb-3 p-2.5 bg-sky-50 border border-sky-300 rounded-lg text-[11px] sm:text-xs text-sky-800 leading-relaxed';
                     lockNotice.innerHTML = `📘 전공 건물만으로는 192학점을 다 채우기 어려워요. 국어·영어·수학·사회·과학을 <b>필요한 만큼 골고루</b> 골라보세요 — 단, 학년당 최대 72학점까지만 담을 수 있으니, 전공 과목을 많이 골랐다면 여기서는 적게 골라도 괜찮아요!`;
+                } else if (isMatch && !hasShownSimplificationNote) {
+                    // 내 전공 건물에 처음 들어왔을 때만 한 번 보여주는 학점 단순화 안내
+                    hasShownSimplificationNote = true;
+                    lockNotice.className = 'mb-3 p-2.5 bg-emerald-50 border border-emerald-400 rounded-lg text-[11px] sm:text-xs text-emerald-800 leading-relaxed';
+                    lockNotice.innerHTML = `📌 이 게임은 이해를 돕기 위해 <b>학년별 학점을 균등하게 단순화</b>했어요. 실제 학점 배분과 과목 구성은 학교의 교육과정에 따라 달라질 수 있어요.`;
                 } else {
                     lockNotice.classList.add('hidden');
                 }
@@ -3794,29 +3912,5 @@
             document.getElementById('intro-modal').classList.remove('hidden');
         };
     </script>
-    <!-- 고교학점제 출처 표 - START -->
-<section style="max-width:900px;margin:40px auto;padding:24px;border:1px solid #e5e7eb;border-radius:16px;background:#f9fafb;font-family:Pretendard,sans-serif">
-  <h2>📚 고교학점제 정보 출처</h2>
-  <table style="width:100%;border-collapse:collapse;background:white;border-radius:12px;overflow:hidden">
-    <tr><th style="background:#111827;color:white;padding:12px;text-align:left">게임 속 설명</th><th style="background:#111827;color:white;padding:12px;text-align:left">공식 출처</th></tr>
-    <tr>
-      <td style="padding:12px;border-bottom:1px solid #eee">3년간 192학점</td>
-      <td style="padding:12px;border-bottom:1px solid #eee"><a href="https://www.moe.go.kr/boardCnts/viewRenew.do?boardID=294&boardSeq=88188" target="_blank">교육부 보도자료 - 192학점 적정화</a><br><a href="https://www.korea.kr/special/policyCurationView.do?newsId=148866513" target="_blank">정책브리핑 - 고교학점제 개요</a></td>
-    </tr>
-    <tr>
-      <td style="padding:12px;border-bottom:1px solid #eee">교과 174 + 창체 18</td>
-      <td style="padding:12px;border-bottom:1px solid #eee"><a href="https://www.korea.kr/special/policyCurationView.do?newsId=148866513" target="_blank">정책브리핑 원문</a></td>
-    </tr>
-    <tr>
-      <td style="padding:12px;border-bottom:1px solid #eee">1학년 공통과목, 2학년부터 선택과목</td>
-      <td style="padding:12px;border-bottom:1px solid #eee"><a href="https://co-school.pen.go.kr" target="_blank">부산교육청 공동교육과정 시스템</a></td>
-    </tr>
-    <tr>
-      <td style="padding:12px">이수기준 및 보장지도</td>
-      <td style="padding:12px"><a href="https://www.korea.kr/news/policyNewsView.do?newsId=148958710" target="_blank">2026 이수기준 완화안</a></td>
-    </tr>
-  </table>
-</section>
-<!-- 고교학점제 출처 표 - END -->
 </body>
 </html>

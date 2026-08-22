@@ -775,6 +775,13 @@
 
     </main>
 
+    <!-- Source citation footer -->
+    <footer class="w-full max-w-6xl mx-auto mt-2 mb-3 px-2 no-print">
+        <p class="text-[10px] text-slate-600 text-center leading-relaxed">
+            출처: 교육부 고교학점제 정책브리핑(2025) · 국가교육위원회 2026 고교학점제 운영 개선 대책 · 2022 개정 교육과정 | 이 게임은 중3 진로연계학기 교육 목적으로 제작되었습니다.
+        </p>
+    </footer>
+
     <!-- QUIZ MODAL -->
     <div id="quiz-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-3 z-50">
         <div class="bg-slate-900 border-2 border-sky-500/80 rounded-2xl max-w-md w-full p-5 shadow-2xl relative">
@@ -963,12 +970,32 @@
                 </div>
 
                 <div class="p-3.5 bg-slate-950 rounded-xl border border-emerald-500/40">
-                    <div class="font-bold text-emerald-300 mb-1 flex items-center gap-1.5"><span>✅</span> 과목 이수 기준</div>
-                    <ul class="list-disc list-inside space-y-1 text-slate-300 leading-relaxed">
-                        <li>출석률 <b class="text-emerald-300">수업일수의 2/3 이상</b></li>
-                        <li>학업성취율 <b class="text-emerald-300">40% 이상</b></li>
-                        <li>기준 미달 시 <b class="text-emerald-300">최소 성취수준 보장지도</b>를 통해 보충 이수</li>
-                    </ul>
+                    <div class="font-bold text-emerald-300 mb-1 flex items-center gap-1.5"><span>✅</span> 과목 이수 기준 <span class="text-[9px] text-amber-400 font-normal ml-1 border border-amber-400/50 rounded px-1.5 py-0.5">2026 개선 반영</span></div>
+                    <div class="space-y-2.5 text-slate-300 text-xs leading-relaxed">
+                        <div class="p-2 bg-slate-900 rounded-lg border border-emerald-500/30">
+                            <div class="font-bold text-emerald-400 mb-0.5">📚 공통과목 (1학년 중심)</div>
+                            <ul class="list-disc list-inside space-y-0.5">
+                                <li>출석률 <b class="text-emerald-300">수업일수의 2/3 이상</b></li>
+                                <li>학업성취율 <b class="text-emerald-300">40% 이상</b> (두 가지 모두 충족)</li>
+                                <li>미달 시 <b class="text-emerald-300">최소 성취수준 보장지도</b>를 통해 보충</li>
+                            </ul>
+                        </div>
+                        <div class="p-2 bg-slate-900 rounded-lg border border-sky-500/30">
+                            <div class="font-bold text-sky-400 mb-0.5">🎯 선택과목 (2·3학년 중심) <span class="text-amber-400 font-normal text-[10px]">★ 2026년부터 완화</span></div>
+                            <ul class="list-disc list-inside space-y-0.5">
+                                <li>출석률 <b class="text-sky-300">수업일수의 2/3 이상</b>만 충족하면 이수 인정</li>
+                                <li class="text-slate-400">성취율 40% 기준과 최소성취수준 보장지도는 공통과목에만 적용</li>
+                            </ul>
+                        </div>
+                        <div class="p-2 bg-slate-900 rounded-lg border border-purple-500/30">
+                            <div class="font-bold text-purple-400 mb-0.5">🎪 창의적 체험활동 (창체)</div>
+                            <ul class="list-disc list-inside space-y-0.5">
+                                <li>과목이 아니라 활동이라 별도 기준 적용</li>
+                                <li><b class="text-purple-300">학년별 전체 수업일수의 2/3 이상</b> 출석 시 이수 인정</li>
+                            </ul>
+                        </div>
+                        <p class="text-[10px] text-slate-500 leading-relaxed">💡 즉, 2학년·3학년에 내가 직접 고르는 선택과목은 <b class="text-slate-300">출석만 잘하면 학점을 받을 수 있어요</b>. 원래는 성적(40% 이상)도 봤는데 2026년부터 선택과목은 완화됐어요.</p>
+                    </div>
                 </div>
 
                 <div class="p-3.5 bg-slate-950 rounded-xl border border-purple-500/40">
@@ -1261,6 +1288,11 @@
                 <!-- JS Injects Recommended Majors, Areas to Supplement, Competencies, and 3-Year Course List -->
             </div>
 
+            <!-- Source citation (visible when printing) -->
+            <p class="text-[9px] text-slate-500 text-center mt-2 leading-relaxed print-text-dark">
+                출처: 교육부 고교학점제 정책브리핑(2025) · 국가교육위원회 2026 고교학점제 운영 개선 대책 · 2022 개정 교육과정
+            </p>
+
             <!-- ACTION BUTTONS -->
             <div class="flex flex-col sm:flex-row items-center justify-end gap-2 border-t border-slate-800 pt-3 no-print">
                 <button onclick="closeModal('result-modal')" class="w-full sm:w-auto px-4 py-2.5 bg-sky-100 hover:bg-sky-200 text-sky-800 font-bold rounded-xl text-xs transition">
@@ -1525,16 +1557,18 @@
                 explanation: '과목을 이수하기 위해서는 해당 과목 수업일수의 2/3 이상을 출석해야 합니다.'
             },
             {
-                id: 4, category: 'credit', icon: '🎯', title: '학업성취율 기준', type: '이수 기준',
-                question: '과목 이수를 위해 달성해야 하는 최소 학업성취율 기준은 얼마일까요?',
-                options: ['30% 이상', '40% 이상', '50% 이상', '60% 이상'], answer: 1,
-                explanation: '과목 이수를 위한 최소 학업성취율은 40% 이상입니다.'
+                id: 4, category: 'credit', icon: '🎯', title: '2026 이수 기준 변화', type: '이수 기준',
+                question: '2026학년도부터 바뀐 선택과목 이수 기준으로 올바른 것은?',
+                options: ['출석률 2/3 + 성취율 40% 둘 다 필요', '출석률 2/3만 충족하면 이수 인정', '성취율 40%만 충족하면 이수 인정', '출석률 80% 이상 필요'],
+                answer: 1,
+                explanation: '2026년부터 2·3학년의 선택과목은 출석률(수업일수의 2/3)만 충족하면 이수 인정! 공통과목은 여전히 출석 + 성취율 40% 두 가지를 모두 봐야 해요.'
             },
             {
                 id: 5, category: 'credit', icon: '🛠️', title: '최소 성취수준 보장지도', type: '학습 지원',
-                question: '학업성취율 40% 미만으로 미이수(I) 위험이 발생할 때 학교에서 제공하는 제도는?',
-                options: ['최소 성취수준 보장지도', '야간 자율학습', '방학 강제 퇴학', '학점 과태료 부여'], answer: 0,
-                explanation: '미이수가 발생하지 않도록 예방 지도 및 보충 이수 등 최소 성취수준 보장지도를 운영합니다.'
+                question: '2026년 이후 "최소 성취수준 보장지도"가 적용되는 과목은?',
+                options: ['모든 선택과목', '공통과목에만 적용', '진로선택과목에만 적용', '체육·예술 과목에만 적용'],
+                answer: 1,
+                explanation: '2026년 완화 이후 최소 성취수준 보장지도는 공통과목에만 적용돼요. 선택과목은 출석만 잘하면 학점을 받을 수 있어요.'
             },
             {
                 id: 6, category: 'credit', icon: '🧭', title: '과목 선택 구조', type: '교육과정',
@@ -1564,7 +1598,7 @@
                 id: 10, category: 'credit', icon: '🎓', title: '학점 이수와 졸업', type: '졸업 조건',
                 question: '고등학교 3년 졸업 결정의 핵심 기준 두 가지는?',
                 options: ['수능 점수 + 봉사시간', '출석률(2/3) + 누적 학점(192학점)', '중간고사 점수 + 기말고사 점수', '선생님 추천 + 반장 경력'], answer: 1,
-                explanation: '과목별 출석률(2/3 이상)과 성취율(40% 이상)을 충족하여 3년간 192학점을 취득해야 졸업할 수 있습니다.'
+                explanation: '출석률(2/3 이상)을 충족하며 3년간 192학점을 취득해야 졸업할 수 있어요. 2026년부터는 선택과목의 성취율 기준이 완화되어, 선택과목은 출석만 충족하면 이수 인정이에요.'
             },
             {
                 id: 11, category: 'fun', icon: '🎨', title: '상황 퀴즈 1탄', type: '고교생활 상황극',

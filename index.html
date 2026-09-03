@@ -178,11 +178,14 @@
             50% { transform: translateY(-5px) scaleY(1.04); }
         }
 
-        /* On-screen D-pad for touch/mobile movement */
+        /* On-screen D-pad for touch/mobile movement — parked in the empty middle band between
+           the top and bottom building rows (right edge), so it never sits on top of a building
+           like 진로상담센터 (which lives in the bottom-right corner, where this used to be). */
         .dpad-wrap {
             position: absolute;
-            bottom: 10px;
+            top: 50%;
             right: 10px;
+            transform: translateY(-50%);
             width: 108px;
             height: 108px;
             z-index: 20;

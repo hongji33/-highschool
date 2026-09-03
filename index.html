@@ -1171,11 +1171,17 @@
                             <div class="text-amber-300 mt-1 text-[11px] font-bold">선택과목 중심</div>
                         </div>
                     </div>
-                    <ul class="list-disc list-inside space-y-1.5 text-slate-300 leading-relaxed">
-                        <li><b class="text-sky-300">1학년:</b> 국어·수학·영어·통합사회·통합과학처럼 <b class="text-amber-300">대부분의 학생이 비슷하게 배우는 공통과목 비중이 높아요.</b> 아직 진로가 정해지지 않아도 되니까, 이 게임에서는 이해를 돕기 위해 미리 채워드렸어요. (궁금하면 1학년 탭에서 직접 살펴보고 바꿔볼 수도 있어요!)</li>
-                        <li><b class="text-sky-300">2·3학년:</b> 학년이 올라갈수록 나의 <b class="text-amber-300">흥미·적성·희망 진로에 맞춰 직접 고르는 선택과목</b>이 늘어나요. 그래서 게임에서도 2학년부터는 여러분이 직접 건물에 들어가 과목을 신청해요.</li>
-                        <li class="text-[11px] text-slate-500">※ 이 게임은 이해를 돕기 위해 학년별 학점을 균등하게 단순화했어요. 실제 학점 배분과 과목 구성은 학교의 교육과정에 따라 달라질 수 있어요.</li>
-                    </ul>
+                    <div class="space-y-2">
+                        <div class="p-2.5 bg-sky-50 border border-sky-300 rounded-lg">
+                            <div class="font-bold text-sky-800 text-sm mb-1 flex items-center gap-1"><span>🌱</span> 1학년: 공통과목 중심</div>
+                            <p class="text-xs sm:text-[13px] text-slate-700 leading-relaxed">국어·수학·영어·통합사회·통합과학처럼 <b class="text-amber-700">대부분의 학생이 비슷하게 배우는 공통과목</b> 비중이 높아요. 아직 진로가 정해지지 않아도 되니까, 이 게임에서는 미리 채워드렸어요. <span class="text-slate-500">(궁금하면 1학년 탭에서 직접 살펴보고 바꿔볼 수도 있어요!)</span></p>
+                        </div>
+                        <div class="p-2.5 bg-amber-50 border border-amber-300 rounded-lg">
+                            <div class="font-bold text-amber-800 text-sm mb-1 flex items-center gap-1"><span>🎯</span> 2·3학년: 선택과목 중심</div>
+                            <p class="text-xs sm:text-[13px] text-slate-700 leading-relaxed">학년이 올라갈수록 나의 <b class="text-amber-700">흥미·적성·희망 진로에 맞춰 직접 고르는 선택과목</b>이 늘어나요. 그래서 게임에서도 2학년부터는 여러분이 직접 건물에 들어가 과목을 신청해요.</p>
+                        </div>
+                        <p class="text-[11px] text-slate-500 leading-relaxed pl-1">※ 이 게임은 이해를 돕기 위해 학년별 학점을 균등하게 단순화했어요. 실제 학점 배분과 과목 구성은 학교의 교육과정에 따라 달라질 수 있어요.</p>
+                    </div>
                 </div>
 
                 <div id="tutorial-section-4" class="tutorial-section p-3.5 bg-slate-950 rounded-xl border border-emerald-500/40">
@@ -2112,19 +2118,20 @@
         let playerPos = { x: 45, y: 43 };
         let currentBuildingZone = null;
 
-        // Building collision zones (percent-based). These are intentionally SMALLER than the
-        // visible building footprint (CSS b-art/b-science/etc.) so the player sprite has to walk
-        // fully inside the building — not just brush past its edge — before it triggers.
-        // Building collision zones are fixed by SLOT position (not by name) — the
+        // Building collision zones (percent-based). These closely match each building's
+        // visible CSS footprint (b-art/b-science/etc., with just a couple % of margin so the
+        // player still has to be visually "inside" the building) — walking anywhere onto the
+        // building now triggers it, instead of needing to hunt for a small sweet spot in the
+        // middle. Building collision zones are fixed by SLOT position (not by name) — the
         // building displayed in each slot changes depending on the chosen school type.
         const buildingZones = {
-            'slot-art': { left: 8, right: 18, top: 12, bottom: 25, type: 'room' },
-            'slot-science': { left: 33, right: 43, top: 12, bottom: 25, type: 'room' },
-            'slot-social': { left: 58, right: 68, top: 12, bottom: 25, type: 'room' },
-            'slot-common': { left: 82, right: 92, top: 12, bottom: 25, type: 'room' },
-            'slot-math': { left: 10, right: 25, top: 75, bottom: 88, type: 'room' },
-            'slot-language': { left: 42, right: 57, top: 75, bottom: 88, type: 'room' },
-            'slot-career': { left: 75, right: 90, top: 75, bottom: 88, type: 'career' }
+            'slot-art': { left: 4, right: 22, top: 8, bottom: 34, type: 'room' },
+            'slot-science': { left: 29, right: 47, top: 8, bottom: 34, type: 'room' },
+            'slot-social': { left: 54, right: 72, top: 8, bottom: 34, type: 'room' },
+            'slot-common': { left: 78, right: 96, top: 8, bottom: 34, type: 'room' },
+            'slot-math': { left: 6, right: 29, top: 66, bottom: 92, type: 'room' },
+            'slot-language': { left: 38, right: 61, top: 66, bottom: 92, type: 'room' },
+            'slot-career': { left: 71, right: 94, top: 66, bottom: 92, type: 'career' }
         };
 
         // Selected Courses Data by Grade

@@ -499,7 +499,7 @@
                 <div class="flex items-center gap-3">
                     <span class="text-3xl">🏫</span>
                     <div>
-                        <h2 class="text-base sm:text-lg font-bold text-sky-300">STAGE 1 : 고교학점제 비밀 교실 (15개 단서 해독)</h2>
+                        <h2 class="text-base sm:text-lg font-bold text-sky-300 flex flex-wrap items-center gap-x-2 gap-y-1"><span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-400 text-white text-xs sm:text-sm font-black shadow-sm">🔑 방탈출 퀴즈</span><span>STAGE 1 : 고교학점제 비밀 교실 (15개 단서 해독)</span></h2>
                         <p class="text-xs text-slate-300">교실 내 15개 오브젝트를 터치하여 퀴즈를 맞추고 열쇠를 얻으세요! (고교학점제 10문제 + 상황퀴즈 5문제)</p>
                     </div>
                 </div>
@@ -979,8 +979,18 @@
                 질문 내용이 여기에 들어갑니다.
             </div>
 
-            <div id="modal-options" class="space-y-2 mb-4">
+            <div id="modal-options" class="space-y-2 mb-3">
             </div>
+
+            <!-- Wrong-answer feedback (replaces the old alert popup) -->
+            <div id="modal-wrong" class="hidden mb-3 px-3 py-2 rounded-xl bg-rose-50 border border-rose-200 text-xs font-bold text-rose-600"></div>
+
+            <!-- Help row: hint + jump back to the 고교학점제 guide -->
+            <div id="modal-help" class="flex flex-wrap gap-2 mb-3">
+                <button id="modal-hint-btn" onclick="showQuizHint()" class="flex-1 min-w-[8rem] px-3 py-2 rounded-xl bg-amber-50 border border-amber-300 text-amber-700 font-bold text-xs hover:bg-amber-100 transition">💡 힌트 보기</button>
+                <button id="modal-guide-btn" onclick="openGuideFromQuiz()" class="flex-1 min-w-[8rem] px-3 py-2 rounded-xl bg-sky-50 border border-sky-300 text-sky-700 font-bold text-xs hover:bg-sky-100 transition">📖 안내 다시 보기</button>
+            </div>
+            <div id="modal-hint" class="hidden mb-3 p-3 rounded-xl bg-amber-50 border-2 border-amber-300 text-xs sm:text-sm text-amber-900 leading-relaxed"></div>
 
             <div id="modal-explanation" class="hidden p-3 bg-slate-950 border border-emerald-500/50 rounded-xl text-xs text-emerald-300">
                 <div class="font-bold mb-1">💡 해설:</div>
@@ -1403,6 +1413,36 @@
             <p class="text-xs sm:text-sm text-slate-500 leading-relaxed mb-5">
                 15개 방탈출 단서를 해독하고, 고교 3개년 192학점 맞춤 수강계획을 설계하는 게임입니다.
             </p>
+
+            <!-- Activity order at a glance -->
+            <div class="mb-6">
+                <div class="text-[11px] font-black text-sky-700 tracking-wide mb-2">🗺️ 이렇게 진행돼요</div>
+                <div class="flex flex-col sm:flex-row items-stretch gap-1.5 sm:gap-2" style="word-break:keep-all">
+                    <div class="flex-1 min-w-0 flex sm:flex-col items-center gap-3 sm:gap-1.5 p-3 sm:px-2 bg-white border-2 border-sky-300 rounded-2xl shadow-sm text-left sm:text-center">
+                        <div class="relative shrink-0 w-11 h-11 rounded-xl bg-sky-100 flex items-center justify-center text-2xl">📖<span class="absolute -top-1.5 -left-1.5 w-5 h-5 rounded-full bg-sky-500 text-white text-[10px] font-black flex items-center justify-center shadow">1</span></div>
+                        <div>
+                            <div class="font-black text-sm text-sky-800 leading-tight">고교학점제 알아보기</div>
+                            <div class="text-[11px] text-slate-500 leading-snug mt-0.5">규칙 읽고 열쇠 단어 찾기</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-center text-sky-400 font-black text-lg leading-none"><span class="inline-block sm:-rotate-90">▼</span></div>
+                    <div class="flex-1 min-w-0 flex sm:flex-col items-center gap-3 sm:gap-1.5 p-3 sm:px-2 bg-white border-2 border-amber-300 rounded-2xl shadow-sm text-left sm:text-center">
+                        <div class="relative shrink-0 w-11 h-11 rounded-xl bg-amber-100 flex items-center justify-center text-2xl">🔑<span class="absolute -top-1.5 -left-1.5 w-5 h-5 rounded-full bg-amber-500 text-white text-[10px] font-black flex items-center justify-center shadow">2</span></div>
+                        <div>
+                            <div class="font-black text-sm text-amber-800 leading-tight">방탈출하기</div>
+                            <div class="text-[11px] text-slate-500 leading-snug mt-0.5">퀴즈 풀고 열쇠 15개 획득</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-center text-sky-400 font-black text-lg leading-none"><span class="inline-block sm:-rotate-90">▼</span></div>
+                    <div class="flex-1 min-w-0 flex sm:flex-col items-center gap-3 sm:gap-1.5 p-3 sm:px-2 bg-white border-2 border-emerald-300 rounded-2xl shadow-sm text-left sm:text-center">
+                        <div class="relative shrink-0 w-11 h-11 rounded-xl bg-emerald-100 flex items-center justify-center text-2xl">🎓<span class="absolute -top-1.5 -left-1.5 w-5 h-5 rounded-full bg-emerald-500 text-white text-[10px] font-black flex items-center justify-center shadow">3</span></div>
+                        <div>
+                            <div class="font-black text-sm text-emerald-800 leading-tight">MISSION 192</div>
+                            <div class="text-[11px] text-slate-500 leading-snug mt-0.5">고교 3년 192학점 채우기</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="bg-sky-50 border border-sky-300 rounded-2xl p-4 text-left mb-6">
                 <div class="font-black text-sky-800 text-sm mb-2 flex items-center gap-1.5">
@@ -2021,6 +2061,51 @@
             renderObjects();
         }
 
+        // Hints for each clue. `tab` = which 고교학점제 안내 tab explains it
+        // (1 학점이란 · 2 학교유형별 · 3 학년별 · 4 이수기준 · 5 내신평가 · 6 플레이방법).
+        // Clues without a matching tab only get the hint button.
+        const quizHints = {
+            1:  { tab: 1, hint: '교과 174학점 + 창체 18학점을 더해 보세요!' },
+            2:  { hint: '한 학기(약 4달) 동안 매주 한 번씩 듣는다고 생각해 보세요. 보기 중 4의 배수는?' },
+            3:  { tab: 4, hint: '수업의 1/3 넘게 빠지면 학점을 못 받아요. 그럼 최소 얼마만큼은 나와야 할까요?' },
+            4:  { tab: 4, hint: '선택과목에는 성적(성취율 40%) 기준이 없어요. 그럼 무엇으로 판단할까요?' },
+            5:  { tab: 4, hint: '보장지도는 "성취율 40%"를 못 채운 학생을 돕는 제도예요. 40% 기준이 있는 과목은 어디일까요?' },
+            6:  { hint: '선택과목은 일반선택·진로선택·○○선택, 세 가지예요. 한 가지는 실제로 없는 이름이에요!' },
+            7:  { hint: '2022 개정 교육과정이 고1부터 적용된 해예요. 보기 중 홀수 해를 살펴보세요.' },
+            8:  { hint: '"학점제"는 내가 고른 과목을 듣는 제도예요. 그럼 시간표는 누구에게 맞춰질까요?' },
+            9:  { hint: '여러 학교가 "함께(공동)" 과목을 운영한다는 뜻이 이름에 들어 있어요.' },
+            10: { tab: 1, hint: '졸업하려면 수업에 잘 나오고(출석), 학점을 끝까지 채워야 해요.' },
+            11: { hint: '좋아하는 것도 중요하지만, 진로에 필요한 과목은 한 종류만이 아니에요.' },
+            12: { hint: '진로를 아직 못 정했을 땐 여러 가지를 직접 경험해 보는 게 도움이 돼요.' },
+            13: { hint: '가고 싶은 학과와 실제로 신청한 과목을 나란히 비교해 보세요.' },
+            14: { hint: '"무조건"이라는 말이 들어간 보기는 조심! 여러 가지를 함께 따져봐요.' },
+            15: { hint: '늦었다고 생각할 때가 가장 빠를 때! 남은 학기를 어떻게 쓸지 생각해 보세요.' }
+        };
+        const quizWrongCount = {};
+        let quizReturnIndex = null;
+
+        function showQuizHint() {
+            const q = quizData[currentQuizIndex];
+            const h = quizHints[q.id];
+            if (!h) return;
+            const box = document.getElementById('modal-hint');
+            const guideLabel = h.tab ? tutorialTabDefs.find(t => t.n === h.tab) : null;
+            box.innerHTML = `<b>💡 힌트</b> ${h.hint}` +
+                (guideLabel ? `<div class="mt-1.5 text-[11px] text-amber-700">더 알고 싶으면 <b>📖 안내 다시 보기</b>에서 '${guideLabel.icon} ${guideLabel.label}' 탭을 확인해요.</div>` : '');
+            box.classList.remove('hidden');
+            const btn = document.getElementById('modal-hint-btn');
+            btn.classList.add('opacity-50');
+            btn.innerText = '💡 힌트 확인함';
+        }
+
+        function openGuideFromQuiz() {
+            const q = quizData[currentQuizIndex];
+            const h = quizHints[q.id] || {};
+            quizReturnIndex = currentQuizIndex;
+            closeQuizModal();
+            showTutorialModal({ review: true, startTab: h.tab || 1 });
+        }
+
         function openQuizModal(index) {
             currentQuizIndex = index;
             const q = quizData[index];
@@ -2036,6 +2121,20 @@
             const explanationBox = document.getElementById('modal-explanation');
             explanationBox.classList.add('hidden');
 
+            // Help UI reset
+            const h = quizHints[q.id] || {};
+            const guideTabDef = h.tab ? tutorialTabDefs.find(t => t.n === h.tab) : null;
+            document.getElementById('modal-wrong').classList.add('hidden');
+            document.getElementById('modal-hint').classList.add('hidden');
+            document.getElementById('modal-help').classList.toggle('hidden', isSolved);
+            const hintBtn = document.getElementById('modal-hint-btn');
+            hintBtn.classList.remove('opacity-50');
+            hintBtn.innerText = '💡 힌트 보기';
+            hintBtn.classList.toggle('hidden', !h.hint);
+            const guideBtn = document.getElementById('modal-guide-btn');
+            guideBtn.innerText = guideTabDef ? `📖 안내 다시 보기 (${guideTabDef.label})` : '📖 안내 다시 보기';
+            if (!isSolved && (quizWrongCount[q.id] || 0) >= 2) showQuizHint();
+
             q.options.forEach((opt, idx) => {
                 const optBtn = document.createElement('button');
                 optBtn.className = `w-full p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition flex items-center justify-between ${
@@ -2048,7 +2147,7 @@
                     <span>${idx + 1}. ${opt}</span>
                     <span class="text-xs">${isSolved && idx === q.answer ? '✅' : '➡️'}</span>
                 `;
-                optBtn.onclick = () => handleAnswerSelect(idx);
+                optBtn.onclick = () => handleAnswerSelect(idx, optBtn);
                 optionsContainer.appendChild(optBtn);
             });
 
@@ -2063,10 +2162,17 @@
             document.getElementById('quiz-modal').classList.add('hidden');
         }
 
-        function handleAnswerSelect(selectedIdx) {
+        function handleAnswerSelect(selectedIdx, optBtn) {
             const q = quizData[currentQuizIndex];
             if (selectedIdx === q.answer) {
                 playSound('correct');
+                if (optBtn) {
+                    optBtn.className = 'w-full p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition flex items-center justify-between bg-emerald-50 border-emerald-500 text-emerald-700';
+                    optBtn.lastElementChild.innerText = '✅';
+                }
+                document.getElementById('modal-wrong').classList.add('hidden');
+                document.getElementById('modal-help').classList.add('hidden');
+                document.getElementById('modal-hint').classList.add('hidden');
                 if (!unlockedKeys.includes(q.id)) {
                     unlockedKeys.push(q.id);
                     updateQuizProgress();
@@ -2080,7 +2186,19 @@
                 }
             } else {
                 playSound('wrong');
-                alert('❌ 아쉽네요! 다시 해설과 질문을 살피고 도전해 보세요.');
+                quizWrongCount[q.id] = (quizWrongCount[q.id] || 0) + 1;
+                if (optBtn) {
+                    optBtn.disabled = true;
+                    optBtn.className = 'w-full p-3 rounded-xl border text-left text-xs sm:text-sm font-medium flex items-center justify-between bg-rose-50 border-rose-300 text-rose-400 line-through cursor-not-allowed';
+                    optBtn.lastElementChild.innerText = '❌';
+                    optBtn.classList.remove('tq-shake'); void optBtn.offsetWidth; optBtn.classList.add('tq-shake');
+                }
+                const wrong = document.getElementById('modal-wrong');
+                wrong.innerText = quizWrongCount[q.id] >= 2
+                    ? '❌ 또 아쉬워요! 아래 힌트를 읽고 다시 골라보세요.'
+                    : '❌ 아쉬워요! 다시 골라보거나, 💡 힌트 · 📖 안내를 참고해 보세요.';
+                wrong.classList.remove('hidden');
+                if (quizWrongCount[q.id] >= 2) showQuizHint();
             }
         }
 
@@ -3900,12 +4018,20 @@
             if (badge) badge.classList.toggle('hidden', goalIsSet);
         }
 
-        function showTutorialModal() {
+        let tutorialReviewMode = false;
+
+        function showTutorialModal(opts) {
+            opts = (opts && typeof opts === 'object') ? opts : {};
+            tutorialReviewMode = !!opts.review;
             const heading = document.getElementById('tutorial-modal-heading');
             const sub = document.getElementById('tutorial-modal-sub');
             const confirmBtn = document.getElementById('tutorial-confirm-btn');
 
-            if (isOnboardingTutorial) {
+            if (tutorialReviewMode) {
+                heading.innerText = '📖 고교학점제 안내 다시 보기';
+                sub.innerText = '다 읽었으면 아래 버튼을 눌러 퀴즈로 돌아가세요.';
+                confirmBtn.dataset.doneLabel = '↩ 퀴즈로 돌아가기';
+            } else if (isOnboardingTutorial) {
                 heading.innerText = '🎉 캐릭터 완성! 시작 전 잠깐, 고교학점제 안내';
                 sub.innerText = '방탈출 퀴즈를 풀기 전에 핵심 규칙을 먼저 확인해보세요.';
                 confirmBtn.dataset.doneLabel = '✅ 확인했어요, 방탈출 시작하기!';
@@ -3921,9 +4047,10 @@
             const firstOpen = tutorialTabDefs.find(t => !isTutorialTabDone(t.n));
             tutorialActiveTab = firstOpen ? firstOpen.n : 1;
             tutorialVisitedTabs = new Set(tutorialTabDefs.filter(t => isTutorialTabDone(t.n)).map(t => t.n));
+            if (tutorialReviewMode && opts.startTab) tutorialActiveTab = opts.startTab;
             tutorialVisitedTabs.add(tutorialActiveTab);
             renderTutorialTabs();
-            focusTutorialQuiz();
+            if (!tutorialReviewMode) focusTutorialQuiz();
 
             document.getElementById('tutorial-modal').classList.remove('hidden');
         }
@@ -3977,6 +4104,7 @@
             return tutorialQuizDefs[n] ? tutorialSolved.has(n) : tutorialVisitedTabs.has(n);
         }
         function isTutorialTabUnlocked(n) {
+            if (tutorialReviewMode) return true; // reviewing from a quiz: browse freely
             return n === 1 || isTutorialTabDone(n - 1) || tutorialVisitedTabs.has(n);
         }
 
@@ -4139,9 +4267,12 @@
             const doneCount = tutorialTabDefs.filter(t => isTutorialTabDone(t.n)).length;
             const note = document.getElementById('tutorial-progress-note');
             const confirmBtn = document.getElementById('tutorial-confirm-btn');
-            const allDone = doneCount >= total;
+            const allDone = tutorialReviewMode || doneCount >= total;
 
-            if (note) {
+            if (note && tutorialReviewMode) {
+                note.innerText = '📖 궁금한 탭을 자유롭게 눌러서 다시 확인해보세요.';
+                note.className = 'text-[10px] text-sky-600 font-bold mb-3';
+            } else if (note) {
                 note.innerText = allDone
                     ? '🎉 열쇠 단어를 모두 찾았어요! 아래 버튼을 눌러 다음으로 넘어가세요.'
                     : `🔑 설명을 읽고 빈칸에 열쇠 단어를 입력하면 다음 항목이 열려요. (${doneCount}/${total})`;
@@ -4164,6 +4295,7 @@
         // Guards the bottom "확인/닫기" button — if something isn't done yet,
         // jump to the first unfinished tab instead of closing.
         function attemptCloseTutorial() {
+            if (tutorialReviewMode) { closeModal('tutorial-modal'); return; }
             const firstOpen = tutorialTabDefs.find(t => !isTutorialTabDone(t.n));
             if (firstOpen) {
                 // Only jump if reachable; otherwise stay on the current blank
@@ -4198,6 +4330,14 @@
             document.getElementById(modalId).classList.add('hidden');
             if (modalId === 'tutorial-modal') {
                 isOnboardingTutorial = false;
+                if (tutorialReviewMode) {
+                    tutorialReviewMode = false;
+                    if (quizReturnIndex !== null) {
+                        const idx = quizReturnIndex;
+                        quizReturnIndex = null;
+                        openQuizModal(idx);
+                    }
+                }
             }
             if (modalId === 'career-modal') {
                 isOnboardingCareerGoal = false;

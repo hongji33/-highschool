@@ -281,6 +281,19 @@
         .step-item.step-done + .step-connector { background: #22c55e; }
         .step-item.step-active .step-circle { background: #0ea5e9; border-color: #0ea5e9; color: white; box-shadow: 0 0 0 4px rgba(14,165,233,0.25); }
         .step-item.step-active .step-label { color: #0369a1; }
+        /* Completed steps are clickable: jump back to that stage */
+        .step-item.step-clickable { position: relative; cursor: pointer; border-radius: 999px; padding: 3px 8px 3px 3px; margin: -3px -8px -3px -3px; transition: background .15s, transform .15s; }
+        .step-item.step-clickable:hover { background: #dcfce7; transform: translateY(-1px); }
+        .step-item.step-clickable:hover .step-label { text-decoration: underline; }
+        /* The step bar scrolls sideways (clips tooltips), so show the hint inline instead */
+        .step-item.step-clickable .step-label::after { content: ""; }
+        .step-item.step-clickable:hover .step-label::after,
+        .step-item.step-clickable:focus-visible .step-label::after {
+            content: " ↩ 눌러서 돌아가기";
+            margin-left: 4px; padding: 1px 6px; border-radius: 999px;
+            background: #16a34a; color: #fff; font-size: 9px; font-weight: 900;
+        }
+        .step-item.step-clickable:hover .step-label { text-decoration: none; }
 
         /* Floating Score Text Animation */
         @keyframes floatUp {
@@ -3531,6 +3544,7 @@
             document.getElementById('mission-game-section').classList.add('hidden');
             document.getElementById('escape-room-section').classList.remove('hidden');
             document.getElementById('quiz-progress-box').classList.remove('hidden');
+            renderStepIndicator(currentStep); // '과목 선택' 단계를 눌러 캠퍼스로 돌아올 수 있게 갱신
         }
 
         function setActiveGrade(grade) {
@@ -4854,6 +4868,38 @@
             { n: 5, icon: '🎓', label: '192학점 완성' }
         ];
         let currentStep = 1;
+
+        function isMissionScreenVisible() {
+            const sec = document.getElementById('mission-game-section');
+            return sec && !sec.classList.contains('hidden');
+        }
+
+        // ✓ 지나온 단계는 누를 수 있음. 방탈출 화면으로 돌아가 있을 때는 '과목 선택'도 눌러서 캠퍼스로 복귀 가능.
+        function isStepClickable(n, activeStep) {
+            if (n < activeStep) return n !== 1 || isMissionScreenVisible();
+            if (n === 4 && activeStep === 4 && hasEnteredMissionGame && !isMissionScreenVisible()) return true;
+            return false;
+        }
+
+        function goToStep(n) {
+            playSound('select');
+            if (n === 1) {
+                exitMissionGame();
+                renderStepIndicator(currentStep);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                return;
+            }
+            // 나머지 단계는 캠퍼스 화면 위에서 열리므로, 방탈출 화면에 있으면 먼저 캠퍼스로 이동
+            if (!isMissionScreenVisible()) openMissionGame();
+            if (n === 2) {
+                changeSchoolType(); // 2·3학년 과목 초기화 확인창을 먼저 띄움
+            } else if (n === 3) {
+                isOnboardingCareerGoal = false;
+                openCareerModal();
+            }
+            renderStepIndicator(currentStep);
+        }
+
         function renderStepIndicator(activeStep) {
             currentStep = activeStep;
             const container = document.getElementById('step-indicator');
@@ -4862,7 +4908,11 @@
                 const state = s.n < activeStep ? 'step-done' : s.n === activeStep ? 'step-active' : '';
                 const circleContent = s.n < activeStep ? '✓' : s.n;
                 const connector = idx < stepDefs.length - 1 ? '<div class="step-connector"></div>' : '';
-                return `<div class="step-item ${state}"><div class="step-circle">${circleContent}</div><span class="step-label">${s.icon} ${s.label}</span></div>${connector}`;
+                const clickable = isStepClickable(s.n, activeStep);
+                const attrs = clickable
+                    ? ` step-clickable" role="button" tabindex="0" title="눌러서 돌아가기" onclick="goToStep(${s.n})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goToStep(${s.n});}`
+                    : '';
+                return `<div class="step-item ${state}${attrs}"><div class="step-circle">${circleContent}</div><span class="step-label">${s.icon} ${s.label}</span></div>${connector}`;
             }).join('');
         }
 

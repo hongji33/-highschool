@@ -537,9 +537,9 @@
         <div id="mission-game-section" class="hidden flex flex-col gap-4">
 
             <!-- Game Navigation Bar -->
-            <div class="bg-slate-900 border-2 border-sky-500/80 rounded-2xl p-3 sm:p-4 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="bg-slate-900 border-2 border-sky-500/80 rounded-2xl px-3 py-2 sm:px-4 shadow-lg flex flex-col md:flex-row items-center justify-between gap-2">
                 <div class="flex items-center gap-3">
-                    <div class="text-3xl font-black font-pixel text-sky-400">MISSION <span class="text-cyan-300">192</span></div>
+                    <div class="text-xl sm:text-2xl font-black font-pixel text-sky-400 whitespace-nowrap">MISSION <span class="text-cyan-300">192</span></div>
                     <div class="h-6 w-[2px] bg-slate-700 hidden sm:block"></div>
                     <div class="text-xs text-slate-300">
                         <span class="text-amber-400 font-bold">STAGE 2:</span> 고교 3개년 학년별 수강계획 & 진로 설계
@@ -547,62 +547,21 @@
                     </div>
                 </div>
 
-                <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end flex-wrap gap-y-2">
-                    <button onclick="changeSchoolType()" class="text-xs bg-amber-100 hover:bg-amber-200 text-amber-800 border border-amber-400 px-3 py-2 rounded-xl font-bold">
+                <div class="flex items-center gap-2 w-full md:w-auto justify-center md:justify-end flex-wrap gap-y-1.5">
+                    <button onclick="changeSchoolType()" class="text-[11px] sm:text-xs bg-amber-100 hover:bg-amber-200 text-amber-800 border border-amber-400 px-2.5 py-1.5 rounded-xl font-bold">
                         🔁 진학 유형 변경
                     </button>
-                    <button onclick="showTutorialModal()" class="text-xs bg-slate-800 hover:bg-slate-700 text-sky-300 border border-sky-500/40 px-3 py-2 rounded-xl font-bold">
-                        ❓ 고교학점제(3년 192학점) 안내
+                    <button onclick="showTutorialModal()" class="text-[11px] sm:text-xs bg-slate-800 hover:bg-slate-700 text-sky-300 border border-sky-500/40 px-2.5 py-1.5 rounded-xl font-bold">
+                        ❓ 고교학점제 안내
                     </button>
-                    <button onclick="exitMissionGame()" class="text-xs bg-rose-100 text-rose-300 hover:bg-rose-200 px-3 py-2 rounded-xl font-bold">
+                    <button onclick="exitMissionGame()" class="text-[11px] sm:text-xs bg-rose-100 text-rose-300 hover:bg-rose-200 px-2.5 py-1.5 rounded-xl font-bold">
                         🚪 방탈출 복귀
                     </button>
                 </div>
             </div>
 
-            <!-- "실제 이 학교는 어떤 곳?" reality-check card, populated per school type.
-                 Collapsed by default (details/summary) so it doesn't crowd the screen —
-                 students already saw the full rules in the tutorial modal; this is just
-                 a "look it up again if curious" reference now. -->
-            <details id="school-reality-card" class="hidden bg-white border-2 border-emerald-300 rounded-2xl overflow-hidden shadow">
-                <summary class="p-3.5 sm:p-4 cursor-pointer select-none list-none flex items-center gap-2 hover:bg-emerald-50">
-                    <span id="school-reality-icon" class="text-xl"></span>
-                    <span id="school-reality-title" class="text-sm sm:text-base font-black text-emerald-700 flex-1"></span>
-                    <span class="text-[10px] text-slate-500">탭해서 자세히 보기 ▾</span>
-                </summary>
-                <ul id="school-reality-facts" class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 text-[11px] sm:text-xs text-slate-600 px-4 pb-4"></ul>
-            </details>
-
-            <!-- Quick "how to play" guide for first-time students. Collapsed by default —
-                 same reason as above, the tutorial modal already walked through this. -->
-            <details class="bg-white border-2 border-sky-300 rounded-2xl overflow-hidden shadow">
-                <summary class="p-3.5 sm:p-4 cursor-pointer select-none list-none flex items-center gap-2 hover:bg-sky-50">
-                    <span class="text-lg">🎮</span>
-                    <span class="text-sm sm:text-base font-bold text-sky-700 flex-1">플레이 방법 요약 (1. 목표정하기 → 2. 학년선택 → 3. 건물이동 → 4. 174+18학점 완성)</span>
-                    <span class="text-[10px] text-slate-500">탭해서 자세히 보기 ▾</span>
-                </summary>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 px-4 pb-4">
-                    <div class="flex items-center gap-3 bg-slate-950/60 rounded-xl px-4 py-3">
-                        <div class="w-11 h-11 rounded-full bg-orange-500 text-slate-950 font-black flex items-center justify-center text-xl flex-shrink-0">1</div>
-                        <div class="text-sm sm:text-base font-bold text-slate-100 text-left leading-snug"><b class="text-orange-600">진로상담센터</b>에서 목표부터 정해요<br><span class="text-xs font-semibold text-slate-500">먼저 방문하면 가이드를 받아요!</span></div>
-                    </div>
-                    <div class="flex items-center gap-3 bg-slate-950/60 rounded-xl px-4 py-3">
-                        <div class="w-11 h-11 rounded-full bg-sky-500 text-slate-950 font-black flex items-center justify-center text-xl flex-shrink-0">2</div>
-                        <div class="text-sm sm:text-base font-bold text-slate-100 text-left leading-snug"><b class="text-sky-300">학년 탭</b>에서 학년을 골라요<br><span class="text-xs font-semibold text-slate-500">1학년은 이미 자동 완료!</span></div>
-                    </div>
-                    <div class="flex items-center gap-3 bg-slate-950/60 rounded-xl px-4 py-3">
-                        <div class="w-11 h-11 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-xl flex-shrink-0">3</div>
-                        <div class="text-sm sm:text-base font-bold text-slate-100 text-left leading-snug">방향키로 <b class="text-amber-300">건물 안까지</b> 걸어가요<br><span class="text-xs font-semibold text-slate-500">자동으로 과목 신청 창이 열려요</span></div>
-                    </div>
-                    <div class="flex items-center gap-3 bg-slate-950/60 rounded-xl px-4 py-3">
-                        <div class="w-11 h-11 rounded-full bg-emerald-500 text-slate-950 font-black flex items-center justify-center text-xl flex-shrink-0">4</div>
-                        <div class="text-sm sm:text-base font-bold text-slate-100 text-left leading-snug"><b class="text-emerald-300">교과 174학점 + 창체 18학점(총 192학점)</b>을 다 채우면 완성!<br><span class="text-xs font-semibold text-slate-500">목표 진로에 맞는 과목으로 채워보세요</span></div>
-                    </div>
-                </div>
-            </details>
-
             <!-- Grade Selection Tabs & Credit Status Banner -->
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex flex-col lg:flex-row items-center justify-between gap-4">
+            <div class="bg-slate-900 border border-slate-800 px-3 py-2.5 sm:px-4 rounded-2xl flex flex-col lg:flex-row items-center justify-between gap-3">
                 <!-- Grade Filter Tabs -->
                 <div class="flex items-center gap-2 w-full lg:w-auto flex-wrap lg:flex-nowrap">
                     <span class="text-sm sm:text-base font-bold text-slate-500 mr-1 whitespace-nowrap flex-shrink-0 flex items-center gap-1.5"><span class="text-lg">📅</span> 학년 선택:</span>
@@ -621,7 +580,7 @@
                 </div>
 
                 <!-- Cumulative 192 Credit Bar -->
-                <div class="w-full lg:w-1/2 flex flex-col gap-1.5 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                <div class="w-full lg:w-1/2 flex flex-col gap-1 bg-slate-950 px-3 py-2 rounded-xl border border-slate-800">
                     <div class="flex justify-between items-center text-xs">
                         <span class="font-bold text-sky-300">🎓 3년간 누적 수강 학점 (목표 교과174 + 창체18 = 192학점)</span>
                         <span class="font-pixel text-amber-400 font-bold whitespace-nowrap"><span id="hud-credit-num">64</span> / 192 학점</span>
@@ -657,7 +616,8 @@
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
                 
                 <!-- Left Panel: Interactive Campus Map (7 Cols) -->
-                <div class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xl flex flex-col justify-between">
+                <div class="lg:col-span-7 flex flex-col gap-3">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xl flex flex-col">
                     <div class="flex items-center justify-between mb-3 border-b border-slate-800 pb-2 flex-wrap gap-y-1.5">
                         <div class="flex items-center gap-2 flex-wrap">
                             <span class="text-xl">🏫</span>
@@ -744,6 +704,17 @@
                     </div>
                 </div>
 
+                    <!-- School Activity Log -->
+                    <div class="bg-slate-900 border-2 border-slate-300 p-3.5 rounded-2xl space-y-2">
+                        <h3 class="text-sm sm:text-base font-bold text-slate-600 flex items-center gap-2">
+                            <span class="text-lg">📜</span> 수강 및 진로 기록
+                        </h3>
+                        <div id="log-box" class="bg-slate-950 p-3 rounded-xl border border-slate-800 max-h-[140px] overflow-y-auto text-xs text-slate-300 space-y-1 leading-relaxed">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Right Sidebar Panel: Career Direction Analysis & Selected Courses (5 Cols) -->
                 <div class="lg:col-span-5 flex flex-col gap-3">
                     
@@ -798,7 +769,7 @@
                     </div>
 
                     <!-- Selected Courses Breakdown by Grade -->
-                    <div class="bg-slate-900 border-2 border-amber-500/50 p-4 rounded-2xl space-y-3 flex-1 flex flex-col">
+                    <div class="bg-slate-900 border-2 border-amber-500/50 p-4 rounded-2xl space-y-3 flex flex-col">
                         <div class="flex items-center justify-between">
                             <h3 class="text-sm sm:text-base font-bold text-amber-600 flex items-center gap-2">
                                 <span class="text-lg">📚</span> 학년별 수강 신청 목록
@@ -806,22 +777,58 @@
                             <span class="text-[10px] text-slate-400">클릭 시 신청 취소</span>
                         </div>
 
-                        <div id="schedule-grid" class="grid grid-cols-2 gap-1.5 text-xs p-1">
+                        <div id="schedule-grid" class="grid grid-cols-2 gap-1.5 text-xs p-1 max-h-[340px] overflow-y-auto">
                             <!-- Injected by JS -->
                         </div>
                     </div>
 
-                    <!-- School Activity Log -->
-                    <div class="bg-slate-900 border-2 border-slate-300 p-3.5 rounded-2xl space-y-2">
-                        <h3 class="text-sm sm:text-base font-bold text-slate-600 flex items-center gap-2">
-                            <span class="text-lg">📜</span> 수강 및 진로 기록
-                        </h3>
-                        <div id="log-box" class="bg-slate-950 p-3 rounded-xl border border-slate-800 max-h-[110px] overflow-y-auto text-xs text-slate-300 space-y-1 leading-relaxed">
-                            <!-- Injected by JS -->
-                        </div>
-                    </div>
 
                 </div>
+            </div>
+
+            <!-- Reference info (folded): moved below the map so the campus is visible right away -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-start">
+            <!-- "실제 이 학교는 어떤 곳?" reality-check card, populated per school type.
+                     Collapsed by default (details/summary) so it doesn't crowd the screen —
+                     students already saw the full rules in the tutorial modal; this is just
+                     a "look it up again if curious" reference now. -->
+                <details id="school-reality-card" class="hidden bg-white border-2 border-emerald-300 rounded-2xl overflow-hidden shadow self-start">
+                    <summary class="p-3.5 sm:p-4 cursor-pointer select-none list-none flex items-center gap-2 hover:bg-emerald-50">
+                        <span id="school-reality-icon" class="text-xl"></span>
+                        <span id="school-reality-title" class="text-sm sm:text-base font-black text-emerald-700 flex-1"></span>
+                        <span class="text-[10px] text-slate-500">탭해서 자세히 보기 ▾</span>
+                    </summary>
+                    <ul id="school-reality-facts" class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 text-[11px] sm:text-xs text-slate-600 px-4 pb-4"></ul>
+                </details>
+
+                <!-- Quick "how to play" guide for first-time students. Collapsed by default —
+                     same reason as above, the tutorial modal already walked through this. -->
+                <details class="bg-white border-2 border-sky-300 rounded-2xl overflow-hidden shadow self-start">
+                    <summary class="p-3.5 sm:p-4 cursor-pointer select-none list-none flex items-center gap-2 hover:bg-sky-50">
+                        <span class="text-lg">🎮</span>
+                        <span class="text-sm sm:text-base font-bold text-sky-700 flex-1">플레이 방법 다시 보기</span>
+                        <span class="text-[10px] text-slate-500">탭해서 자세히 보기 ▾</span>
+                    </summary>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 px-4 pb-4">
+                        <div class="flex items-center gap-3 bg-slate-950/60 rounded-xl px-4 py-3">
+                            <div class="w-11 h-11 rounded-full bg-orange-500 text-slate-950 font-black flex items-center justify-center text-xl flex-shrink-0">1</div>
+                            <div class="text-sm sm:text-base font-bold text-slate-100 text-left leading-snug"><b class="text-orange-600">진로상담센터</b>에서 목표부터 정해요<br><span class="text-xs font-semibold text-slate-500">먼저 방문하면 가이드를 받아요!</span></div>
+                        </div>
+                        <div class="flex items-center gap-3 bg-slate-950/60 rounded-xl px-4 py-3">
+                            <div class="w-11 h-11 rounded-full bg-sky-500 text-slate-950 font-black flex items-center justify-center text-xl flex-shrink-0">2</div>
+                            <div class="text-sm sm:text-base font-bold text-slate-100 text-left leading-snug"><b class="text-sky-300">학년 탭</b>에서 학년을 골라요<br><span class="text-xs font-semibold text-slate-500">1학년은 이미 자동 완료!</span></div>
+                        </div>
+                        <div class="flex items-center gap-3 bg-slate-950/60 rounded-xl px-4 py-3">
+                            <div class="w-11 h-11 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-xl flex-shrink-0">3</div>
+                            <div class="text-sm sm:text-base font-bold text-slate-100 text-left leading-snug">방향키로 <b class="text-amber-300">건물 안까지</b> 걸어가요<br><span class="text-xs font-semibold text-slate-500">자동으로 과목 신청 창이 열려요</span></div>
+                        </div>
+                        <div class="flex items-center gap-3 bg-slate-950/60 rounded-xl px-4 py-3">
+                            <div class="w-11 h-11 rounded-full bg-emerald-500 text-slate-950 font-black flex items-center justify-center text-xl flex-shrink-0">4</div>
+                            <div class="text-sm sm:text-base font-bold text-slate-100 text-left leading-snug"><b class="text-emerald-300">교과 174학점 + 창체 18학점(총 192학점)</b>을 다 채우면 완성!<br><span class="text-xs font-semibold text-slate-500">목표 진로에 맞는 과목으로 채워보세요</span></div>
+                        </div>
+                    </div>
+                </details>
+
             </div>
 
         </div>
@@ -1006,53 +1013,50 @@
     <!-- BUILDING SUBJECT SELECTOR MODAL -->
     <div id="room-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md hidden flex items-center justify-center p-3 z-50">
         <div class="modal-card max-w-2xl w-full p-5 sm:p-6 text-slate-100 relative max-h-[90vh] overflow-y-auto">
-            <div class="flex items-start justify-between gap-2 border-b border-slate-700 pb-3 mb-4 flex-wrap">
-                <div class="flex items-center gap-3">
-                    <span id="room-icon" class="text-3xl flex-shrink-0">🎨</span>
-                    <div>
-                        <div class="flex items-center gap-2 flex-wrap">
-                            <h2 id="room-modal-title" class="text-lg font-bold text-sky-300">건물 이름</h2>
-                            <span id="room-grade-badge" class="px-2 py-0.5 rounded text-xs font-bold bg-amber-400 text-slate-950 whitespace-nowrap">[1학년 과목]</span>
-                        </div>
-                        <p class="text-xs text-slate-400">해당 학년의 과목을 선택하여 3개년 수강 계획에 반영해보세요.</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-2 flex-shrink-0">
-                    <div class="bg-slate-950 border border-emerald-500/50 px-2.5 py-1.5 rounded-xl text-center min-w-[90px]">
-                        <div class="text-[8px] text-emerald-400 font-bold leading-none whitespace-nowrap">게임상 최대 학점(교과)</div>
-                        <div id="room-grade-capacity-badge" class="text-sm font-black text-emerald-300 font-pixel leading-tight">0/72</div>
-                    </div>
-                    <div class="bg-slate-950 border border-sky-500/50 px-2.5 py-1.5 rounded-xl text-center min-w-[100px]">
-                        <div class="text-[8px] text-sky-400 font-bold leading-none whitespace-nowrap">누적 교과/창체</div>
-                        <div id="room-credit-badge" class="text-xs font-black text-amber-300 font-pixel leading-tight">0/174 · 0/18</div>
+            <div class="border-b border-slate-700 pb-3 mb-3">
+                <div class="flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-2.5 min-w-0 flex-wrap">
+                        <span id="room-icon" class="text-3xl flex-shrink-0">🎨</span>
+                        <h2 id="room-modal-title" class="text-lg sm:text-xl font-black text-sky-300">건물 이름</h2>
+                        <span id="room-grade-badge" class="px-2 py-0.5 rounded-lg text-xs font-bold bg-amber-400 text-slate-950 whitespace-nowrap">[1학년 과목]</span>
                     </div>
                     <button onclick="closeModal('room-modal')" class="text-slate-400 hover:text-white text-2xl font-bold flex-shrink-0">✕</button>
+                </div>
+                <div class="mt-2.5 grid grid-cols-2 gap-2" style="word-break:keep-all">
+                    <div class="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-emerald-50 border border-emerald-300">
+                        <span class="text-[11px] sm:text-xs font-bold text-emerald-800 leading-tight">📘 이번 학년 교과<span class="block text-[10px] font-medium text-emerald-600">게임상 최대 72학점</span></span>
+                        <span id="room-grade-capacity-badge" class="text-base sm:text-lg font-black text-emerald-700 leading-none whitespace-nowrap">0/72</span>
+                    </div>
+                    <div class="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-sky-50 border border-sky-300">
+                        <span class="text-[11px] sm:text-xs font-bold text-sky-800 leading-tight">🎓 3년 누적<span class="block text-[10px] font-medium text-sky-600">교과 · 창체</span></span>
+                        <span id="room-credit-badge" class="text-sm sm:text-base font-black text-sky-700 leading-none whitespace-nowrap">0/174 · 0/18</span>
+                    </div>
                 </div>
             </div>
 
             <div id="room-lock-notice" class="hidden mb-3 p-2.5 bg-amber-50 border border-amber-400 rounded-lg text-[11px] sm:text-xs text-amber-800 leading-relaxed"></div>
-            <div id="room-math-sequence-note" class="hidden mb-3 p-2.5 bg-indigo-50 border border-indigo-300 rounded-lg text-[11px] sm:text-xs text-indigo-800 leading-relaxed">
-                📐 <b>수학 과목 위계 참고:</b> 대수 → 미적분Ⅰ(순서 또는 병행) · 경제 수학 전에는 대수 이수 권장 · 미적분Ⅱ는 대수·미적분Ⅰ 이후 · 전문수학·이산수학은 공통수학1·2 이후 · 고급 기하/고급 미적분 등은 관련 진로선택 과목 이후에 듣는 것이 좋아요. (이 게임은 이수 순서를 강제로 막지는 않지만, 실제로는 순서를 지키는 것이 좋아요) <span class="text-emerald-700">— 고교학점제 지원센터 Q&A에서도 이 위계의 근거로 「2026학년도 교육과정 편성·운영의 길라잡이」 101쪽과 「2026학년도 신입생 교육과정 안내자료」 12쪽을 안내하고 있어요.</span>
-            </div>
 
-            <details class="mb-3 bg-sky-50 border-2 border-sky-300 rounded-xl overflow-hidden">
-                <summary class="p-3 cursor-pointer select-none list-none flex items-center gap-2 hover:bg-sky-100">
-                    <span class="text-lg">💡</span>
-                    <span class="text-sm sm:text-base font-bold text-sky-800 flex-1">과목 선택 도움말 (탭해서 자세히 보기)</span>
-                    <span class="text-[10px] text-slate-500">▾</span>
+            <details class="mb-3 bg-sky-50 border border-sky-300 rounded-xl overflow-hidden">
+                <summary class="px-3 py-2 cursor-pointer select-none list-none flex items-center gap-2 hover:bg-sky-100">
+                    <span>💡</span>
+                    <span class="text-xs sm:text-sm font-bold text-sky-800 flex-1">과목 선택 도움말</span>
+                    <span class="text-[10px] text-slate-500">탭해서 보기 ▾</span>
                 </summary>
-                <div class="px-3.5 pb-3.5 space-y-2.5">
-                    <div class="flex gap-2.5 p-3 bg-white border border-sky-200 rounded-lg text-xs sm:text-sm text-sky-900 leading-relaxed">
-                        <span class="text-lg leading-none flex-shrink-0">🏫</span>
-                        <span><b>한 건물 과목을 다 들을 필요는 없어요.</b> 학년당 <b>게임상 최대 72학점</b>까지만 담겨요(실제 국가 기준 아님) — 전공 과목은 이 건물에서, 국어·영어·수학 같은 공통 학점은 <b>보통교과관</b>에서 나눠 담아보세요.</span>
+                <div class="px-3 pb-3 space-y-2 text-[11px] sm:text-xs leading-relaxed" style="word-break:keep-all">
+                    <div id="room-math-sequence-note" class="hidden p-2.5 bg-indigo-50 border border-indigo-300 rounded-lg text-[11px] sm:text-xs text-indigo-800 leading-relaxed">
+                        📐 <b>수학 과목 위계 참고:</b> 대수 → 미적분Ⅰ(순서 또는 병행) · 경제 수학 전에는 대수 이수 권장 · 미적분Ⅱ는 대수·미적분Ⅰ 이후 · 전문수학·이산수학은 공통수학1·2 이후 · 고급 기하/고급 미적분 등은 관련 진로선택 과목 이후에 듣는 것이 좋아요. (이 게임은 이수 순서를 강제로 막지는 않지만, 실제로는 순서를 지키는 것이 좋아요) <span class="text-emerald-700">— 고교학점제 지원센터 Q&A에서도 이 위계의 근거로 「2026학년도 교육과정 편성·운영의 길라잡이」 101쪽과 「2026학년도 신입생 교육과정 안내자료」 12쪽을 안내하고 있어요.</span>
                     </div>
-                    <div class="flex gap-2.5 p-3 bg-white border border-orange-200 rounded-lg text-xs sm:text-sm text-orange-900 leading-relaxed">
-                        <span class="inline-block flex-shrink-0 text-[10px] font-black px-2 py-1 rounded bg-orange-500 text-white self-start">핵심과목</span>
-                        <span>이 뱃지가 붙은 과목은 진로상담센터에서 계열을 정할 때 자동으로 신청돼요. 실제로도 전공과 밀접한 과목은 커리큘럼상 자연스럽게 편성되는 경우가 많아요.</span>
+                    <div class="flex gap-2 p-2.5 bg-white border border-sky-200 rounded-lg text-sky-900">
+                        <span class="flex-shrink-0">🏫</span>
+                        <span><b>한 건물 과목을 다 들을 필요는 없어요.</b> 학년당 게임상 최대 72학점까지 담겨요. 전공 과목은 이 건물에서, 국어·영어·수학 같은 공통 학점은 <b>보통교과관</b>에서 나눠 담아요.</span>
                     </div>
-                    <div class="flex gap-2.5 p-3 bg-white border border-amber-200 rounded-lg text-xs sm:text-sm text-amber-900 leading-relaxed">
-                        <span class="text-lg leading-none flex-shrink-0">⚠️</span>
-                        <span>배지가 없다고 신청이 막히진 않아요 — 지금 진로와 관련성이 낮다는 안내일 뿐, <b>다양하게 탐색해봐도 좋아요!</b></span>
+                    <div class="flex gap-2 p-2.5 bg-white border border-orange-200 rounded-lg text-orange-900">
+                        <span class="inline-block flex-shrink-0 text-[10px] font-black px-1.5 py-0.5 rounded bg-orange-500 text-white self-start">핵심과목</span>
+                        <span>이 배지가 붙은 과목은 진로상담센터에서 계열을 정할 때 자동으로 신청돼요.</span>
+                    </div>
+                    <div class="flex gap-2 p-2.5 bg-white border border-amber-200 rounded-lg text-amber-900">
+                        <span class="flex-shrink-0">⚠️</span>
+                        <span>배지가 없어도 신청할 수 있어요. 진로와 관련성이 낮다는 안내일 뿐, <b>다양하게 탐색해봐도 좋아요!</b></span>
                     </div>
                 </div>
             </details>
@@ -3503,48 +3507,24 @@
             const remainingSubject = Math.max(0, SUBJECT_TARGET - getTotalSubjectCredits());
             const remainingActivity = Math.max(0, ACTIVITY_TARGET - getTotalActivityCredits());
             const gradeCredits = getGradeSubjectCredits(activeGrade);
+            const chip = (txt, c) => `<span class="inline-flex items-center bg-${c}-100 border border-${c}-300 text-${c}-800 text-[11px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">${txt}</span>`;
+            const strip = (bg, icon, title, chips) => {
+                note.className = `bg-${bg}-50 border-2 border-${bg}-300 rounded-xl px-3 py-2 flex flex-wrap items-center gap-x-2 gap-y-1`;
+                note.innerHTML = `<span class="text-base">${icon}</span><span class="text-xs sm:text-sm font-black text-${bg}-800 mr-1">${title}</span>${chips.join('')}`;
+            };
 
             if (remainingSubject === 0 && remainingActivity === 0) {
-                note.className = 'bg-emerald-50 border-2 border-emerald-300 rounded-xl px-4 py-3 space-y-1.5';
-                note.innerHTML = `
-                    <div class="flex items-center gap-2">
-                        <span class="text-lg">🎉</span>
-                        <span class="text-sm sm:text-base font-black text-emerald-800">교과 174학점 + 창체 18학점을 모두 채웠어요!</span>
-                    </div>
-                    <p class="text-xs sm:text-sm text-emerald-900 leading-relaxed pl-7">3년 동안 들어야 할 수업을 다 계획한 거예요. 잠시 후 최종 수강 계획서 &amp; 진로 리포트가 자동으로 열립니다.</p>
-                `;
+                strip('emerald', '🎉', '교과 174 + 창체 18학점 완성! 잠시 후 최종 리포트가 열려요.', []);
                 return;
             }
-
             if (activeGrade === 1) {
-                // Grade 1 is auto-filled — don't say "choosing", explain it's already done and point to grade 2
-                note.className = 'bg-sky-50 border-2 border-sky-300 rounded-xl px-4 py-3 space-y-1.5';
-                note.innerHTML = `
-                    <div class="flex items-center gap-2">
-                        <span class="text-lg">✅</span>
-                        <span class="text-sm sm:text-base font-black text-sky-800">1학년 교과 ${gradeCredits}학점(게임용 예시)은 이미 다 채워져 있어요!</span>
-                    </div>
-                    <p class="text-xs sm:text-sm text-slate-700 leading-relaxed pl-7">진로가 아직 안 정해져도 되도록, 1학년 때는 국어·수학·영어 같은 <b class="text-amber-700">공통과목</b>을 폭넓게 배우는 경우가 많기 때문이에요. (내용이 궁금하면 오른쪽 "학년별 수강 신청 목록"을 확인해보세요)</p>
-                    <div class="pl-7 flex flex-wrap gap-1.5">
-                        <span class="inline-flex items-center gap-1 bg-amber-100 border border-amber-300 text-amber-800 text-[11px] sm:text-xs font-bold px-2.5 py-1 rounded-full">🎯 진짜 선택은 2학년 탭부터!</span>
-                        <span class="inline-flex items-center gap-1 bg-sky-100 border border-sky-300 text-sky-800 text-[11px] sm:text-xs font-bold px-2.5 py-1 rounded-full">창체 학점은 학년마다 자동 반영</span>
-                    </div>
-                `;
+                strip('sky', '✅', `1학년 교과 ${gradeCredits}학점은 이미 채워져 있어요 (게임용 예시)`,
+                      [chip('🎯 진짜 선택은 2학년 탭부터!', 'amber')]);
                 return;
             }
-
-            note.className = 'bg-sky-50 border-2 border-sky-300 rounded-xl px-4 py-3 space-y-1.5';
-            note.innerHTML = `
-                <div class="flex items-center gap-2">
-                    <span class="text-lg">🧭</span>
-                    <span class="text-sm sm:text-base font-black text-sky-800">지금은 ${activeGrade}학년 과목을 고르는 중이에요!</span>
-                </div>
-                <p class="text-xs sm:text-sm text-slate-700 leading-relaxed pl-7">2·3학년부터는 <b class="text-amber-700">내 흥미와 진로에 맞는 과목</b>을 직접 골라야 해요. 그래야 나에게 맞는 시간표가 완성돼요. 방향키(WASD)로 캠퍼스를 이동해 건물 안으로 들어가면 자동으로 과목 신청 창이 열립니다.</p>
-                <div class="pl-7 flex flex-wrap gap-1.5">
-                    <span class="inline-flex items-center gap-1 bg-amber-100 border border-amber-300 text-amber-800 text-[11px] sm:text-xs font-bold px-2.5 py-1 rounded-full">🎯 졸업까지 교과 ${remainingSubject}학점 · 창체 ${remainingActivity}학점 더!</span>
-                    <span class="inline-flex items-center gap-1 bg-sky-100 border border-sky-300 text-sky-800 text-[11px] sm:text-xs font-bold px-2.5 py-1 rounded-full">현재 ${activeGrade}학년 교과 ${gradeCredits}/72학점</span>
-                </div>
-            `;
+            strip('sky', '🧭', `지금은 ${activeGrade}학년 과목 고르는 중 — 건물 안으로 걸어가면 신청 창이 열려요`,
+                  [chip(`현재 ${activeGrade}학년 교과 ${gradeCredits}/72`, 'sky'),
+                   chip(`🎯 졸업까지 교과 ${remainingSubject} · 창체 ${remainingActivity}학점`, 'amber')]);
         }
 
         // Short badge text for a course's 내신 평가 방식 (assessment type).
@@ -3792,7 +3772,7 @@
             const gradeCreditsNow = getGradeSubjectCredits(activeGrade);
             const capacityBadge = document.getElementById('room-grade-capacity-badge');
             capacityBadge.innerText = `${gradeCreditsNow}/${GRADE_CREDIT_CAP}`;
-            capacityBadge.className = `text-sm font-black font-pixel leading-tight ${gradeCreditsNow >= 60 ? 'text-rose-400' : 'text-emerald-300'}`;
+            capacityBadge.className = `text-base sm:text-lg font-black leading-none whitespace-nowrap ${gradeCreditsNow >= 60 ? 'text-rose-600' : 'text-emerald-700'}`;
 
             const slotInfo = Object.values(trackData[schoolType].slots).find(s => s.name === roomName);
             document.getElementById('room-icon').textContent = slotInfo ? slotInfo.icon : '🏫';

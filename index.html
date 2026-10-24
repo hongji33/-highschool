@@ -1328,10 +1328,26 @@
     <!-- SCHOOL TYPE SELECTION MODAL -->
     <div id="school-type-modal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md hidden flex items-center justify-center p-3 z-50">
         <div class="modal-card max-w-2xl w-full p-5 sm:p-6 text-slate-100 relative max-h-[92vh] overflow-y-auto border-2 border-sky-500/80">
-            <div class="text-center mb-4">
-                <div class="text-3xl mb-1">🧑‍🎓</div>
-                <h2 class="text-lg sm:text-xl font-black text-sky-300">어떤 고등학교를 생각하고 있나요?</h2>
-                <p class="text-xs sm:text-sm text-slate-400 mt-1">고등학교는 크게 <b class="text-slate-200">일반고 / 특목고 / 직업계고</b>로 나뉘어요. 선택한 유형에 맞는 캠퍼스 건물과 과목, 진로 가이드가 준비돼요. 아직 안 정했어도 괜찮아요!</p>
+            <!-- MISSION 192 intro banner -->
+            <div class="mb-5 p-4 rounded-2xl bg-gradient-to-br from-emerald-50 to-sky-50 border-2 border-emerald-300 text-center" style="word-break:keep-all">
+                <div class="flex flex-wrap items-center justify-center gap-2 mb-1.5">
+                    <span class="px-2.5 py-0.5 rounded-full bg-emerald-500 text-white text-[11px] font-black shadow-sm">STAGE 2</span>
+                    <span class="text-xl sm:text-2xl font-black text-emerald-700 tracking-tight">🎓 MISSION 192</span>
+                </div>
+                <p class="text-sm sm:text-base font-bold text-slate-700">가상 고등학교에 입학해서 <b class="text-emerald-700">3년 동안 192학점</b>을 직접 채워봐요!</p>
+                <div class="mt-3 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs font-bold">
+                    <span class="px-2.5 py-1 rounded-lg bg-white border border-sky-400 text-sky-700 shadow-sm">① 학교 유형 고르기</span>
+                    <span class="inline-block text-emerald-400 text-[10px] leading-none sm:-rotate-90">▼</span>
+                    <span class="px-2.5 py-1 rounded-lg bg-white border border-slate-300 text-slate-600">② 진로상담센터에서 진로 정하기</span>
+                    <span class="inline-block text-emerald-400 text-[10px] leading-none sm:-rotate-90">▼</span>
+                    <span class="px-2.5 py-1 rounded-lg bg-white border border-slate-300 text-slate-600">③ 건물에 들어가 과목 신청</span>
+                </div>
+            </div>
+
+            <div class="text-center mb-4" style="word-break:keep-all">
+                <div class="text-[11px] font-black text-sky-600 mb-0.5">STEP ①</div>
+                <h2 class="text-lg sm:text-xl font-black text-sky-300">🧑‍🎓 어떤 고등학교를 생각하고 있나요?</h2>
+                <p class="text-xs sm:text-sm text-slate-400 mt-1">고등학교는 크게 <b class="text-slate-200">일반고 / 특목고 / 직업계고</b>로 나뉘어요. 고른 유형에 따라 캠퍼스 건물과 과목이 달라져요. 아직 못 정했어도 괜찮아요!</p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -1407,12 +1423,9 @@
             <div class="w-16 h-16 mx-auto bg-sky-500 rounded-2xl flex items-center justify-center text-slate-950 text-4xl font-black shadow-lg mb-4">
                 <i class="fa-solid fa-graduation-cap"></i>
             </div>
-            <h1 class="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-cyan-300 to-blue-200 mb-2">
+            <h1 class="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-cyan-300 to-blue-200 mb-5">
                 고교학점제 방탈출 & MISSION 192
             </h1>
-            <p class="text-xs sm:text-sm text-slate-500 leading-relaxed mb-5">
-                15개 방탈출 단서를 해독하고, 고교 3개년 192학점 맞춤 수강계획을 설계하는 게임입니다.
-            </p>
 
             <!-- Activity order at a glance -->
             <div class="mb-6">
@@ -3241,6 +3254,7 @@
         let hasEnteredMissionGame = false;
         let isOnboardingCareerGoal = false;
         let hasShownSimplificationNote = false; // 학점 단순화 안내 — 내 전공 건물 첫 진입 시 한 번만 표시
+        let suppressNegativeScoreToast = false; // 진로 목표를 고를 때 점수 계산 방식이 바뀌며 생기는 감점 토스트를 숨김
         let suppressNextScoreToast = false; // 진학 유형 변경 직후의 점수 재계산 토스트를 한 번 건너뛰기 위한 플래그
         let hasAutoAdvancedToGrade3 = false; // 2학년 학점이 다 차서 3학년으로 자동 전환한 적이 있는지 (중복 알림 방지)
 
@@ -3347,7 +3361,6 @@
             schoolType = type;
             const track = trackData[type];
             logItems.unshift(`🏫 [진학 희망 유형] '${track.label}'(으)로 설정했습니다.`);
-            document.getElementById('school-type-modal').classList.add('hidden');
             renderStepIndicator(3);
 
             const badge = document.getElementById('nav-school-type-badge');
@@ -3363,11 +3376,12 @@
             updateGameUI();
             updateCareerBuildingHighlight();
 
-            // Guide them to set a career goal next, before picking any courses
-            setTimeout(() => {
-                isOnboardingCareerGoal = true;
-                openCareerModal();
-            }, 350);
+            // Guide them to set a career goal next, before picking any courses.
+            // Open the career modal BEFORE hiding the school-type modal (same frame),
+            // so the campus map never flashes on screen in between.
+            isOnboardingCareerGoal = true;
+            openCareerModal();
+            document.getElementById('school-type-modal').classList.add('hidden');
         }
 
         // Lets the student switch to a different school type mid-game.
@@ -3624,12 +3638,15 @@
             if (currentTotalScore !== 0 && newTotalScore !== currentTotalScore) {
                 if (suppressNextScoreToast) {
                     suppressNextScoreToast = false;
+                } else if (suppressNegativeScoreToast && newTotalScore < currentTotalScore) {
+                    // skip the dip caused by the scoring-mode switch
                 } else {
                     const diff = newTotalScore - currentTotalScore;
                     triggerScoreToast(diff);
                 }
             }
             currentTotalScore = newTotalScore;
+            suppressNegativeScoreToast = false;
 
             // Update Header Score
             const headerScore = document.getElementById('header-score-num');
@@ -3945,6 +3962,10 @@
             playSound('correct');
             isOnboardingCareerGoal = false;
             autoAssignRequiredCoreSubjects(goal);
+            // Picking a goal switches the 진로 점수 from "탐색 진행도" to "목표 계열 일치도",
+            // so the number can dip even though the student did nothing wrong. Only show
+            // the toast if the change is positive (e.g. core subjects auto-registered).
+            suppressNegativeScoreToast = true;
             updateGameUI();
             updateCareerBuildingHighlight();
             updateBuildingAccessibilityVisuals();

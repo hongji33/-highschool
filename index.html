@@ -1076,32 +1076,32 @@
 
     <!-- BUILDING SUBJECT SELECTOR MODAL -->
     <div id="room-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md hidden flex items-center justify-center p-3 z-50">
-        <div class="modal-card max-w-2xl w-full p-5 sm:p-6 text-slate-100 relative max-h-[90vh] overflow-y-auto">
-            <div class="border-b border-slate-700 pb-3 mb-3">
-                <div class="flex items-center justify-between gap-2">
-                    <div class="flex items-center gap-2.5 min-w-0 flex-wrap">
-                        <span id="room-icon" class="text-3xl flex-shrink-0">🎨</span>
+        <div class="modal-card max-w-5xl w-full p-3 sm:p-4 text-slate-100 relative max-h-[95vh] overflow-y-auto">
+            <div class="border-b border-slate-700 pb-2 mb-2">
+                <div class="flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap">
+                    <div class="flex items-center gap-2 min-w-0 flex-wrap">
+                        <span id="room-icon" class="text-2xl flex-shrink-0">🎨</span>
                         <h2 id="room-modal-title" class="text-lg sm:text-xl font-black text-sky-300">건물 이름</h2>
                         <span id="room-grade-badge" class="px-2 py-0.5 rounded-lg text-xs font-bold bg-amber-400 text-slate-950 whitespace-nowrap">[1학년 과목]</span>
                     </div>
-                    <button onclick="closeModal('room-modal')" class="text-slate-400 hover:text-white text-2xl font-bold flex-shrink-0">✕</button>
-                </div>
-                <div class="mt-2.5 grid grid-cols-2 gap-2" style="word-break:keep-all">
-                    <div class="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-emerald-50 border border-emerald-300">
-                        <span class="text-[11px] sm:text-xs font-bold text-emerald-800 leading-tight">📘 이번 학년 교과<span class="block text-[10px] font-medium text-emerald-600">게임상 최대 72학점</span></span>
-                        <span id="room-grade-capacity-badge" class="text-base sm:text-lg font-black text-emerald-700 leading-none whitespace-nowrap">0/72</span>
+                    <div class="flex items-center gap-1.5 order-3 sm:order-none w-full sm:w-auto" style="word-break:keep-all">
+                        <div class="flex-1 sm:flex-none flex items-center justify-between gap-2 px-2.5 py-1 rounded-lg bg-emerald-50 border border-emerald-300" title="게임상 학년당 최대 72학점">
+                            <span class="text-[11px] font-bold text-emerald-800 whitespace-nowrap">📘 이번 학년</span>
+                            <span id="room-grade-capacity-badge" class="text-sm sm:text-base font-black text-emerald-700 leading-none whitespace-nowrap">0/72</span>
+                        </div>
+                        <div class="flex-1 sm:flex-none flex items-center justify-between gap-2 px-2.5 py-1 rounded-lg bg-sky-50 border border-sky-300" title="3년 누적: 교과 · 창체">
+                            <span class="text-[11px] font-bold text-sky-800 whitespace-nowrap">🎓 3년 누적</span>
+                            <span id="room-credit-badge" class="text-sm sm:text-base font-black text-sky-700 leading-none whitespace-nowrap">0/174 · 0/18</span>
+                        </div>
                     </div>
-                    <div class="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-sky-50 border border-sky-300">
-                        <span class="text-[11px] sm:text-xs font-bold text-sky-800 leading-tight">🎓 3년 누적<span class="block text-[10px] font-medium text-sky-600">교과 · 창체</span></span>
-                        <span id="room-credit-badge" class="text-sm sm:text-base font-black text-sky-700 leading-none whitespace-nowrap">0/174 · 0/18</span>
-                    </div>
+                    <button onclick="closeModal('room-modal')" class="text-slate-400 hover:text-white text-2xl font-bold flex-shrink-0 leading-none">✕</button>
                 </div>
             </div>
 
-            <div id="room-lock-notice" class="hidden mb-3 p-2.5 bg-amber-50 border border-amber-400 rounded-lg text-[11px] sm:text-xs text-amber-800 leading-relaxed"></div>
+            <div id="room-lock-notice" class="hidden mb-2 p-2 bg-amber-50 border border-amber-400 rounded-lg text-[11px] sm:text-xs text-amber-800 leading-relaxed"></div>
 
-            <details class="mb-3 bg-sky-50 border border-sky-300 rounded-xl overflow-hidden">
-                <summary class="px-3 py-2 cursor-pointer select-none list-none flex items-center gap-2 hover:bg-sky-100">
+            <details class="mb-2 bg-sky-50 border border-sky-300 rounded-xl overflow-hidden">
+                <summary class="px-3 py-1 cursor-pointer select-none list-none flex items-center gap-2 hover:bg-sky-100">
                     <span>💡</span>
                     <span class="text-xs sm:text-sm font-bold text-sky-800 flex-1">과목 선택 도움말</span>
                     <span class="text-[10px] text-slate-500">탭해서 보기 ▾</span>
@@ -1125,12 +1125,12 @@
                 </div>
             </details>
 
-            <div id="room-subjects-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+            <div id="room-subjects-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 mb-2">
                 <!-- Javascript injects subject cards -->
             </div>
 
-            <div class="flex justify-end border-t border-slate-800 pt-3">
-                <button onclick="closeModal('room-modal')" class="px-5 py-2.5 bg-slate-800 text-slate-300 font-bold rounded-xl text-xs">확인 / 닫기</button>
+            <div class="flex justify-end border-t border-slate-800 pt-2">
+                <button onclick="closeModal('room-modal')" class="px-4 py-1.5 bg-slate-800 text-slate-300 font-bold rounded-lg text-xs">확인 / 닫기</button>
             </div>
         </div>
     </div>
@@ -3765,6 +3765,17 @@
             }
         }
 
+        // 과목 카드용 짧은 평가 방식 표시 (마우스를 올리면 전체 설명이 보여요)
+        function assessmentShort(a) {
+            switch (a) {
+                case 'achievement9': return 'A~E만';
+                case 'abc3': return 'A·B·C';
+                case 'pass': return 'P(이수)';
+                case 'rank5':
+                default: return 'A~E+5등급';
+            }
+        }
+
         function getGradeCredits(grade) {
             return selectedCourses[grade].reduce((sum, c) => sum + c.credit, 0);
         }
@@ -4015,21 +4026,21 @@
             if (lockNotice) {
                 if (isOtherDepartment(roomName)) {
                     const schoolWord = schoolType === 'vocational' ? '특성화고' : '예술고';
-                    lockNotice.className = 'mb-3 p-2.5 bg-slate-100 border-2 border-dashed border-slate-400 rounded-lg text-[11px] sm:text-xs text-slate-700 leading-relaxed';
+                    lockNotice.className = 'mb-2 p-2 bg-slate-100 border-2 border-dashed border-slate-400 rounded-lg text-[11px] sm:text-xs text-slate-700 leading-relaxed';
                     lockNotice.innerHTML = `🚧 <b>다른 학과 건물이에요.</b> 실제 ${schoolWord}는 학과별로 운영돼서, 보통 <b>자기 학과 전공 과목</b>을 들어요. 다른 학과 과목은 실제로는 듣기 어려우니 둘러보기만 해도 괜찮아요. 학점은 <b>⭐ 내 전공</b> 건물과 <b>📘 보통교과관</b>에서 채워요.`;
                 } else if (!isMatch) {
-                    lockNotice.className = 'mb-3 p-2.5 bg-amber-50 border border-amber-400 rounded-lg text-[11px] sm:text-xs text-amber-800 leading-relaxed';
+                    lockNotice.className = 'mb-2 p-2 bg-amber-50 border border-amber-400 rounded-lg text-[11px] sm:text-xs text-amber-800 leading-relaxed';
                     lockNotice.innerHTML = `⚠️ 지금 정한 진로(<b>'${targetCareerGoal}'</b>)와는 관련성이 낮은 과목들이에요. 그래도 다양한 경험을 위해 자유롭게 선택할 수 있어요 — 실제 고교학점제에서도 진로와 다른 분야를 함께 탐색하는 건 자연스러운 일이에요!`;
                 } else if (roomName === '보통교과관' && schoolType === 'general') {
-                    lockNotice.className = 'mb-3 p-2.5 bg-sky-50 border border-sky-300 rounded-lg text-[11px] sm:text-xs text-sky-800 leading-relaxed';
+                    lockNotice.className = 'mb-2 p-2 bg-sky-50 border border-sky-300 rounded-lg text-[11px] sm:text-xs text-sky-800 leading-relaxed';
                     lockNotice.innerHTML = `📘 <b>일반고 학생 대부분이 듣는 기본 과목(일반 선택)</b>이 모여 있어요. 2학년은 문학·대수·영어Ⅰ처럼 이곳 과목을 중심으로, 3학년은 진로에 맞는 <b>진로·융합 선택</b>을 다른 건물에서 더 많이 골라요. 실제 학교에서는 이 중 일부를 학교가 미리 정해 두기도 해요.`;
                 } else if (roomName === '보통교과관') {
-                    lockNotice.className = 'mb-3 p-2.5 bg-sky-50 border border-sky-300 rounded-lg text-[11px] sm:text-xs text-sky-800 leading-relaxed';
+                    lockNotice.className = 'mb-2 p-2 bg-sky-50 border border-sky-300 rounded-lg text-[11px] sm:text-xs text-sky-800 leading-relaxed';
                     lockNotice.innerHTML = `📘 전공 건물만으로는 교과 174학점을 다 채우기 어려워요. 국어·영어·수학·사회·과학을 <b>필요한 만큼 골고루</b> 골라보세요 — 단, 학년당 게임상 최대 72학점까지만 담을 수 있으니, 전공 과목을 많이 골랐다면 여기서는 적게 골라도 괜찮아요!`;
                 } else if (isMatch && !hasShownSimplificationNote) {
                     // 내 전공 건물에 처음 들어왔을 때만 한 번 보여주는 학점 단순화 안내
                     hasShownSimplificationNote = true;
-                    lockNotice.className = 'mb-3 p-2.5 bg-emerald-50 border border-emerald-400 rounded-lg text-[11px] sm:text-xs text-emerald-800 leading-relaxed';
+                    lockNotice.className = 'mb-2 p-2 bg-emerald-50 border border-emerald-400 rounded-lg text-[11px] sm:text-xs text-emerald-800 leading-relaxed';
                     lockNotice.innerHTML = `📌 이 게임은 이해를 돕기 위해 <b>학년별 학점을 균등하게 단순화</b>했어요. 실제 학점 배분과 과목 구성은 학교의 교육과정에 따라 달라질 수 있어요.`;
                 } else {
                     lockNotice.classList.add('hidden');
@@ -4050,7 +4061,7 @@
                     const isCoreRequired = req && req[roomName] && req[roomName][activeGrade] === subj.name;
 
                     const card = document.createElement('div');
-                    card.className = `p-3.5 rounded-xl border text-left transition flex flex-col justify-between space-y-2 ${
+                    card.className = `px-2.5 py-2 rounded-xl border text-left transition flex flex-col justify-between gap-1.5 ${
                         isSelected 
                         ? 'bg-sky-50 border-sky-400' 
                         : !isMatch
@@ -4058,34 +4069,32 @@
                         : 'bg-slate-900 border-slate-700 hover:border-slate-500'
                     }`;
 
-                    const actionButton = `<button onclick="toggleSubject('${subj.name}', ${subj.credit}, '${subj.category}', '${subj.desc}', ${!isMatch})" class="px-3 py-1.5 rounded-lg text-xs font-bold ${
+                    const actionButton = `<button onclick="toggleSubject('${subj.name}', ${subj.credit}, '${subj.category}', '${subj.desc}', ${!isMatch})" class="flex-shrink-0 px-2.5 py-1 rounded-lg text-[11px] font-bold whitespace-nowrap ${
                                 isSelected 
                                 ? 'bg-rose-600 hover:bg-rose-500 text-white' 
                                 : 'bg-sky-500 hover:bg-sky-400 text-slate-950'
                             }">
-                                ${isSelected ? '수강 취소' : `${activeGrade}학년 신청`}
+                                ${isSelected ? '취소' : '신청'}
                             </button>`;
 
+                    const badge = (cls, txt, title) => `<span class="text-[9px] font-black px-1 py-0.5 rounded leading-none whitespace-nowrap ${cls}"${title ? ` title="${title}"` : ''}>${txt}</span>`;
                     card.innerHTML = `
-                        <div>
-                            <div class="flex items-center justify-between gap-2">
-                                <span class="font-bold text-sm text-sky-800">${subj.name}</span>
-                                <div class="flex items-center gap-1 flex-shrink-0 flex-wrap justify-end">
-                                    ${isCoreRequired ? '<span class="text-[9px] font-black px-1.5 py-0.5 rounded bg-orange-500 text-white">핵심과목</span>' : ''}
-                                    ${!isMatch ? '<span class="text-[9px] font-black px-1.5 py-0.5 rounded bg-amber-500 text-slate-950">⚠️ 관련성 낮음</span>' : ''}
-                                    <span class="text-xs font-pixel px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 border border-sky-500/30">+${subj.credit} 학점</span>
-                                </div>
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="min-w-0">
+                                <div class="font-bold text-[13px] text-sky-800 leading-tight">${subj.name}</div>
+                                <p class="text-[11px] text-slate-400 leading-snug mt-0.5" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:keep-all" title="${subj.desc}">${subj.desc}</p>
                             </div>
-                            <div class="flex items-center gap-1 flex-wrap mt-1">
-                                ${subj.kind ? `<span class="text-[9px] font-black px-1.5 py-0.5 rounded ${KIND_BADGE_CLASS[subj.kind] || 'bg-slate-500 text-white'}">${subj.kind} 선택</span>` : ''}
-                                ${subj.virtual ? '<span class="text-[9px] font-black px-1.5 py-0.5 rounded bg-fuchsia-600 text-white">🎮 게임용 가상 과목</span>' : ''}
-                                <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-600">${assessmentLabel(subj.assessment)}</span>
-                            </div>
-                            <p class="text-xs text-slate-400 mt-1">${subj.desc}</p>
+                            <span class="flex-shrink-0 text-[11px] font-pixel px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 border border-sky-500/30 whitespace-nowrap">+${subj.credit}학점</span>
                         </div>
-
-                        <div class="flex items-center justify-between border-t border-slate-800 pt-2 mt-2">
-                            <span class="text-[10px] text-amber-300 font-bold">분야: ${subj.category}</span>
+                        <div class="flex items-center justify-between gap-1.5">
+                            <div class="flex items-center gap-1 flex-wrap min-w-0">
+                                ${subj.kind ? badge(KIND_BADGE_CLASS[subj.kind] || 'bg-slate-500 text-white', `${subj.kind} 선택`) : ''}
+                                ${isCoreRequired ? badge('bg-orange-500 text-white', '핵심과목') : ''}
+                                ${!isMatch ? badge('bg-amber-500 text-slate-950', '⚠️ 관련성 낮음') : ''}
+                                ${subj.virtual ? badge('bg-fuchsia-600 text-white', '🎮 가상 과목', '게임용 가상 과목') : ''}
+                                ${badge('bg-slate-800 text-slate-300 border border-slate-600 font-bold', assessmentShort(subj.assessment), assessmentLabel(subj.assessment).replace('📊 ', ''))}
+                                <span class="text-[10px] text-amber-300 font-bold whitespace-nowrap">${subj.category}</span>
+                            </div>
                             ${actionButton}
                         </div>
                     `;
